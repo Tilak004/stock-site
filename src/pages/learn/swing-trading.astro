@@ -1,0 +1,121 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "What Is Swing Trading?";
+const description =
+  "Swing trading explained: holding period, how it differs from intraday and " +
+  "investing, what the approach actually requires, and its honest costs.";
+---
+
+<Base title={title} description={description} crumb="Trading / Swing trading">
+  <h1>What is swing trading?</h1>
+  <p class="lede">
+    Swing trading means holding a position for several days to a few weeks,
+    aiming to capture one directional move rather than a long-term thesis or an
+    intraday fluctuation. It sits between day trading and investing, and it
+    inherits problems from both.
+  </p>
+
+  <h2>Where it sits</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>intraday</code><span class="meta">minutes to hours</span></div>
+      <p>Positions closed before the session ends. Costs dominate, since you pay
+        the spread and brokerage repeatedly against small moves.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>swing</code><span class="meta">days to weeks</span></div>
+      <p>Overnight risk is accepted in exchange for larger moves and far fewer
+        transactions. Daily bars are usually enough.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>positional_and_investing</code><span class="meta">months to years</span></div>
+      <p>Held on a view about the business rather than the price pattern.
+        Different questions entirely — see
+        <a href="/learn/evaluating-a-business/">evaluating a business</a>.</p>
+    </div>
+  </div>
+
+  <h2>What the approach assumes</h2>
+  <p>
+    Swing trading rests on one premise: that price moves are not entirely random
+    over a horizon of days to weeks, and that some of the structure is
+    identifiable in advance. That premise is defensible but weak — the observable
+    edge is small, and it is not present in all conditions.
+  </p>
+  <p class="lede">
+    It is emphatically not the premise that indicators predict prices. What
+    trend-following approaches actually rely on is that a move already underway is
+    somewhat more likely to continue than to reverse immediately, which is a much
+    more modest claim.
+  </p>
+
+  <h2>The honest arithmetic</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>win_rates_are_low</code><span class="meta">by design</span></div>
+      <p>Trend-following approaches typically win 35–45% of the time, and make
+        money through a payoff ratio above 2:1. That is not a flaw; it is how the
+        structure works. It does mean long losing streaks are routine.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>costs_matter_more_than_expected</code><span class="meta">the usual killer</span></div>
+      <p>Brokerage, STT, stamp duty and slippage on every round trip. On illiquid
+        stocks slippage alone can exceed the edge. A strategy that works at 0.2%
+        round-trip costs can lose to an index fund at 1%.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>regime_dependence</code><span class="meta">the structural weakness</span></div>
+      <p>Trend-following needs trends. In a sideways or narrow market the same
+        rules produce a stream of small losses, and no amount of parameter tuning
+        fixes it — the conditions simply are not there.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>taxation</code><span class="meta">India</span></div>
+      <p>Positions held under a year attract short-term capital gains treatment,
+        which is less favourable than long-term. Frequent trading means the tax
+        drag is continuous. Verify current rates before planning around them.</p>
+    </div>
+  </div>
+
+  <h2>What it actually requires</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>written_rules</code><span class="meta">non-negotiable</span></div>
+      <p>Entry, exit, position size and stop, decided before the position exists.
+        Rules made during a trade get renegotiated.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>a_record</code><span class="meta">the thing almost nobody keeps</span></div>
+      <p>Every trade logged with its reason, size, and outcome. Without one you
+        have impressions rather than evidence, and impressions are reliably
+        flattering.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>capital_you_can_leave_alone</code><span class="meta">practical</span></div>
+      <p>A 20–30% drawdown is a normal event, not a disaster. Money needed within
+        the year does not belong here.</p>
+    </div>
+  </div>
+
+  <h2>An honest assessment</h2>
+  <p class="lede">
+    A well-constructed swing strategy on Indian equities might produce a Sharpe
+    ratio near 1 on tradeable names after realistic costs. That is a genuine but
+    modest edge — comparable to the index on return with meaningfully smaller
+    drawdowns, or slightly better, and considerably more work.
+  </p>
+  <p class="lede">
+    Anyone promising much more than that is either measuring badly or selling
+    something. <a href="/learn/backtesting/">Backtesting</a> covers the specific
+    errors that make results look far better than they are.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Next: <a href="/learn/risk-management/">risk management</a> ·
+    <a href="/learn/backtesting/">backtesting</a> ·
+    <a href="/learn/trading-psychology/">trading psychology</a>
+  </p>
+</Base>

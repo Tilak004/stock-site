@@ -1,0 +1,113 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Support and Resistance Explained";
+const description =
+  "What support and resistance actually are, why round numbers and prior highs " +
+  "matter, and why a level is a zone rather than a line.";
+---
+
+<Base title={title} description={description} crumb="Technical analysis / Support and resistance">
+  <h1>Support and resistance</h1>
+  <p class="lede">
+    A support level is a price where buying has previously been enough to stop a
+    decline. Resistance is where selling has previously been enough to stop an
+    advance. Both are observations about what has already happened, not
+    predictions about what will.
+  </p>
+
+  <h2>Why levels exist at all</h2>
+  <p>
+    The mechanism is ordinary human behaviour rather than anything mystical:
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>memory_of_a_price</code><span class="meta">the main driver</span></div>
+      <p>People who bought near a previous high and then watched it fall often
+        sell when price returns to what they paid. That supply is why old highs
+        act as resistance.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>round_numbers</code><span class="meta">self-fulfilling</span></div>
+      <p>Orders cluster at ₹100, ₹500, ₹1,000. There is nothing special about
+        those prices except that everyone uses them, which is enough.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>widely_watched_averages</code><span class="meta">also self-fulfilling</span></div>
+      <p>The 200-day average works partly because a great many people are watching
+        it and acting near it. See
+        <a href="/learn/moving-averages/">moving averages</a>.</p>
+    </div>
+  </div>
+
+  <h2>A level is a zone, not a line</h2>
+  <p class="lede">
+    Drawing a support line at exactly ₹1,247.30 implies a precision that does not
+    exist. What actually happens is that buying appears somewhere in a band — and
+    the band widens with volatility. On a stock with an ATR of 3% of price, a
+    "level" is realistically a few percent wide.
+  </p>
+  <p>
+    That matters directly for stop placement: a stop sitting just below a
+    well-known level is in the exact region where price probes before turning.
+    See <a href="/tools/position-sizing/">position sizing</a>.
+  </p>
+
+  <h2>The role reversal</h2>
+  <p class="lede">
+    The commonly taught idea is that broken resistance becomes support, and
+    broken support becomes resistance. The reasoning is that buyers who missed
+    the move wait to buy a retest, while those who sold too early buy back.
+  </p>
+  <p>
+    It happens often enough to be worth knowing and fails often enough that it is
+    not a rule. Levels break decisively and never look back all the time; the
+    examples used to teach the concept are chosen after the fact from the cases
+    where it worked.
+  </p>
+
+  <h2>What the data can and cannot tell you</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>52_week_high</code><span class="meta">on this site</span></div>
+      <p>The clearest objective resistance reference, because it needs no
+        judgement. The <a href="/screener/">screener</a> publishes distance from
+        it as <span class="c">pct_from_52wh</span>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>prior_pivot_lows</code><span class="meta">objective, if defined carefully</span></div>
+      <p>A swing low — a bar lower than the several bars either side — can be
+        identified mechanically. What cannot be mechanised is which of the many
+        such lows anyone actually cares about.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>hand_drawn_lines</code><span class="meta">not published here</span></div>
+      <p>Trendlines and channels depend on which points you choose to connect,
+        and different analysts draw different lines on the same chart. This site
+        does not publish them, because there is no objective version.</p>
+    </div>
+  </div>
+
+  <h2>The honest caveat</h2>
+  <p class="lede">
+    Support and resistance is the part of technical analysis most vulnerable to
+    hindsight. On any completed chart you can find levels that "held" — because
+    you are looking at where price turned and then calling it a level. The test
+    is whether you would have drawn the same line <em>before</em> the turn, and
+    on most charts the answer is no.
+  </p>
+  <p>
+    Treat levels as a description of where transactions have previously clustered,
+    which is genuinely useful context. Treat them as forecasts and you are fitting
+    a story to a chart you have already seen. See
+    <a href="/learn/overfitting/">overfitting</a>.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Next: <a href="/learn/moving-averages/">moving averages</a> ·
+    <a href="/learn/rsi/">RSI</a> ·
+    <a href="/learn/risk-management/">risk management</a>
+  </p>
+</Base>

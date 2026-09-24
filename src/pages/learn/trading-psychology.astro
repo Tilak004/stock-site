@@ -1,0 +1,125 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Trading Psychology — The Biases That Cost Money";
+const description =
+  "Loss aversion, the disposition effect, recency and hindsight bias: the specific " +
+  "mental errors that show up in trading records, and what actually helps.";
+---
+
+<Base title={title} description={description} crumb="Trading / Trading psychology">
+  <h1>Trading psychology</h1>
+  <p class="lede">
+    Most of what gets written under this heading is motivational. What follows is
+    narrower: the specific, documented biases that show up as money leaving an
+    account, and the small number of things that measurably help.
+  </p>
+
+  <h2>The disposition effect</h2>
+  <p>
+    The tendency to sell winners early and hold losers too long. It is among the
+    best-documented findings in behavioural finance and shows up in retail
+    brokerage records across every market studied.
+  </p>
+  <p class="lede">
+    The mechanism is simple: selling a winner realises a gain, which feels good.
+    Selling a loser realises a loss, which converts a "temporary dip" into an
+    admitted mistake. So the loser is kept, often until it is much larger.
+  </p>
+  <p>
+    The effect is exactly backwards for a trend-following approach, which depends
+    on a few large winners to pay for many small losses. Cut the winners short and
+    the arithmetic stops working — see
+    <a href="/learn/risk-management/">expectancy</a>.
+  </p>
+
+  <h2>Loss aversion</h2>
+  <p class="lede">
+    Losses are experienced roughly twice as intensely as equivalent gains. The
+    practical consequence is that a position at a loss generates enough discomfort
+    to distort judgement about it — which is precisely when clear judgement is
+    needed.
+  </p>
+
+  <h2>Recency</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>after_a_winning_streak</code><span class="meta">the dangerous one</span></div>
+      <p>Confidence rises, position sizes creep up, rules get relaxed. The largest
+        losses in most trading records arrive immediately after the best runs, for
+        exactly this reason.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>after_a_losing_streak</code><span class="meta">equally costly</span></div>
+      <p>Signals get skipped. Since a small number of large winners carry the
+        result, skipping a few can turn a profitable year into a flat one — and
+        the ones skipped are not random, they are the ones taken after losses,
+        which is when opportunities often cluster.</p>
+    </div>
+  </div>
+
+  <h2>Hindsight bias</h2>
+  <p class="lede">
+    On a completed chart every turning point looks obvious, which makes the past
+    seem far more predictable than it was. This is also what makes backtests
+    seductive and what makes "I knew that was going to happen" a near-universal
+    and near-universally false feeling.
+  </p>
+  <p>
+    The only defence is writing decisions down <em>before</em> outcomes are known.
+    A record made in advance is immune to reinterpretation; memory is not.
+  </p>
+
+  <h2>Confirmation bias</h2>
+  <p class="lede">
+    Once a position exists, information supporting it feels more convincing than
+    information against it. You will notice the analyst who agrees and dismiss the
+    one who does not. The discipline that helps is writing down, at entry,
+    specifically what would make you wrong — and then treating it as binding.
+  </p>
+
+  <h2>What actually helps</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>decide_before_you_are_exposed</code><span class="meta">the core idea</span></div>
+      <p>Entry, size, stop and target written down before the position exists.
+        Every rule here works by moving the decision to a moment when you are not
+        under pressure.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>keep_a_record</code><span class="meta">most effective single habit</span></div>
+      <p>Every trade with its reason and outcome. It converts impressions into
+        evidence, and the evidence is frequently unflattering in useful ways —
+        most people discover their instincts about which trades work are wrong.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>size_so_it_is_boring</code><span class="meta">underrated</span></div>
+      <p>If a position is large enough to disturb you, it is large enough to make
+        you act badly. Most psychology problems are position sizing problems
+        wearing a different hat.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>expect_the_losing_streak</code><span class="meta">calibration</span></div>
+      <p>At a 40% win rate, eight consecutive losses is a normal event over a few
+        hundred trades, not evidence the approach has stopped working. Knowing the
+        number in advance makes it survivable.</p>
+    </div>
+  </div>
+
+  <h2>The thing that does not help</h2>
+  <p class="lede">
+    Trying to feel differently. You will not stop finding losses painful, and
+    advice to "control your emotions" is not actionable. What works is
+    <strong>structural</strong> — rules written in advance, sizes small enough
+    that the emotion stays manageable, and a record that tells you what actually
+    happened rather than what you remember happening.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Next: <a href="/learn/risk-management/">risk management</a> ·
+    <a href="/learn/overfitting/">overfitting</a> ·
+    <a href="/learn/swing-trading/">swing trading</a>
+  </p>
+</Base>

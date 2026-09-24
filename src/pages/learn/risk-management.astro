@@ -1,0 +1,124 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Risk Management — Position Sizing, Stops and Drawdowns";
+const description =
+  "Why risk per trade matters more than entry quality, what a drawdown actually " +
+  "requires to recover, and the arithmetic of ruin.";
+---
+
+<Base title={title} description={description} crumb="Trading / Risk management">
+  <h1>Risk management</h1>
+  <p class="lede">
+    Entry selection gets the attention. Position sizing decides the outcome. A
+    mediocre entry sized correctly survives; an excellent entry sized carelessly
+    can end an account on the one occasion it goes wrong.
+  </p>
+
+  <h2>The arithmetic that makes this non-negotiable</h2>
+  <p>
+    Losses and the gains needed to recover them are not symmetric, and the
+    asymmetry accelerates:
+  </p>
+  <div class="formula">Lose 10%  →  need +11% to recover
+Lose 20%  →  need +25%
+Lose 33%  →  need +50%
+Lose 50%  →  need +100%
+Lose 75%  →  need +300%</div>
+  <p class="lede">
+    This is why capital preservation is not timidity. Past roughly a 50%
+    drawdown, recovery stops being a question of skill and becomes a question of
+    time you may not have.
+  </p>
+
+  <h2>Fix the risk, not the amount</h2>
+  <p>
+    Investing a fixed ₹20,000 per trade means a volatile stock with a wide stop
+    risks several times what a quiet one does. Fixing the <em>risk</em> instead
+    equalises them:
+  </p>
+  <div class="formula">quantity = (capital × risk%) / (entry − stop)</div>
+  <p class="lede">
+    Now every position costs the same when it goes wrong, regardless of the
+    stock's volatility. The <a href="/tools/position-sizing/">position sizing
+    calculator</a> does this, including the cap that stops a very tight stop
+    sizing past your account.
+  </p>
+
+  <h2>How much per trade</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>1_to_2_percent</code><span class="meta">the common range</span></div>
+      <p>At 1% per trade, ten consecutive losses cost about 10% of capital —
+        unpleasant, survivable. At 5% per trade the same streak costs 40%, and
+        you now need a 67% gain to get back.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>losing_streaks_are_longer_than_you_expect</code><span class="meta">do the maths</span></div>
+      <p>At a 40% win rate, a run of eight consecutive losses has roughly a 1.7%
+        chance on any given sequence — which means over a few hundred trades it is
+        close to certain. Size for the streak you will get, not the average.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>correlated_positions</code><span class="meta">the one people miss</span></div>
+      <p>Risking 1.5% across ten open positions is 15% at risk simultaneously —
+        and in a market decline they lose together. Concurrent risk is the number
+        that matters, not per-trade risk.</p>
+    </div>
+  </div>
+
+  <h2>What a stop-loss is and is not</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>is</code><span class="meta">a decision made in advance</span></div>
+      <p>Its real value is that it is set before you own the position, while you
+        are still capable of thinking clearly about it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>is_not_a_guarantee</code><span class="meta">gaps</span></div>
+      <p>A stock that gaps down 15% on news fills far below your stop. The
+        realised loss exceeds the planned one, sometimes by a lot.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>too_tight_is_its_own_error</code><span class="meta">common</span></div>
+      <p>A stop inside normal daily noise gets hit by nothing in particular.
+        Sizing it against ATR rather than a round percentage adapts it to how much
+        the stock actually moves.</p>
+    </div>
+  </div>
+
+  <h2>Expectancy, not win rate</h2>
+  <div class="formula">expectancy = (win% × average win) − (loss% × average loss)</div>
+  <p class="lede">
+    A 35% win rate with a 3:1 payoff is profitable. An 80% win rate with a 0.2:1
+    payoff is not. Win rate on its own tells you nothing, which is why "accuracy"
+    claims from tip services are close to meaningless — you can manufacture a
+    90% win rate trivially by taking tiny profits and holding losers.
+  </p>
+  <p>
+    The <a href="/tools/risk-reward/">risk-reward calculator</a> gives the
+    break-even win rate for any ratio, which is the honest way to read both
+    numbers together.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>The part nobody enjoys</h2>
+  <p class="lede">
+    Every rule here is easy to state and difficult to follow, because each one
+    costs you something at the exact moment it matters. Position sizing means
+    taking a smaller position in the trade you are most confident about. A stop
+    means accepting a loss while it still feels premature.
+  </p>
+  <p class="lede">
+    That is why risk rules have to be written down before the position exists.
+    Decided afterwards, they get renegotiated. See
+    <a href="/learn/trading-psychology/">trading psychology</a>.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/tools/position-sizing/">position sizing calculator</a> ·
+    <a href="/tools/risk-reward/">risk-reward calculator</a> ·
+    <a href="/learn/trading-psychology/">trading psychology</a>
+  </p>
+</Base>
