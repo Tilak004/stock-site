@@ -26,7 +26,6 @@ const groups = [
     open: true,
     items: [
       { href: "/screener/", label: "All stocks", tag: "LIVE", cls: "data" },
-      { href: "/screener/conditions/", label: "Condition reference", tag: "DOC", cls: "doc" },
     ],
   },
   {
@@ -41,6 +40,19 @@ const groups = [
     ],
   },
   {
+    label: "Fundamentals",
+    open: true,
+    items: [
+      { href: "/learn/reading-financials/", label: "Reading a financial statement", tag: "DOC", cls: "doc" },
+      { href: "/learn/roe-roce/", label: "ROE and ROCE", tag: "DOC", cls: "doc" },
+      { href: "/learn/debt-leverage/", label: "Debt and leverage", tag: "DOC", cls: "doc" },
+      { href: "/learn/cash-flow/", label: "Cash flow vs profit", tag: "DOC", cls: "doc" },
+      { href: "/learn/valuation-ratios/", label: "P/E, P/B and EV/EBITDA", tag: "DOC", cls: "doc" },
+      { href: "/learn/evaluating-a-business/", label: "Evaluating a business", tag: "DOC", cls: "doc" },
+      { href: "/learn/promoter-governance/", label: "Promoter holding & governance", tag: "DOC", cls: "doc" },
+    ],
+  },
+  {
     label: "Trading",
     open: false,
     items: [
@@ -48,24 +60,30 @@ const groups = [
       { href: "/learn/backtesting/", label: "Backtesting", tag: "DOC", cls: "doc" },
       { href: "/learn/overfitting/", label: "Overfitting", tag: "DOC", cls: "doc" },
       { href: "/learn/risk-management/", label: "Risk management", tag: "DOC", cls: "doc" },
+      { href: "/learn/trading-psychology/", label: "Trading psychology", tag: "DOC", cls: "doc" },
     ],
   },
   {
     label: "Investing",
     open: false,
     items: [
-      { href: "/learn/cagr/", label: "CAGR", tag: "DOC", cls: "doc" },
-      { href: "/learn/xirr/", label: "XIRR", tag: "DOC", cls: "doc" },
+      { href: "/learn/cagr/", label: "CAGR and XIRR", tag: "DOC", cls: "doc" },
+      { href: "/learn/compounding/", label: "Compounding", tag: "DOC", cls: "doc" },
+      { href: "/learn/equity-vs-debt/", label: "Equity vs debt", tag: "DOC", cls: "doc" },
       { href: "/learn/asset-allocation/", label: "Asset allocation", tag: "DOC", cls: "doc" },
+      { href: "/learn/inflation/", label: "Inflation", tag: "DOC", cls: "doc" },
     ],
   },
   {
     label: "Tools",
     open: true,
     items: [
+      { href: "/tools/", label: "All calculators", tag: "CALC", cls: "calc" },
+      { href: "/tools/sip-calculator/", label: "SIP", tag: "CALC", cls: "calc" },
+      { href: "/tools/step-up-sip-calculator/", label: "Step-up SIP", tag: "CALC", cls: "calc" },
       { href: "/tools/cagr-calculator/", label: "CAGR", tag: "CALC", cls: "calc" },
       { href: "/tools/xirr-calculator/", label: "XIRR", tag: "CALC", cls: "calc" },
-      { href: "/tools/sip-calculator/", label: "SIP & step-up SIP", tag: "CALC", cls: "calc" },
+      { href: "/tools/inflation-calculator/", label: "Inflation", tag: "CALC", cls: "calc" },
       { href: "/tools/position-sizing/", label: "Position sizing", tag: "CALC", cls: "calc" },
       { href: "/tools/risk-reward/", label: "Risk / reward", tag: "CALC", cls: "calc" },
     ],
@@ -77,6 +95,7 @@ const groups = [
       { href: "/methodology/", label: "Methodology", tag: "DOC", cls: "doc" },
       { href: "/mutual-funds/", label: "Mutual funds", tag: "DOC", cls: "doc" },
       { href: "/about/", label: "About", tag: "DOC", cls: "doc" },
+      { href: "/contact/", label: "Contact", tag: "DOC", cls: "doc" },
     ],
   },
 ];

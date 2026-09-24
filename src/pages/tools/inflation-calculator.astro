@@ -1,0 +1,116 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Inflation Calculator — Real Value of Money Over Time";
+const description =
+  "See what a sum of money will be worth in future at an assumed inflation rate, " +
+  "and what return you need just to preserve purchasing power.";
+---
+
+<Base title={title} description={description} crumb="Tools / Inflation calculator">
+  <h1>Inflation calculator</h1>
+  <p class="lede">
+    Inflation is the reason a nominal return can be a real loss. This shows what
+    a sum will buy in future at an assumed rate, and what return merely holds
+    purchasing power steady.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="amt">Amount today (₹)</label>
+        <input type="number" id="amt" value="1000000" min="0" step="10000" />
+      </div>
+      <div class="fld">
+        <label for="yrs">Years ahead</label>
+        <input type="number" id="yrs" value="20" min="1" max="60" step="1" />
+      </div>
+      <div class="fld">
+        <label for="inf">Assumed inflation (% per year)</label>
+        <input type="number" id="inf" value="6" min="0" max="30" step="0.5" />
+        <div class="hint">India's long-run CPI has typically run in the 5-7% range.</div>
+      </div>
+      <div class="fld">
+        <label for="ret">Your assumed return (% per year)</label>
+        <input type="number" id="ret" value="12" min="0" max="50" step="0.5" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="real">&mdash;</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">
+        what today's amount will buy, in today's money
+      </div>
+      <div class="out-row"><span class="lbl">Purchasing power lost</span><span class="val" id="lost">&mdash;</span></div>
+      <div class="out-row"><span class="lbl">Cost then of what costs this today</span><span class="val" id="cost">&mdash;</span></div>
+      <div class="out-row"><span class="lbl">Nominal value at your return</span><span class="val" id="nom">&mdash;</span></div>
+      <div class="out-row"><span class="lbl">Real value at your return</span><span class="val" id="realret">&mdash;</span></div>
+      <div class="out-row"><span class="lbl">Real rate of return</span><span class="val" id="rr">&mdash;</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">future purchasing power = amount / (1 + inflation)^years
+real rate = (1 + nominal) / (1 + inflation) - 1</div>
+  <p class="lede">
+    The real rate uses the exact Fisher relation rather than simply subtracting
+    inflation from the nominal rate. Subtraction is a decent approximation at low
+    rates and drifts noticeably at high ones.
+  </p>
+
+  <h2>Why this matters more than it looks</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>fd_trap</code><span class="meta">worked example</span></div>
+      <p>A 7% fixed deposit against 6% inflation is a real return near 0.9% before
+        tax. After tax at 30% the nominal 7% becomes 4.9%, which is a real loss of
+        roughly 1%. The balance grows while the purchasing power shrinks.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>goal_inflation_differs</code><span class="meta">caution</span></div>
+      <p>Education and healthcare have historically inflated faster than headline
+        CPI. Planning a child's education at 6% may understate it considerably.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/sip-calculator/">SIP</a> &middot;
+    <a href="/tools/cagr-calculator/">CAGR</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "\u20B9" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const a = +$("amt").value, y = +$("yrs").value,
+            inf = +$("inf").value / 100, ret = +$("ret").value / 100;
+      $("err").textContent = "";
+      const ids = ["real", "lost", "cost", "nom", "realret", "rr"];
+      if (!(a >= 0) || !(y > 0) || !(inf >= 0) || !(ret >= 0)) {
+        ids.forEach(function (id) { $(id).textContent = "\u2014"; });
+        $("err").textContent = "Enter non-negative values and a period above zero.";
+        return;
+      }
+      var infFactor = Math.pow(1 + inf, y);
+      var power = a / infFactor;
+      var nominal = a * Math.pow(1 + ret, y);
+      var realVal = nominal / infFactor;
+      var realRate = ((1 + ret) / (1 + inf) - 1) * 100;
+
+      $("real").textContent = inr(power);
+      $("lost").textContent = ((1 - power / a) * 100).toFixed(1) + "%";
+      $("cost").textContent = inr(a * infFactor);
+      $("nom").textContent = inr(nominal);
+      $("realret").textContent = inr(realVal);
+      $("rr").textContent = realRate.toFixed(2) + "%";
+      $("rr").style.color = realRate >= 0 ? "var(--up)" : "var(--down)";
+    }
+    ["amt", "yrs", "inf", "ret"].forEach(function (id) {
+      $(id).addEventListener("input", run);
+    });
+    run();
+  </script>
+</Base>

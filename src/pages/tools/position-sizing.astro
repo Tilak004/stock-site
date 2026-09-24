@@ -1,0 +1,133 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Position Sizing Calculator — Risk-Based Quantity";
+const description =
+  "Work out how many shares to buy so that a stop-loss costs a fixed percentage " +
+  "of capital. Includes the capital-cap check most sizing calculators leave out.";
+---
+
+<Base title={title} description={description} crumb="Tools / Position sizing">
+  <h1>Position sizing calculator</h1>
+  <p class="lede">
+    Risk-based sizing works backwards from the loss you are willing to take. You
+    fix the percentage of capital a losing trade may cost, and the stop distance
+    determines the quantity — not the other way round.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="cap">Total capital (₹)</label>
+        <input type="number" id="cap" value="100000" min="1" step="1000" />
+      </div>
+      <div class="fld">
+        <label for="risk">Risk per trade (%)</label>
+        <input type="number" id="risk" value="1.5" min="0.1" max="100" step="0.1" />
+        <div class="hint">The share of capital lost if the stop is hit.</div>
+      </div>
+      <div class="fld">
+        <label for="entry">Entry price (₹)</label>
+        <input type="number" id="entry" value="1200" min="0.01" step="1" />
+      </div>
+      <div class="fld">
+        <label for="stop">Stop-loss price (₹)</label>
+        <input type="number" id="stop" value="1140" min="0" step="1" />
+      </div>
+      <div class="fld">
+        <label for="maxpos">Maximum position (% of capital)</label>
+        <input type="number" id="maxpos" value="20" min="1" max="100" step="1" />
+        <div class="hint">A cap so one tight stop cannot consume the account.</div>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="qty">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">shares</div>
+      <div class="out-row"><span class="lbl">Position value</span><span class="val" id="val">—</span></div>
+      <div class="out-row"><span class="lbl">Amount at risk</span><span class="val" id="atrisk">—</span></div>
+      <div class="out-row"><span class="lbl">Stop distance</span><span class="val" id="dist">—</span></div>
+      <div class="out-row"><span class="lbl">% of capital deployed</span><span class="val" id="pct">—</span></div>
+      <div class="out-row"><span class="lbl">Binding constraint</span><span class="val" id="bind">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">quantity = (capital × risk%) / (entry − stop)
+capped at (capital × max position%) / entry</div>
+  <p class="lede">
+    The second line is the part most calculators omit, and it matters. As the stop
+    gets tighter the first formula returns an ever-larger quantity — with a ₹2
+    stop on a ₹1,200 share it would have you buying several times your account.
+    The cap is what stops that.
+  </p>
+
+  <h2>Why fix the risk rather than the amount</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>equal_risk</code><span class="meta">the point</span></div>
+      <p>Investing a fixed ₹20,000 in every trade means a volatile stock with a
+        wide stop risks far more than a quiet one. Fixing the risk instead makes
+        every position cost the same when it goes wrong.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>concurrent_positions</code><span class="meta">easy to forget</span></div>
+      <p>Risking 1.5% per trade across 10 open positions is 15% of capital at
+        risk simultaneously, and losses often arrive together.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>gaps</code><span class="meta">limitation</span></div>
+      <p>A stop is not a guarantee. A price that gaps past it overnight fills
+        lower, and the actual loss exceeds the calculated figure.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/risk-reward/">risk / reward</a> ·
+    <a href="/learn/risk-management/">risk management</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const cap = +$("cap").value, risk = +$("risk").value,
+            e = +$("entry").value, s = +$("stop").value, mx = +$("maxpos").value;
+      $("err").textContent = "";
+      const clear = () => ["qty", "val", "atrisk", "dist", "pct", "bind"]
+        .forEach((id) => ($(id).textContent = "—"));
+
+      if (!(cap > 0) || !(risk > 0) || !(e > 0) || !(mx > 0)) {
+        clear(); $("err").textContent = "Capital, risk, entry and maximum position must be above zero."; return;
+      }
+      const dist = e - s;
+      if (!(dist > 0)) {
+        clear(); $("err").textContent = "Stop-loss must be below the entry price for a long position."; return;
+      }
+
+      const byRisk = (cap * risk / 100) / dist;
+      const byCap  = (cap * mx / 100) / e;
+      const qty = Math.floor(Math.min(byRisk, byCap));
+
+      if (qty < 1) {
+        clear();
+        $("err").textContent = "That combination sizes to less than one share — the stop is too wide for this capital.";
+        return;
+      }
+
+      const value = qty * e;
+      $("qty").textContent = qty.toLocaleString("en-IN");
+      $("val").textContent = inr(value);
+      $("atrisk").textContent = inr(qty * dist) + "  (" + ((qty * dist / cap) * 100).toFixed(2) + "%)";
+      $("dist").textContent = "₹" + dist.toFixed(2) + "  (" + ((dist / e) * 100).toFixed(2) + "%)";
+      $("pct").textContent = ((value / cap) * 100).toFixed(1) + "%";
+      $("bind").textContent = byCap < byRisk ? "position cap" : "risk per trade";
+    }
+    ["cap", "risk", "entry", "stop", "maxpos"].forEach((id) =>
+      $(id).addEventListener("input", run));
+    run();
+  </script>
+</Base>

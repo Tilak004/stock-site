@@ -1,0 +1,116 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Risk-Reward Ratio Calculator — With Break-Even Win Rate";
+const description =
+  "Calculate the risk-reward ratio for a trade and the win rate you would need " +
+  "to break even at that ratio.";
+---
+
+<Base title={title} description={description} crumb="Tools / Risk-reward">
+  <h1>Risk-reward calculator</h1>
+  <p class="lede">
+    The ratio compares what a trade stands to gain against what it stands to
+    lose. On its own that number means little — it only becomes useful alongside
+    the win rate needed to break even at that ratio.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="entry">Entry price (₹)</label>
+        <input type="number" id="entry" value="1200" min="0.01" step="1" />
+      </div>
+      <div class="fld">
+        <label for="stop">Stop-loss price (₹)</label>
+        <input type="number" id="stop" value="1140" min="0" step="1" />
+      </div>
+      <div class="fld">
+        <label for="target">Target price (₹)</label>
+        <input type="number" id="target" value="1350" min="0" step="1" />
+      </div>
+      <div class="fld">
+        <label for="win">Your actual win rate (%)</label>
+        <input type="number" id="win" value="40" min="0" max="100" step="1" />
+        <div class="hint">From your own records, if you keep them.</div>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="rr">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">reward per unit of risk</div>
+      <div class="out-row"><span class="lbl">Risk per share</span><span class="val" id="risk">—</span></div>
+      <div class="out-row"><span class="lbl">Reward per share</span><span class="val" id="rew">—</span></div>
+      <div class="out-row"><span class="lbl">Break-even win rate</span><span class="val" id="be">—</span></div>
+      <div class="out-row"><span class="lbl">Expectancy at your win rate</span><span class="val" id="exp">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">ratio = (target − entry) / (entry − stop)
+break-even win rate = 1 / (1 + ratio)
+expectancy = winRate × reward − (1 − winRate) × risk</div>
+
+  <h2>Reading the result</h2>
+  <p class="lede">
+    At 2:1 you break even winning a third of the time. At 3:1, a quarter. This is
+    why a low win rate is not automatically a bad system — and why a high win rate
+    with a 0.3:1 ratio usually is. What decides the outcome is expectancy, not
+    either number alone.
+  </p>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>planned_not_realised</code><span class="meta">important</span></div>
+      <p>This is the ratio you intend. Slippage, gaps and exits taken before the
+        target mean the realised ratio is almost always worse.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>costs_excluded</code><span class="meta">excluded</span></div>
+      <p>Brokerage, STT, stamp duty and slippage are not deducted. On small moves
+        they matter more than the ratio does.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>wide_targets</code><span class="meta">caution</span></div>
+      <p>A distant target flatters the ratio while lowering the chance of ever
+        reaching it. The ratio says nothing about probability.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/position-sizing/">position sizing</a> ·
+    <a href="/learn/risk-management/">risk management</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    function run() {
+      const e = +$("entry").value, s = +$("stop").value,
+            t = +$("target").value, w = +$("win").value / 100;
+      $("err").textContent = "";
+      const clear = () => ["rr", "risk", "rew", "be", "exp"]
+        .forEach((id) => ($(id).textContent = "—"));
+
+      const risk = e - s, rew = t - e;
+      if (!(e > 0)) { clear(); $("err").textContent = "Entry price must be above zero."; return; }
+      if (!(risk > 0)) { clear(); $("err").textContent = "Stop-loss must be below the entry price."; return; }
+      if (!(rew > 0)) { clear(); $("err").textContent = "Target must be above the entry price."; return; }
+
+      const ratio = rew / risk;
+      const be = 1 / (1 + ratio);
+      const exp = w * rew - (1 - w) * risk;
+
+      $("rr").textContent = ratio.toFixed(2) + " : 1";
+      $("rr").className = "out-hero " + (ratio >= 1 ? "pos" : "neg");
+      $("risk").textContent = "₹" + risk.toFixed(2) + "  (" + ((risk / e) * 100).toFixed(2) + "%)";
+      $("rew").textContent = "₹" + rew.toFixed(2) + "  (" + ((rew / e) * 100).toFixed(2) + "%)";
+      $("be").textContent = (be * 100).toFixed(1) + "%";
+      $("exp").textContent = "₹" + exp.toFixed(2) + " per share";
+      $("exp").style.color = exp >= 0 ? "var(--up)" : "var(--down)";
+    }
+    ["entry", "stop", "target", "win"].forEach((id) => $(id).addEventListener("input", run));
+    run();
+  </script>
+</Base>

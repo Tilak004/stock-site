@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Contact";
+const description =
+  "Get in touch about the site, report an error in the data, or reach Shastri " +
+  "Financial Services about mutual fund distribution.";
+
+// TODO: LinkedIn URL pending from Tilak — placeholder intentionally omitted
+// rather than guessed, so no dead or wrong link ships.
+const EMAIL = "shastritilak880@gmail.com";
+const PHONE = "+91 94817 40319";
+---
+
+<Base title={title} description={description} crumb="Reference / Contact">
+  <h1>Contact</h1>
+  <p class="lede">
+    Questions about the site, the calculations, or something that looks wrong —
+    all welcome. Corrections especially.
+  </p>
+
+  <h2>About this site</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>email</code><span class="meta">preferred</span></div>
+      <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+    </div>
+    <div class="def">
+      <div class="h"><code>found_an_error</code><span class="meta">please do tell me</span></div>
+      <p>If an indicator value looks wrong, include the ticker and the date shown
+        in the table. Every row carries the date of the price bar it was computed
+        from, which makes it straightforward to check.</p>
+    </div>
+  </div>
+
+  <h2>Mutual fund distribution</h2>
+  <p class="lede">
+    Separate from this site. My distribution business operates as Shastri
+    Financial Services under <span class="c">ARN-346031</span>.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>website</code><span class="meta">Shastri Financial Services</span></div>
+      <p><a href="https://tilak004.github.io/Business_website/" rel="noopener">tilak004.github.io/Business_website</a></p>
+    </div>
+    <div class="def">
+      <div class="h"><code>phone</code><span class="meta">also WhatsApp</span></div>
+      <p>{PHONE}</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Please note.</b> I cannot tell you what to buy or sell, or whether a
+    particular stock suits you. That would be personalised investment advice,
+    which this site does not provide and which I am not registered to give. I am
+    happy to explain how anything here is calculated.
+  </div>
+
+  <div class="ad">Advertisement</div>
+</Base>

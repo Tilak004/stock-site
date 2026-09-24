@@ -1,0 +1,91 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "About";
+const description =
+  "Who runs this site, what it is for, how it is funded, and the limits of what " +
+  "it does. Built and maintained by Tilak Chandra Shastri, AMFI-registered " +
+  "mutual fund distributor (ARN-346031).";
+---
+
+<Base title={title} description={description} crumb="Reference / About">
+  <h1>About this site</h1>
+  <p class="lede">
+    A reference for Indian equity markets: standard technical indicators computed
+    daily across the NSE universe, a screener you control the thresholds on, and
+    written explanations of how the underlying concepts actually work.
+  </p>
+
+  <h2>Who runs it</h2>
+  <p>
+    <strong>Tilak Chandra Shastri.</strong> I am an independent,
+    <strong>AMFI-registered Mutual Fund Distributor</strong> —
+    <span class="c">ARN-346031</span> — operating as
+    <strong>Shastri Financial Services</strong>, with around five years of
+    hands-on experience in the stock market.
+  </p>
+  <p>
+    I built the analytics behind this site myself: the data pipeline, the
+    indicator calculations, the backtesting engine and the screener. It began as
+    a personal research project and this is the public, educational part of it.
+  </p>
+
+  <h2>Why it exists</h2>
+  <p>
+    Most Indian market content falls into one of two piles: tip services telling
+    you what to buy, or theory with no data attached. I wanted the third thing —
+    the actual numbers, computed transparently, with an honest explanation of
+    what they do and do not tell you.
+  </p>
+  <p>
+    That includes publishing the unflattering parts. A strategy's losing periods
+    are more instructive than its winning ones, and a screen that looks selective
+    is often just a threshold chosen after the fact. Where this site has
+    something to say about that, it says it.
+  </p>
+
+  <h2>What it is not</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>not_advisory</code><span class="meta">important</span></div>
+      <p>This site does not provide personalised investment advice. It publishes
+        computed values and explanations. Whether any security suits you depends
+        on your goals, horizon and risk tolerance — none of which it knows.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>not_a_tip_service</code><span class="meta">by design</span></div>
+      <p>There are no buy or sell calls here, and no entry, stop-loss or target
+        prices. You set the filters; the site reports what the data says.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>separate_from_my_distribution_business</code><span class="meta">disclosure</span></div>
+      <p>My mutual fund distribution business is a separate activity, conducted
+        under ARN-346031 at
+        <a href="https://tilak004.github.io/Business_website/" rel="noopener">Shastri
+        Financial Services</a>. This site is not a sales channel for it, and
+        nothing here is conditional on becoming a client.</p>
+    </div>
+  </div>
+
+  <h2>How the data is produced</h2>
+  <p class="lede">
+    Daily OHLCV from public sources, indicators computed with standard published
+    formulas, refreshed once per trading day. Where a value cannot be computed it
+    is shown as unavailable rather than estimated, and every row carries the date
+    of the price bar it came from. Full detail on the
+    <a href="/methodology/">methodology page</a>.
+  </p>
+
+  <h2>How it is funded</h2>
+  <p class="lede">
+    Through advertising. Ads are kept away from controls and never placed to
+    encourage accidental clicks. No content on this site is written to create ad
+    inventory, and no advertiser has any influence over what it says.
+  </p>
+
+  <h2>Contact</h2>
+  <p class="lede">
+    Corrections, questions and disagreements are all welcome — particularly
+    corrections. See the <a href="/contact/">contact page</a>.
+  </p>
+</Base>

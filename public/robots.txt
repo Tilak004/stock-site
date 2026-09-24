@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stock-site.pages.dev/sitemap-index.xml
+Sitemap: https://stock-site.shastritilak880.workers.dev/sitemap-index.xml

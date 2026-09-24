@@ -1,0 +1,57 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Investment & Trading Calculators";
+const description =
+  "Free calculators for SIP, step-up SIP, CAGR, XIRR, inflation, position sizing " +
+  "and risk-reward. Everything runs in your browser; nothing is stored or sent.";
+
+const tools = [
+  { href: "/tools/sip-calculator/", name: "SIP calculator",
+    desc: "What a fixed monthly investment grows to at an assumed rate." },
+  { href: "/tools/step-up-sip-calculator/", name: "Step-up SIP calculator",
+    desc: "A SIP whose instalment rises each year, compared against a flat one." },
+  { href: "/tools/cagr-calculator/", name: "CAGR calculator",
+    desc: "The constant annual rate between a start and end value." },
+  { href: "/tools/xirr-calculator/", name: "XIRR calculator",
+    desc: "Annualised return when money goes in and out on irregular dates." },
+  { href: "/tools/inflation-calculator/", name: "Inflation calculator",
+    desc: "What a sum will buy later, and the real rate after inflation." },
+  { href: "/tools/position-sizing/", name: "Position sizing calculator",
+    desc: "Quantity such that a stop-loss costs a fixed share of capital." },
+  { href: "/tools/risk-reward/", name: "Risk-reward calculator",
+    desc: "Reward per unit of risk, and the win rate needed to break even." },
+];
+---
+
+<Base title={title} description={description} crumb="Tools">
+  <h1>Calculators</h1>
+  <p class="lede">
+    Seven calculators, each with the formula it uses and an honest note on what
+    it leaves out. All computation happens in your browser — nothing you enter is
+    transmitted, logged or stored.
+  </p>
+
+  <div class="defs">
+    {tools.map((t) => (
+      <div class="def">
+        <div class="h"><code><a href={t.href}>{t.name}</a></code></div>
+        <p>{t.desc}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>A note on assumed returns</h2>
+  <p class="lede">
+    Several of these ask for an expected rate of return. That number is an
+    assumption you supply, not a forecast and not a rate this site is suggesting.
+    Real returns vary year to year and are negative for long stretches. A steady
+    12% is a convenience for arithmetic; no fund delivers it in a straight line.
+  </p>
+  <p class="lede">
+    None of the calculators deduct costs, taxes, expense ratios or slippage
+    unless stated. Actual outcomes will be lower than the figures shown.
+  </p>
+</Base>

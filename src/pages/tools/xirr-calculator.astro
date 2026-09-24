@@ -1,0 +1,165 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "XIRR Calculator — Returns on Irregular Cash Flows";
+const description =
+  "Calculate XIRR for investments with multiple contributions and withdrawals " +
+  "on arbitrary dates. Enter each cash flow with its date and get an annualised rate.";
+---
+
+<Base title={title} description={description} crumb="Tools / XIRR calculator">
+  <h1>XIRR calculator</h1>
+  <p class="lede">
+    XIRR is the annualised return when money goes in and out on irregular dates —
+    an SIP, top-ups, partial redemptions. It is the rate at which every cash flow,
+    discounted back to the first date, sums to zero.
+  </p>
+  <p class="lede">
+    Enter <strong>investments as negative</strong> (money leaving your pocket) and
+    <strong>redemptions or current value as positive</strong>.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in" style="grid-template-columns:1fr">
+      <div class="fld">
+        <label for="rows">Cash flows — one per line: <span class="c">YYYY-MM-DD, amount</span></label>
+        <textarea id="rows" rows="9" style="width:100%;padding:.5rem;border:1px solid var(--line);
+          border-radius:5px;background:var(--bg);color:var(--ink);font-family:var(--mono);
+          font-size:.85rem;resize:vertical">2024-01-01, -100000
+2024-07-01, -50000
+2025-01-01, -50000
+2026-09-24, 240000</textarea>
+        <div class="hint">Last line is usually today's value as a positive number.</div>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="xirr">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">annualised return (XIRR)</div>
+      <div class="out-row"><span class="lbl">Total invested</span><span class="val" id="inv">—</span></div>
+      <div class="out-row"><span class="lbl">Total received / current value</span><span class="val" id="rec">—</span></div>
+      <div class="out-row"><span class="lbl">Net gain</span><span class="val" id="gain">—</span></div>
+      <div class="out-row"><span class="lbl">Period</span><span class="val" id="span">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">Σ  CFₖ / (1 + r)^(dₖ / 365)  =  0        solved for r</div>
+  <p class="lede">
+    There is no closed form, so it is solved numerically — this page uses
+    Newton-Raphson with a bisection fallback when the derivative misbehaves.
+    That is the same approach spreadsheet <span class="c">XIRR()</span> uses, so
+    results should agree to within rounding.
+  </p>
+
+  <h2>Things worth knowing</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>sign_change_required</code><span class="meta">constraint</span></div>
+      <p>You need at least one negative and one positive flow. All-negative or
+        all-positive has no solution.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>multiple_roots</code><span class="meta">edge case</span></div>
+      <p>Cash flows that change sign several times can admit more than one
+        mathematically valid rate. Treat such results with suspicion.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>xirr_vs_cagr</code><span class="meta">which to use</span></div>
+      <p>One lump sum in, one value out → <a href="/tools/cagr-calculator/">CAGR</a>.
+        Anything else → XIRR.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function parse(text) {
+      const out = [];
+      for (const raw of text.split("\n")) {
+        const line = raw.trim();
+        if (!line) continue;
+        const m = line.split(",");
+        if (m.length < 2) return { error: `Could not read line: "${line}"` };
+        const d = new Date(m[0].trim());
+        const a = parseFloat(m[1].replace(/[₹,\s]/g, ""));
+        if (isNaN(d.getTime())) return { error: `Bad date: "${m[0].trim()}"` };
+        if (isNaN(a)) return { error: `Bad amount: "${m[1].trim()}"` };
+        out.push({ d, a });
+      }
+      return { flows: out.sort((x, y) => x.d - y.d) };
+    }
+
+    const npv = (flows, r, t0) =>
+      flows.reduce((s, f) => {
+        const yrs = (f.d - t0) / 86400000 / 365;
+        return s + f.a / Math.pow(1 + r, yrs);
+      }, 0);
+
+    function xirr(flows) {
+      const t0 = flows[0].d;
+      let r = 0.1;
+      // Newton-Raphson first: fast when it behaves.
+      for (let k = 0; k < 60; k++) {
+        const f = npv(flows, r, t0);
+        const d = (npv(flows, r + 1e-6, t0) - f) / 1e-6;
+        if (!isFinite(d) || Math.abs(d) < 1e-12) break;
+        const next = r - f / d;
+        if (!isFinite(next) || next <= -0.9999) break;
+        if (Math.abs(next - r) < 1e-9) return next;
+        r = next;
+      }
+      // Bisection fallback — slower but cannot diverge, provided the rate is bracketed.
+      let lo = -0.9999, hi = 10;
+      let flo = npv(flows, lo, t0);
+      if (flo * npv(flows, hi, t0) > 0) return null;
+      for (let k = 0; k < 300; k++) {
+        const mid = (lo + hi) / 2;
+        const fm = npv(flows, mid, t0);
+        if (Math.abs(fm) < 1e-7) return mid;
+        if (flo * fm < 0) hi = mid; else { lo = mid; flo = fm; }
+      }
+      return (lo + hi) / 2;
+    }
+
+    function run() {
+      $("err").textContent = "";
+      const clear = () => ["xirr", "inv", "rec", "gain", "span"]
+        .forEach((id) => ($(id).textContent = "—"));
+
+      const { flows, error } = parse($("rows").value);
+      if (error) { clear(); $("err").textContent = error; return; }
+      if (!flows || flows.length < 2) { clear(); $("err").textContent = "Enter at least two cash flows."; return; }
+
+      const neg = flows.filter((f) => f.a < 0), pos = flows.filter((f) => f.a > 0);
+      if (!neg.length || !pos.length) {
+        clear();
+        $("err").textContent = "Needs at least one negative (investment) and one positive (value) flow.";
+        return;
+      }
+
+      const r = xirr(flows);
+      if (r === null || !isFinite(r)) {
+        clear(); $("err").textContent = "No rate could be found for these cash flows.";
+        return;
+      }
+
+      const pct = r * 100;
+      $("xirr").textContent = pct.toFixed(2) + "%";
+      $("xirr").className = "out-hero " + (pct >= 0 ? "pos" : "neg");
+      const invested = -neg.reduce((s, f) => s + f.a, 0);
+      const received = pos.reduce((s, f) => s + f.a, 0);
+      $("inv").textContent = inr(invested);
+      $("rec").textContent = inr(received);
+      $("gain").textContent = inr(received - invested);
+      const days = (flows[flows.length - 1].d - flows[0].d) / 86400000;
+      $("span").textContent = (days / 365).toFixed(2) + " years";
+    }
+
+    $("rows").addEventListener("input", run);
+    run();
+  </script>
+</Base>

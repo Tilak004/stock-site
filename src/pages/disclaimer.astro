@@ -1,0 +1,77 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Disclaimer";
+const description =
+  "Full disclaimer: this site is educational, publishes computed indicator " +
+  "values, and does not provide personalised investment advice.";
+---
+
+<Base title={title} description={description} crumb="Reference / Disclaimer">
+  <h1>Disclaimer</h1>
+  <p class="lede">Last updated: 24 September 2026</p>
+
+  <h2>Educational purpose</h2>
+  <p class="lede">
+    Everything on this site is published for educational and informational
+    purposes. It computes and displays values of standard technical indicators
+    from publicly available market data, and lets you filter securities using
+    conditions you select. It explains how those concepts work.
+  </p>
+
+  <h2>Not investment advice</h2>
+  <p>
+    Nothing on this site constitutes personalised investment advice or a
+    recommendation to buy, sell or hold any security. No content here takes
+    account of your financial situation, objectives, horizon or risk tolerance,
+    because the site has no knowledge of them.
+  </p>
+  <p class="lede">
+    The operator of this site is an AMFI-registered mutual fund distributor
+    (ARN-346031) and is <strong>not</strong> a SEBI-registered Investment Adviser
+    or Research Analyst. For personalised advice, please consult a
+    SEBI-registered investment adviser.
+  </p>
+
+  <h2>About the data</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>computed_not_curated</code><span class="meta">how to read it</span></div>
+      <p>Indicator values are the output of standard published formulas applied
+        to price data. A stock appearing in a filtered list means only that its
+        values satisfied the thresholds you chose.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>describes_the_past</code><span class="meta">limitation</span></div>
+      <p>Technical indicators are functions of past prices. They describe what has
+        already happened. No indicator on this site predicts future prices, and
+        none should be read as doing so.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>errors_possible</code><span class="meta">no warranty</span></div>
+      <p>Data may be delayed, incomplete or wrong. Corporate actions, splits and
+        source errors all occur. Values are provided without warranty of accuracy
+        or fitness for any purpose. Verify anything before acting on it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>past_performance</code><span class="meta">standard but true</span></div>
+      <p>Historical and backtested results do not guarantee future performance.
+        Backtests are especially prone to overstating results — a subject the
+        site covers directly rather than glossing over.</p>
+    </div>
+  </div>
+
+  <h2>Your responsibility</h2>
+  <p class="lede">
+    Investing and trading in securities carries risk, including loss of capital.
+    Any decision you make is yours. Conduct your own research, consider your own
+    circumstances, and seek professional advice where appropriate. The operator
+    of this site accepts no liability for any loss arising from use of it.
+  </p>
+
+  <h2>Third-party links</h2>
+  <p class="lede">
+    Links to external sites are provided for convenience. This site is not
+    responsible for their content or practices.
+  </p>
+</Base>

@@ -271,3 +271,27 @@ td.n { font-family: var(--mono); }
 .foot b { color: var(--dim); }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ── Calculators ────────────────────────────────────────────────────────── */
+.calc { border: 1px solid var(--line); border-radius: 7px; background: var(--panel); overflow: hidden; margin: 1.2rem 0 1.6rem; }
+.calc-in { padding: 1rem; display: grid; gap: .9rem; }
+@media (min-width: 560px) { .calc-in { grid-template-columns: 1fr 1fr; } }
+.fld label { display: block; font-size: .78rem; color: var(--dim); margin-bottom: .25rem; }
+.fld input, .fld select {
+  width: 100%; padding: .42rem .55rem; border: 1px solid var(--line); border-radius: 5px;
+  background: var(--bg); color: var(--ink); font-family: var(--mono);
+  font-size: .9rem; font-variant-numeric: tabular-nums;
+}
+.fld .hint { font-size: .7rem; color: var(--faint); margin-top: .2rem; }
+.calc-out { border-top: 1px solid var(--line); background: var(--code); padding: 1rem; }
+.out-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .3rem 0; font-size: .85rem; }
+.out-row + .out-row { border-top: 1px dashed var(--line); }
+.out-row .lbl { color: var(--dim); }
+.out-row .val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; }
+.out-hero { font-family: var(--mono); font-size: 1.9rem; font-weight: 650; letter-spacing: -.03em; color: var(--link); line-height: 1.1; }
+.out-hero.pos { color: var(--up); }
+.out-hero.neg { color: var(--down); }
+.err { color: var(--down); font-size: .8rem; margin-top: .5rem; }
+.rows { width: 100%; font-size: .8rem; }
+.rows th, .rows td { padding: .3rem .5rem; }
+.formula { background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: .7rem .85rem; font-family: var(--mono); font-size: .82rem; overflow-x: auto; margin: .8rem 0; }

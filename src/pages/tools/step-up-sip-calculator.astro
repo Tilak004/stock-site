@@ -1,0 +1,124 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Step-Up SIP Calculator — Increasing Monthly Investment";
+const description =
+  "Calculate a SIP where the monthly amount rises by a fixed percentage each " +
+  "year, and compare it against a flat SIP over the same period.";
+---
+
+<Base title={title} description={description} crumb="Tools / Step-up SIP calculator">
+  <h1>Step-up SIP calculator</h1>
+  <p class="lede">
+    A step-up SIP raises the monthly instalment by a set percentage every year,
+    usually tracking a salary increase. This shows what that does over a long
+    period compared with keeping the amount flat.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="amt">Starting monthly amount (₹)</label>
+        <input type="number" id="amt" value="10000" min="0" step="500" />
+      </div>
+      <div class="fld">
+        <label for="step">Annual step-up (%)</label>
+        <input type="number" id="step" value="10" min="0" max="100" step="1" />
+      </div>
+      <div class="fld">
+        <label for="yrs">Period (years)</label>
+        <input type="number" id="yrs" value="15" min="1" max="50" step="1" />
+      </div>
+      <div class="fld">
+        <label for="rate">Assumed return (% per year)</label>
+        <input type="number" id="rate" value="12" min="0" max="50" step="0.5" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="fv">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">estimated value with step-up</div>
+      <div class="out-row"><span class="lbl">Total invested</span><span class="val" id="inv">—</span></div>
+      <div class="out-row"><span class="lbl">Estimated gain</span><span class="val" id="gain">—</span></div>
+      <div class="out-row"><span class="lbl">Final monthly instalment</span><span class="val" id="last">—</span></div>
+      <div class="out-row"><span class="lbl">Flat SIP would give</span><span class="val" id="flat">—</span></div>
+      <div class="out-row"><span class="lbl">Difference</span><span class="val" id="diff">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <p class="lede">
+    There is no tidy closed form once the instalment changes, so this is computed
+    month by month: each instalment is compounded for the months remaining, and
+    the amount is multiplied by <span class="c">(1 + step)</span> every twelfth
+    month. The flat-SIP comparison uses the same return on the unchanged starting
+    amount.
+  </p>
+
+  <h2>Worth noting</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>you_invest_more</code><span class="meta">obvious but easy to miss</span></div>
+      <p>A step-up ends up larger mostly because more money went in, not because
+        the rate improved. Compare total invested, not just the final figure.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>affordability</code><span class="meta">caution</span></div>
+      <p>A 10% annual step-up over 15 years takes a ₹10,000 instalment past
+        ₹38,000 a month. Check the later years are realistic before committing.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>same_exclusions</code><span class="meta">as the SIP calculator</span></div>
+      <p>No costs, no taxes, no inflation, and a constant return that no real
+        fund delivers.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/sip-calculator/">flat SIP</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a> ·
+    <a href="/tools/xirr-calculator/">XIRR</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    // Month-by-month because the instalment changes annually; no closed form.
+    function simulate(P0, stepPct, years, ratePct) {
+      const n = Math.round(years * 12);
+      const i = ratePct / 100 / 12;
+      const g = stepPct / 100;
+      let fv = 0, invested = 0, P = P0;
+      for (let m = 0; m < n; m++) {
+        if (m > 0 && m % 12 === 0) P *= 1 + g;
+        invested += P;
+        fv += P * Math.pow(1 + i, n - m);   // compounds for the remaining months
+      }
+      return { fv, invested, last: P, n };
+    }
+
+    function run() {
+      const P = +$("amt").value, s = +$("step").value,
+            y = +$("yrs").value, r = +$("rate").value;
+      $("err").textContent = "";
+      if (!(P >= 0) || !(y > 0) || !(r >= 0) || !(s >= 0)) {
+        ["fv", "inv", "gain", "last", "flat", "diff"].forEach((id) => ($(id).textContent = "—"));
+        $("err").textContent = "All inputs must be zero or greater, and the period above zero.";
+        return;
+      }
+      const up = simulate(P, s, y, r);
+      const flat = simulate(P, 0, y, r);
+      $("fv").textContent = inr(up.fv);
+      $("inv").textContent = inr(up.invested);
+      $("gain").textContent = inr(up.fv - up.invested);
+      $("last").textContent = inr(up.last);
+      $("flat").textContent = inr(flat.fv);
+      $("diff").textContent = inr(up.fv - flat.fv);
+    }
+    ["amt", "step", "yrs", "rate"].forEach((id) => $(id).addEventListener("input", run));
+    run();
+  </script>
+</Base>
