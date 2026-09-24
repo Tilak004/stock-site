@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Histogram from "../../components/Histogram.astro";
+import PriceChart from "../../components/PriceChart.astro";
 
 const title = "RSI Explained — Relative Strength Index";
 const description =
@@ -15,6 +16,13 @@ const description =
     expresses the result on a 0–100 scale. It measures the <em>balance</em> of
     buying and selling pressure over a lookback window — nothing more.
   </p>
+
+  <PriceChart
+    ticker="RELIANCE" indicator="rsi" levels={[30, 50, 70]}
+    shadeAbove={70} shadeBelow={30}
+    markPeak markTrough peakNote="highest RSI" troughNote="lowest RSI"
+    title="What RSI looks like underneath a real price chart"
+    caption="Price on top, RSI(14) below. The dotted lines mark the highest and lowest RSI readings of the period — follow each one up to the price line and see what price was doing at that moment. This is the whole idea: RSI is a description of the move above it, not a separate prediction." />
 
   <h2>How it is calculated</h2>
   <div class="formula">RS  = Average gain over n periods / Average loss over n periods

@@ -329,3 +329,26 @@ td.n { font-family: var(--mono); }
 .tbtn .i-moon { display: none; }
 :root[data-theme="light"] .tbtn .i-moon { display: block; }
 :root[data-theme="light"] .tbtn .i-sun { display: none; }
+
+/* Collapsed nav groups showed only a label, which made the sidebar a set of
+   mystery boxes. The count tells you whether opening one is worth it. */
+.grp-right { display: inline-flex; align-items: center; gap: .45rem; }
+.grp-n {
+  font-family: var(--mono); font-size: .66rem; color: var(--faint);
+  background: var(--chip); border-radius: 3px; padding: 0 .28rem; line-height: 1.5;
+}
+
+/* Page-to-page navigation, so the end of an article is never a dead end. */
+.pagenav { display: grid; gap: .6rem; margin: 2.4rem 0 0; }
+@media (min-width: 560px) { .pagenav { grid-template-columns: 1fr 1fr; } }
+.pagenav a {
+  display: block; border: 1px solid var(--line); border-radius: 7px;
+  padding: .7rem .85rem; text-decoration: none; background: var(--panel);
+}
+.pagenav a:hover { border-color: var(--link); text-decoration: none; }
+.pagenav .dir {
+  font-family: var(--mono); font-size: .68rem; color: var(--faint);
+  text-transform: uppercase; letter-spacing: .08em; display: block;
+}
+.pagenav .lbl { color: var(--ink); font-size: .88rem; font-weight: 500; }
+.pagenav .next { text-align: right; }

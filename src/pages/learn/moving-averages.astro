@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Histogram from "../../components/Histogram.astro";
+import PriceChart from "../../components/PriceChart.astro";
 
 const title = "Moving Averages Explained — SMA, EMA and the 200 DMA";
 const description =
@@ -16,6 +17,11 @@ const description =
     price series and see the underlying direction — and the oldest, which is part
     of why it still matters.
   </p>
+
+  <PriceChart
+    ticker="RELIANCE" indicator="adx" levels={[20, 25]} showMAs
+    title="Moving averages drawn on a real price line"
+    caption="The orange line is the 50-day average and the red is the 200-day. Notice they are always behind the price — that is not a defect, it is what averaging past prices necessarily does. Where price sits relative to them is the whole of what a moving average tells you." />
 
   <h2>Simple versus exponential</h2>
   <div class="formula">SMA = (P₁ + P₂ + ... + Pₙ) / n          every day weighted equally

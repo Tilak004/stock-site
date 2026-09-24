@@ -83,6 +83,8 @@ const groups = [
     items: [
       { href: "/tools/", label: "All calculators", tag: "CALC", cls: "calc" },
       { href: "/tools/sip-calculator/", label: "SIP", tag: "CALC", cls: "calc" },
+      { href: "/tools/lumpsum-calculator/", label: "Lumpsum", tag: "CALC", cls: "calc" },
+      { href: "/tools/emi-calculator/", label: "EMI / loan", tag: "CALC", cls: "calc" },
       { href: "/tools/step-up-sip-calculator/", label: "Step-up SIP", tag: "CALC", cls: "calc" },
       { href: "/tools/cagr-calculator/", label: "CAGR", tag: "CALC", cls: "calc" },
       { href: "/tools/xirr-calculator/", label: "XIRR", tag: "CALC", cls: "calc" },
@@ -104,6 +106,14 @@ const groups = [
 ];
 
 const hasRail = Astro.slots.has("rail");
+
+// Reading order is the sidebar order, flattened. Deriving prev/next from it
+// means a new page gets working navigation the moment it is added to `groups`.
+const flat = [{ href: "/", label: "Introduction" },
+              ...groups.flatMap((g) => g.items.map((i) => ({ href: i.href, label: i.label })))];
+const here = flat.findIndex((i) => i.href === path);
+const prev = here > 0 ? flat[here - 1] : null;
+const next = here >= 0 && here < flat.length - 1 ? flat[here + 1] : null;
 ---
 <!doctype html>
 <html lang="en-IN">
@@ -166,7 +176,11 @@ const hasRail = Astro.slots.has("rail");
             return (
               <>
                 <button class="grp" type="button" aria-expanded={String(g.open || active)}>
-                  <span>{g.label}</span><span class="ch">▶</span>
+                  <span>{g.label}</span>
+                  <span class="grp-right">
+                    <span class="grp-n">{g.items.length}</span>
+                    <span class="ch">▶</span>
+                  </span>
                 </button>
                 <ul class="sub" style={g.open || active ? "" : "display:none"}>
                   {g.items.map((i) => (
@@ -207,6 +221,19 @@ const hasRail = Astro.slots.has("rail");
           <div class="doc">
             {crumb && <div class="crumb">{crumb}</div>}
             <slot />
+
+            {(prev || next) && (
+              <nav class="pagenav" aria-label="Previous and next page">
+                {prev ? (
+                  <a href={prev.href}><span class="dir">← Previous</span>
+                    <span class="lbl">{prev.label}</span></a>
+                ) : <span />}
+                {next && (
+                  <a href={next.href} class="next"><span class="dir">Next →</span>
+                    <span class="lbl">{next.label}</span></a>
+                )}
+              </nav>
+            )}
 
             <div class="foot">
               <b>Disclaimer.</b> Educational and informational purposes only. This

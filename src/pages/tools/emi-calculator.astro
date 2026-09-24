@@ -1,0 +1,117 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "EMI Calculator — Home, Car and Personal Loan";
+const description =
+  "Calculate your monthly EMI, total interest paid and the full repayment amount " +
+  "for any loan, with the formula and what it leaves out.";
+---
+
+<Base title={title} description={description} crumb="Tools / EMI calculator">
+  <h1>EMI calculator</h1>
+  <p class="lede">
+    Equated Monthly Instalment — the fixed amount you pay each month until a loan
+    is cleared. Every instalment is part interest and part principal, and the mix
+    shifts steadily over the life of the loan.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="p">Loan amount (₹)</label>
+        <input type="number" id="p" value="3000000" min="1000" step="50000" />
+      </div>
+      <div class="fld">
+        <label for="r">Interest rate (% per year)</label>
+        <input type="number" id="r" value="8.5" min="0.1" max="40" step="0.05" />
+      </div>
+      <div class="fld">
+        <label for="y">Tenure (years)</label>
+        <input type="number" id="y" value="20" min="0.5" max="40" step="0.5" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="emi">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">per month</div>
+      <div class="out-row"><span class="lbl">Total interest paid</span><span class="val" id="int">—</span></div>
+      <div class="out-row"><span class="lbl">Total amount repaid</span><span class="val" id="tot">—</span></div>
+      <div class="out-row"><span class="lbl">Interest as % of loan</span><span class="val" id="pct">—</span></div>
+      <div class="out-row"><span class="lbl">Number of instalments</span><span class="val" id="n">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">EMI = P × i × (1+i)^n / [ (1+i)^n − 1 ]
+
+P = principal,  i = annual rate / 12 / 100,  n = tenure in months</div>
+
+  <h2>The part that surprises people</h2>
+  <p class="lede">
+    On a 20-year home loan at 8.5%, <strong>the total interest exceeds the amount
+    borrowed</strong>. Change the tenure above from 20 years to 15 and watch the
+    interest figure fall — the monthly EMI rises, but the total paid drops
+    sharply. That trade-off is the most useful thing this calculator shows, and
+    it is the opposite of how loans are usually sold.
+  </p>
+
+  <h2>What it does not include</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>processing_fees</code><span class="meta">excluded</span></div>
+      <p>Typically 0.25–1% of the loan amount, charged upfront.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>floating_rates</code><span class="meta">important in India</span></div>
+      <p>Most Indian home loans float against a repo-linked benchmark. When the
+        rate moves, lenders commonly adjust the <em>tenure</em> rather than the
+        EMI — so the loan quietly gets longer instead of visibly costlier. Ask
+        which one your lender changes.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>prepayment</code><span class="meta">not modelled</span></div>
+      <p>Paying extra against principal shortens the loan considerably. Floating-rate
+        home loans to individuals carry no prepayment penalty.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>tax_treatment</code><span class="meta">excluded</span></div>
+      <p>Deductions available on home loan interest and principal are outside this
+        calculation and change the effective cost.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/lumpsum-calculator/">lumpsum</a> ·
+    <a href="/tools/sip-calculator/">SIP</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const P = +$("p").value, R = +$("r").value, Y = +$("y").value;
+      $("err").textContent = "";
+      const ids = ["emi", "int", "tot", "pct", "n"];
+      if (!(P > 0) || !(R > 0) || !(Y > 0)) {
+        ids.forEach((i) => ($(i).textContent = "—"));
+        $("err").textContent = "All three values must be greater than zero.";
+        return;
+      }
+      const i = R / 100 / 12, n = Math.round(Y * 12);
+      const f = Math.pow(1 + i, n);
+      const emi = (P * i * f) / (f - 1);
+      const total = emi * n;
+      $("emi").textContent = inr(emi);
+      $("int").textContent = inr(total - P);
+      $("tot").textContent = inr(total);
+      $("pct").textContent = (((total - P) / P) * 100).toFixed(1) + "%";
+      $("n").textContent = n;
+    }
+    ["p", "r", "y"].forEach((i) => $(i).addEventListener("input", run));
+    run();
+  </script>
+</Base>

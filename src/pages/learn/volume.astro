@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Histogram from "../../components/Histogram.astro";
+import PriceChart from "../../components/PriceChart.astro";
 
 const title = "Volume and Relative Volume Explained";
 const description =
@@ -16,6 +17,12 @@ const description =
     small one trades thousands. What carries information is volume compared with
     <em>its own</em> recent average.
   </p>
+
+  <PriceChart
+    ticker="RELIANCE" indicator="vol_ratio" levels={[1, 2]}
+    markPeak peakNote="busiest session"
+    title="Relative volume under a real price chart"
+    caption="The busiest session of the period is marked on both panels. Look at what price did that day — heavy volume tells you many people transacted, never which way they were leaning." />
 
   <h2>Relative volume</h2>
   <div class="formula">Relative volume = Today's volume / 20-day average volume</div>
