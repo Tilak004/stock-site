@@ -152,6 +152,15 @@ const hasRail = Astro.slots.has("rail");
         </div>
 
         <div class="navscroll">
+          <ul class="sub" style="margin-bottom:.5rem">
+            <li>
+              <a href="/" aria-current={path === "/" ? "page" : undefined}
+                 style="padding-left:.85rem">
+                Introduction<span class="tag doc">START</span>
+              </a>
+            </li>
+          </ul>
+
           {groups.map((g) => {
             const active = g.items.some((i) => path.startsWith(i.href));
             return (
