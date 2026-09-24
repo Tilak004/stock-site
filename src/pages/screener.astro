@@ -36,7 +36,19 @@ const description =
       <tbody id="tb"></tbody>
     </table>
   </div>
-  <p class="lede" id="more" style="font-size:.78rem;margin-top:.5rem"></p>
+  <div class="pager">
+    <button class="pgbtn" id="prev" type="button" aria-label="Previous page">&larr; Prev</button>
+    <span class="pos" id="pos">&mdash;</span>
+    <button class="pgbtn" id="next" type="button" aria-label="Next page">Next &rarr;</button>
+    <span class="spacer"></span>
+    <label for="per">Rows</label>
+    <select id="per" style="width:auto">
+      <option value="10" selected>10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
 
   <div class="ad">Advertisement</div>
 
@@ -143,7 +155,7 @@ const description =
     const f = (v, d = 2) =>
       v === null || v === undefined ? '<span class="na">—</span>' : Number(v).toFixed(d);
 
-    let DATA = [], sk = "turnover_cr", sd = -1;
+    let DATA = [], sk = "turnover_cr", sd = -1, page = 1;
 
     const T = () => ({
       lo: +$("a").value, hi: +$("b").value, adx: +$("c").value,
@@ -180,7 +192,20 @@ const description =
       });
 
       $("cnt").textContent = rows.length;
-      const shown = rows.slice(0, 250);
+
+      const per = +$("per").value;
+      const pages = Math.max(1, Math.ceil(rows.length / per));
+      // A filter change can shrink the result set below the current page.
+      if (page > pages) page = pages;
+      const start = (page - 1) * per;
+      const shown = rows.slice(start, start + per);
+
+      $("pos").textContent = rows.length
+        ? `${start + 1}–${start + shown.length} of ${rows.length}`
+        : "no matches";
+      $("prev").disabled = page <= 1;
+      $("next").disabled = page >= pages;
+
       $("tb").innerHTML = shown.map((r) => {
         const c = r.chg_pct === null ? "" : r.chg_pct >= 0 ? "up" : "down";
         return `<tr>
@@ -192,10 +217,6 @@ const description =
           <td class="met"><b>${r._m}</b>/6</td></tr>`;
       }).join("");
 
-      $("more").textContent =
-        rows.length > shown.length
-          ? `Showing the first ${shown.length} of ${rows.length}. Narrow the filters to see fewer.`
-          : "";
     }
 
     fetch("/data/snapshot.json")
@@ -226,19 +247,25 @@ const description =
         $("cnt").textContent = "—";
       });
 
+    // Changing a filter returns to page 1 — staying on page 7 of a set that just
+    // shrank to 2 pages reads as a broken table.
     ["a", "b", "c", "d", "e", "f", "g"].forEach((i) =>
-      $(i).addEventListener("input", draw));
+      $(i).addEventListener("input", () => { page = 1; draw(); }));
+
+    $("per").addEventListener("change", () => { page = 1; draw(); });
+    $("prev").addEventListener("click", () => { if (page > 1) { page--; draw(); } });
+    $("next").addEventListener("click", () => { page++; draw(); });
 
     document.querySelectorAll("thead th").forEach((th) =>
       th.addEventListener("click", () => {
         const k = th.dataset.k;
-        sd = sk === k ? -sd : -1; sk = k; draw();
+        sd = sk === k ? -sd : -1; sk = k; page = 1; draw();
       }));
 
     $("reset").addEventListener("click", () => {
       $("a").value = 35; $("b").value = 70; $("c").value = 18;
       $("d").value = 10; $("e").value = 25; $("f").value = 0; $("g").value = "";
-      draw();
+      page = 1; draw();
     });
     });
   </script>
