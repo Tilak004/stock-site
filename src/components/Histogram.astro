@@ -1,0 +1,147 @@
+---
+/**
+ * Histogram.astro — a distribution chart rendered at BUILD time from the daily
+ * snapshot.
+ *
+ * Why build-time SVG rather than a client-side chart library:
+ *   - crawlable, so the figure counts as page content for search
+ *   - no JavaScript, no layout shift, nothing to hydrate
+ *   - no dependency, and it themes itself through CSS custom properties
+ *
+ * The point of these figures is that they are not illustrations. They are
+ * measurements of the actual NSE universe on the date shown, and they change
+ * every night when the snapshot refreshes.
+ */
+import snapshot from "../../public/data/snapshot.json";
+
+export interface Band {
+  from: number;
+  to: number;
+  label: string;
+  tone?: "warn" | "good" | "bad";
+}
+
+export interface Props {
+  field: string;          // key in each snapshot row, e.g. "rsi"
+  min: number;
+  max: number;
+  bins?: number;
+  bands?: Band[];         // shaded regions with labels
+  markers?: number[];     // vertical reference lines
+  title: string;
+  caption?: string;
+  unit?: string;
+}
+
+const {
+  field, min, max, bins = 28, bands = [], markers = [],
+  title, caption, unit = "",
+} = Astro.props;
+
+const rows = (snapshot as any).stocks ?? [];
+const values: number[] = rows
+  .map((r: any) => r[field])
+  .filter((v: any) => typeof v === "number" && isFinite(v));
+
+// Clamp into range so outliers land in the end bins rather than vanishing.
+const counts = new Array(bins).fill(0);
+for (const v of values) {
+  const c = Math.min(max, Math.max(min, v));
+  const i = Math.min(bins - 1, Math.floor(((c - min) / (max - min)) * bins));
+  counts[i]++;
+}
+const peak = Math.max(1, ...counts);
+
+const W = 640, H = 200, PAD_L = 34, PAD_B = 26, PAD_T = 14, PAD_R = 8;
+const plotW = W - PAD_L - PAD_R;
+const plotH = H - PAD_T - PAD_B;
+const x = (v: number) => PAD_L + ((v - min) / (max - min)) * plotW;
+const barW = plotW / bins;
+
+const median = values.length
+  ? [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
+  : null;
+
+const barDate = rows.length ? rows[0].bar_date : "unknown";
+const toneVar = (t?: string) =>
+  t === "good" ? "var(--up)" : t === "bad" ? "var(--down)" : "var(--warn)";
+---
+
+<figure class="fig">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img"
+       aria-label={`${title}. Distribution across ${values.length} stocks on ${barDate}.`}>
+    {/* shaded bands */}
+    {bands.map((b) => (
+      <rect x={x(b.from)} y={PAD_T} width={x(b.to) - x(b.from)} height={plotH}
+            fill={toneVar(b.tone)} opacity="0.08" />
+    ))}
+
+    {/* bars */}
+    {counts.map((c, i) => {
+      const h = (c / peak) * plotH;
+      return (
+        <rect x={PAD_L + i * barW + 0.6} y={PAD_T + plotH - h}
+              width={Math.max(1, barW - 1.2)} height={h}
+              fill="var(--link)" opacity="0.85" />
+      );
+    })}
+
+    {/* reference markers */}
+    {markers.map((m) => (
+      <g>
+        <line x1={x(m)} y1={PAD_T} x2={x(m)} y2={PAD_T + plotH}
+              stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55" />
+        <text x={x(m)} y={PAD_T - 4} text-anchor="middle"
+              font-size="9" font-family="var(--mono)" fill="var(--dim)">{m}</text>
+      </g>
+    ))}
+
+    {/* axes */}
+    <line x1={PAD_L} y1={PAD_T + plotH} x2={W - PAD_R} y2={PAD_T + plotH}
+          stroke="var(--line)" stroke-width="1" />
+    <line x1={PAD_L} y1={PAD_T} x2={PAD_L} y2={PAD_T + plotH}
+          stroke="var(--line)" stroke-width="1" />
+
+    {[min, (min + max) / 2, max].map((t) => (
+      <text x={x(t)} y={H - 8} text-anchor="middle"
+            font-size="10" font-family="var(--mono)" fill="var(--faint)">{t}{unit}</text>
+    ))}
+    <text x={PAD_L - 6} y={PAD_T + 8} text-anchor="end"
+          font-size="9" font-family="var(--mono)" fill="var(--faint)">{peak}</text>
+    <text x={PAD_L - 6} y={PAD_T + plotH} text-anchor="end"
+          font-size="9" font-family="var(--mono)" fill="var(--faint)">0</text>
+
+    {/* band labels sit inside their region */}
+    {bands.map((b) => (
+      <text x={(x(b.from) + x(b.to)) / 2} y={PAD_T + plotH - 6} text-anchor="middle"
+            font-size="9" font-family="var(--mono)" fill={toneVar(b.tone)}>{b.label}</text>
+    ))}
+  </svg>
+
+  <figcaption>
+    <strong>{title}</strong>
+    {caption && <> — {caption}</>}
+    <br />
+    <span class="meta-line">
+      {values.length} stocks · bar date {barDate}
+      {median !== null && <> · median {median.toFixed(1)}{unit}</>}
+      {" "}· recomputed nightly, not an illustration
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .fig { margin: 1.4rem 0 1.8rem; }
+  .fig svg {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--panel); padding: .3rem;
+  }
+  figcaption {
+    font-size: .8rem; color: var(--dim); margin-top: .5rem; line-height: 1.5;
+  }
+  figcaption strong { color: var(--ink); }
+  .meta-line {
+    font-family: var(--mono); font-size: .72rem; color: var(--faint);
+  }
+</style>

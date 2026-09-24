@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Histogram from "../../components/Histogram.astro";
 
 const title = "RSI Explained — Relative Strength Index";
 const description =
@@ -49,6 +50,14 @@ RSI = 100 − 100 / (1 + RS)</div>
     RSI <em>between</em> 35 and 70 rather than below 30 — it excludes both
     extremes rather than chasing either.
   </p>
+
+  <Histogram
+    field="rsi" min={0} max={100} bins={25}
+    bands={[{ from: 0, to: 30, label: "oversold", tone: "bad" },
+            { from: 70, to: 100, label: "overbought", tone: "good" }]}
+    markers={[30, 70]}
+    title="Where RSI actually sits across the NSE universe"
+    caption="Most stocks cluster in the middle on any given day. The tails are thin, which is precisely why 30 and 70 became the conventional lines rather than 10 and 90. On a strongly trending day the whole distribution shifts right." />
 
   <h2>Period length changes everything</h2>
   <div class="defs">

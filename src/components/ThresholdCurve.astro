@@ -1,0 +1,114 @@
+---
+/**
+ * ThresholdCurve.astro — how many stocks survive as a threshold tightens.
+ *
+ * This is the site's central teaching point rendered as a picture: a screen
+ * looks selective largely because of where the threshold was drawn, not because
+ * it found something. Built at build time from the daily snapshot, so it is a
+ * measurement of the real universe rather than a drawing of the idea.
+ */
+import snapshot from "../../public/data/snapshot.json";
+
+export interface Props {
+  field: string;
+  min: number;
+  max: number;
+  /** "gte" counts rows at or above t; "lte" counts rows at or below t. */
+  direction?: "gte" | "lte";
+  steps?: number;
+  title: string;
+  caption?: string;
+  highlight?: number;     // the screener's default, marked on the curve
+  unit?: string;
+}
+
+const {
+  field, min, max, direction = "gte", steps = 60,
+  title, caption, highlight, unit = "",
+} = Astro.props;
+
+const rows = (snapshot as any).stocks ?? [];
+const values: number[] = rows
+  .map((r: any) => r[field])
+  .filter((v: any) => typeof v === "number" && isFinite(v));
+
+const thresholds = Array.from({ length: steps + 1 },
+  (_, i) => min + (i / steps) * (max - min));
+const survivors = thresholds.map((t) =>
+  direction === "gte" ? values.filter((v) => v >= t).length
+                      : values.filter((v) => v <= t).length);
+
+const W = 640, H = 210, PAD_L = 40, PAD_B = 28, PAD_T = 14, PAD_R = 10;
+const plotW = W - PAD_L - PAD_R, plotH = H - PAD_T - PAD_B;
+const total = Math.max(1, values.length);
+const x = (v: number) => PAD_L + ((v - min) / (max - min)) * plotW;
+const y = (n: number) => PAD_T + plotH - (n / total) * plotH;
+
+const path = thresholds
+  .map((t, i) => `${i === 0 ? "M" : "L"}${x(t).toFixed(1)},${y(survivors[i]).toFixed(1)}`)
+  .join(" ");
+const area = `${path} L${x(max).toFixed(1)},${(PAD_T + plotH).toFixed(1)} L${x(min).toFixed(1)},${(PAD_T + plotH).toFixed(1)} Z`;
+
+const atHighlight = highlight !== undefined
+  ? (direction === "gte" ? values.filter((v) => v >= highlight).length
+                         : values.filter((v) => v <= highlight).length)
+  : null;
+
+const barDate = rows.length ? rows[0].bar_date : "unknown";
+---
+
+<figure class="fig">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img"
+       aria-label={`${title}. Number of stocks satisfying the threshold, ${barDate}.`}>
+    <path d={area} fill="var(--link)" opacity="0.10" />
+    <path d={path} fill="none" stroke="var(--link)" stroke-width="2"
+          stroke-linejoin="round" />
+
+    {highlight !== undefined && (
+      <g>
+        <line x1={x(highlight)} y1={PAD_T} x2={x(highlight)} y2={PAD_T + plotH}
+              stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 3" />
+        <circle cx={x(highlight)} cy={y(atHighlight!)} r="3.5" fill="var(--warn)" />
+        <text x={x(highlight) + 6} y={y(atHighlight!) - 7}
+              font-size="10" font-family="var(--mono)" fill="var(--warn)">
+          {highlight}{unit} → {atHighlight}
+        </text>
+      </g>
+    )}
+
+    <line x1={PAD_L} y1={PAD_T + plotH} x2={W - PAD_R} y2={PAD_T + plotH}
+          stroke="var(--line)" stroke-width="1" />
+    <line x1={PAD_L} y1={PAD_T} x2={PAD_L} y2={PAD_T + plotH}
+          stroke="var(--line)" stroke-width="1" />
+
+    {[min, (min + max) / 2, max].map((t) => (
+      <text x={x(t)} y={H - 9} text-anchor="middle"
+            font-size="10" font-family="var(--mono)" fill="var(--faint)">{t}{unit}</text>
+    ))}
+    {[0, total].map((n) => (
+      <text x={PAD_L - 6} y={y(n) + 3} text-anchor="end"
+            font-size="9" font-family="var(--mono)" fill="var(--faint)">{n}</text>
+    ))}
+  </svg>
+
+  <figcaption>
+    <strong>{title}</strong>
+    {caption && <> — {caption}</>}
+    <br />
+    <span class="meta-line">
+      {values.length} stocks · bar date {barDate} · recomputed nightly
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .fig { margin: 1.4rem 0 1.8rem; }
+  .fig svg {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--panel); padding: .3rem;
+  }
+  figcaption { font-size: .8rem; color: var(--dim); margin-top: .5rem; line-height: 1.5; }
+  figcaption strong { color: var(--ink); }
+  .meta-line { font-family: var(--mono); font-size: .72rem; color: var(--faint); }
+</style>

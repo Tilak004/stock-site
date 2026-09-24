@@ -1,5 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Histogram from "../../components/Histogram.astro";
+import ThresholdCurve from "../../components/ThresholdCurve.astro";
 
 const title = "ADX Explained — Average Directional Index";
 const description =
@@ -74,6 +76,19 @@ ADX            →  how decisively, either way</div>
     "ADX is 35" without the DI relationship says nothing about whether the stock
     is rising.
   </p>
+
+  <Histogram
+    field="adx" min={0} max={60} bins={24}
+    bands={[{ from: 0, to: 20, label: "no trend", tone: "warn" },
+            { from: 25, to: 60, label: "trending", tone: "good" }]}
+    markers={[20, 25]}
+    title="ADX across the universe today"
+    caption="How much of the market is actually trending right now, rather than in theory. In a quiet market the mass sits left of 20; after a decisive move it shifts right." />
+
+  <ThresholdCurve
+    field="adx" min={0} max={50} direction="gte" highlight={18}
+    title="How many stocks survive as the ADX threshold rises"
+    caption="The screener default of 18 is marked. Move it to 25 and the sample shrinks sharply — this curve is the trade-off between selectivity and sample size, measured rather than asserted." />
 
   <h2>The lag is structural, not a flaw</h2>
   <p class="lede">

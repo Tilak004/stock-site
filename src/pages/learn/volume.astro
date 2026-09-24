@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Histogram from "../../components/Histogram.astro";
 
 const title = "Volume and Relative Volume Explained";
 const description =
@@ -63,6 +64,13 @@ const description =
     trades can set the close. The <span class="c">turnover_cr</span> column shows
     the figure so you can judge it directly.
   </p>
+
+  <Histogram
+    field="vol_ratio" min={0} max={3} bins={30}
+    markers={[1]}
+    bands={[{ from: 1, to: 3, label: "above average", tone: "good" }]}
+    title="Relative volume across the universe today" unit="x"
+    caption="The peak sits near 1.0 by construction — most sessions are ordinary. What matters is the right tail: the stocks trading well above their own norm today." />
 
   <h2>Turnover versus share count</h2>
   <div class="formula">Turnover (&#8377;) = Volume (shares) &times; Price</div>

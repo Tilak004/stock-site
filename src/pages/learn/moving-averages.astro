@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Histogram from "../../components/Histogram.astro";
 
 const title = "Moving Averages Explained — SMA, EMA and the 200 DMA";
 const description =
@@ -76,6 +77,13 @@ where k = 2 / (n + 1)                   recent days weighted more</div>
         <span class="c">ema21_above_50</span> condition is this comparison.</p>
     </div>
   </div>
+
+  <Histogram
+    field="pct_from_52wh" min={-60} max={0} bins={24}
+    markers={[-25]}
+    bands={[{ from: -25, to: 0, label: "within 25% of high", tone: "good" }]}
+    title="Distance from the 52-week high across the universe" unit="%"
+    caption="A breadth reading in one picture. When the distribution hugs zero the market is broadly strong; when it spreads left, few stocks are near their highs regardless of what the index is doing." />
 
   <h2>The lag is unavoidable</h2>
   <p>
