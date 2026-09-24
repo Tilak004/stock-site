@@ -1,0 +1,269 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Technical Screener — Filter NSE Stocks by Indicator Values";
+const description =
+  "Filter NSE stocks using standard technical indicators: RSI, ADX, moving " +
+  "averages, relative volume and distance from the 52-week high. Set your own " +
+  "thresholds and see how many stocks satisfy them.";
+---
+
+<Base title={title} description={description}>
+  <section class="wrap" style="padding-top:2rem">
+    <p class="eyebrow">Interactive tool</p>
+    <h1>Technical screener</h1>
+    <p style="max-width:68ch;color:var(--muted)">
+      Every value below is computed from publicly available daily price data
+      using standard formulas. <strong>You choose the thresholds.</strong> Move
+      them and watch how many stocks qualify — that relationship is itself worth
+      understanding, and it is the reason a screen that looks selective can
+      still be meaningless.
+    </p>
+
+    <div id="meta" class="notice" style="margin:1rem 0">Loading data…</div>
+
+    <!-- Controls -->
+    <div class="card" style="margin-bottom:1rem">
+      <div class="controls">
+        <div class="ctl">
+          <label for="rsiLo">RSI(14) minimum: <span id="rsiLoVal" class="num">35</span></label>
+          <input type="range" id="rsiLo" min="0" max="100" step="1" value="35" />
+        </div>
+        <div class="ctl">
+          <label for="rsiHi">RSI(14) maximum: <span id="rsiHiVal" class="num">70</span></label>
+          <input type="range" id="rsiHi" min="0" max="100" step="1" value="70" />
+        </div>
+        <div class="ctl">
+          <label for="adxMin">ADX(14) minimum: <span id="adxMinVal" class="num">18</span></label>
+          <input type="range" id="adxMin" min="0" max="60" step="1" value="18" />
+        </div>
+        <div class="ctl">
+          <label for="volMult">Volume vs 20-day avg, at least: <span id="volMultVal" class="num">1.0</span>×</label>
+          <input type="range" id="volMult" min="0" max="3" step="0.1" value="1" />
+        </div>
+        <div class="ctl">
+          <label for="pct52">Within this % of the 52-week high: <span id="pct52Val" class="num">25</span>%</label>
+          <input type="range" id="pct52" min="0" max="90" step="1" value="25" />
+        </div>
+        <div class="ctl">
+          <label for="minMet">Minimum conditions met</label>
+          <select id="minMet">
+            <option value="0">Any</option>
+            <option value="3">3 or more</option>
+            <option value="4">4 or more</option>
+            <option value="5">5 or more</option>
+            <option value="6">All 6</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <label for="sector">Sector</label>
+          <select id="sector"><option value="">All sectors</option></select>
+        </div>
+        <div class="ctl">
+          <label for="minTurn">Minimum daily turnover (₹ crore)</label>
+          <input type="number" id="minTurn" min="0" step="1" value="0" />
+        </div>
+        <div class="ctl" style="display:flex;align-items:end">
+          <button class="theme-btn" id="reset" type="button" style="width:100%">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <p id="count" class="stat" aria-live="polite">—</p>
+    <p class="stat-label" style="margin-top:-.4rem">stocks satisfy every condition you selected</p>
+
+    <div class="table-scroll" style="margin-top:1rem">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th data-k="ticker">Stock</th>
+            <th data-k="close">Close</th>
+            <th data-k="chg_pct">Chg %</th>
+            <th data-k="rsi">RSI</th>
+            <th data-k="adx">ADX</th>
+            <th data-k="vol_ratio">Vol ×</th>
+            <th data-k="pct_from_52wh">From 52wH</th>
+            <th data-k="atr_pct">ATR %</th>
+            <th data-k="turnover_cr">Turnover ₹cr</th>
+            <th data-k="met">Met</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="stat-label" id="truncated" style="margin-top:.5rem"></p>
+
+    <div class="ad-slot" aria-hidden="true">Advertisement</div>
+
+    <div class="prose" style="padding:0;margin:2rem 0 0">
+      <h2>What these columns mean</h2>
+      <p>
+        <strong>RSI(14)</strong> compares the size of recent gains to recent
+        losses on a 0–100 scale. Readings below about 30 are conventionally
+        described as oversold and above 70 as overbought.
+        <a href="/learn/rsi/">Read more about RSI</a>.
+      </p>
+      <p>
+        <strong>ADX(14)</strong> measures how strongly a market is trending,
+        regardless of direction. A low ADX describes a sideways market, not a
+        falling one.
+      </p>
+      <p>
+        <strong>Vol ×</strong> is the session's volume divided by its own 20-day
+        average, so 1.4× means 40% more shares changed hands than usual.
+      </p>
+      <p>
+        <strong>Met</strong> counts how many of the six conditions a stock
+        satisfies at your current thresholds. It is a count, not a rating — a
+        stock meeting six conditions is not thereby a better investment than one
+        meeting three.
+      </p>
+      <p class="na">
+        Where a value could not be computed, the table shows “n/a” rather than a
+        substituted number.
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    const F = (v, d = 2) =>
+      v === null || v === undefined || Number.isNaN(v)
+        ? '<span class="na">n/a</span>'
+        : Number(v).toFixed(d);
+
+    const state = { rows: [], sortKey: "turnover_cr", sortDir: -1 };
+
+    const el = (id) => document.getElementById(id);
+    const ctls = ["rsiLo", "rsiHi", "adxMin", "volMult", "pct52", "minMet", "sector", "minTurn"];
+
+    function thresholds() {
+      return {
+        rsiLo: +el("rsiLo").value,
+        rsiHi: +el("rsiHi").value,
+        adxMin: +el("adxMin").value,
+        volMult: +el("volMult").value,
+        pct52: -Math.abs(+el("pct52").value),
+        minMet: +el("minMet").value,
+        sector: el("sector").value,
+        minTurn: +el("minTurn").value || 0,
+      };
+    }
+
+    // Recomputed live from the raw values — this is what makes the sliders
+    // teach something rather than just filter a precomputed flag.
+    function evaluate(r, t) {
+      const c = [
+        r.close !== null && r.ema200 !== null ? r.close > r.ema200 : null,
+        r.ema21 !== null && r.ema50 !== null ? r.ema21 > r.ema50 : null,
+        r.rsi !== null ? r.rsi >= t.rsiLo && r.rsi <= t.rsiHi : null,
+        r.adx !== null ? r.adx >= t.adxMin : null,
+        r.vol_ratio !== null ? r.vol_ratio >= t.volMult : null,
+        r.pct_from_52wh !== null ? r.pct_from_52wh >= t.pct52 : null,
+      ];
+      return c.filter((x) => x === true).length;
+    }
+
+    function render() {
+      const t = thresholds();
+      let rows = state.rows.map((r) => ({ ...r, _met: evaluate(r, t) }));
+      rows = rows.filter(
+        (r) =>
+          r._met >= t.minMet &&
+          (!t.sector || r.sector === t.sector) &&
+          (r.turnover_cr ?? 0) >= t.minTurn
+      );
+
+      const k = state.sortKey, dir = state.sortDir;
+      rows.sort((a, b) => {
+        const av = k === "met" ? a._met : a[k], bv = k === "met" ? b._met : b[k];
+        if (av === null || av === undefined) return 1;
+        if (bv === null || bv === undefined) return -1;
+        return typeof av === "string" ? av.localeCompare(bv) * dir : (av - bv) * dir;
+      });
+
+      el("count").textContent = rows.length.toLocaleString("en-IN");
+
+      const shown = rows.slice(0, 300);
+      el("tbody").innerHTML = shown
+        .map((r) => {
+          const chg = r.chg_pct === null ? "" : r.chg_pct >= 0 ? "up" : "down";
+          return `<tr>
+            <td><strong>${r.ticker}</strong><br><span class="stat-label">${r.sector ?? ""}</span></td>
+            <td>${F(r.close)}</td>
+            <td class="${chg}">${F(r.chg_pct)}</td>
+            <td>${F(r.rsi, 1)}</td>
+            <td>${F(r.adx, 1)}</td>
+            <td>${F(r.vol_ratio)}</td>
+            <td>${F(r.pct_from_52wh, 1)}</td>
+            <td>${F(r.atr_pct)}</td>
+            <td>${F(r.turnover_cr, 0)}</td>
+            <td><span class="pill">${r._met} / 6</span></td>
+          </tr>`;
+        })
+        .join("");
+
+      el("truncated").textContent =
+        rows.length > shown.length
+          ? `Showing the first ${shown.length} of ${rows.length} matches. Narrow the filters to see fewer.`
+          : "";
+    }
+
+    function syncLabels() {
+      el("rsiLoVal").textContent = el("rsiLo").value;
+      el("rsiHiVal").textContent = el("rsiHi").value;
+      el("adxMinVal").textContent = el("adxMin").value;
+      el("volMultVal").textContent = (+el("volMult").value).toFixed(1);
+      el("pct52Val").textContent = el("pct52").value;
+    }
+
+    fetch("/data/snapshot.json")
+      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then((d) => {
+        state.rows = d.stocks || [];
+
+        const sectors = [...new Set(state.rows.map((r) => r.sector).filter(Boolean))].sort();
+        el("sector").insertAdjacentHTML(
+          "beforeend",
+          sectors.map((s) => `<option value="${s}">${s}</option>`).join("")
+        );
+
+        const dates = state.rows.map((r) => r.bar_date).filter(Boolean).sort();
+        const newest = dates[dates.length - 1] || "unknown";
+        const stale = state.rows.filter((r) => r.bar_date !== newest).length;
+        el("meta").innerHTML =
+          `<strong>${(d.rows_published ?? state.rows.length).toLocaleString("en-IN")}</strong> stocks · ` +
+          `latest price bar <strong>${newest}</strong> · ` +
+          `computed ${new Date(d.generated_at).toLocaleString("en-IN")}` +
+          (stale ? ` · <span class="na">${stale} stocks have an older last bar</span>` : "");
+
+        syncLabels();
+        render();
+      })
+      .catch((e) => {
+        el("meta").innerHTML =
+          `<strong>Data unavailable.</strong> The snapshot could not be loaded (${e.message}). ` +
+          `No values are shown rather than estimated ones.`;
+        el("count").textContent = "—";
+      });
+
+    ctls.forEach((id) =>
+      el(id).addEventListener("input", () => { syncLabels(); render(); })
+    );
+
+    document.querySelectorAll("#tbl thead th").forEach((th) =>
+      th.addEventListener("click", () => {
+        const k = th.dataset.k;
+        state.sortDir = state.sortKey === k ? -state.sortDir : -1;
+        state.sortKey = k;
+        render();
+      })
+    );
+
+    el("reset").addEventListener("click", () => {
+      const def = { rsiLo: 35, rsiHi: 70, adxMin: 18, volMult: 1, pct52: 25, minMet: 0, sector: "", minTurn: 0 };
+      Object.entries(def).forEach(([k, v]) => (el(k).value = v));
+      syncLabels();
+      render();
+    });
+  </script>
+</Base>

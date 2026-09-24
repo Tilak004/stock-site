@@ -1,0 +1,173 @@
+/* ---------------------------------------------------------------------------
+   Tokens. Light is the base; dark is redefined twice — once for the OS
+   preference (guarded so an explicit light choice still wins) and once for the
+   explicit toggle. Every component reads tokens, never raw colours, so all
+   three states resolve as a set.
+   --------------------------------------------------------------------------- */
+:root {
+  --paper:     #fbfcfd;
+  --surface:   #ffffff;
+  --ink:       #0e1620;
+  --muted:     #5a6b7b;
+  --line:      #e2e8ec;
+  --accent:    #0d7d8c;
+  --accent-in: #ffffff;
+  --up:        #0f8a5f;
+  --down:      #c0392b;
+  --warn-bg:   #fff8e6;
+  --warn-line: #e8d9a8;
+
+  --w-wide:  1140px;
+  --w-prose: 68ch;
+  --r:       8px;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:     #0c1218;
+    --surface:   #121b23;
+    --ink:       #e6edf3;
+    --muted:     #8494a3;
+    --line:      #1e2a35;
+    --accent:    #35b8c8;
+    --accent-in: #05171a;
+    --up:        #3fbe8b;
+    --down:      #e0695c;
+    --warn-bg:   #221d0e;
+    --warn-line: #4a3f1c;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:     #0c1218;
+  --surface:   #121b23;
+  --ink:       #e6edf3;
+  --muted:     #8494a3;
+  --line:      #1e2a35;
+  --accent:    #35b8c8;
+  --accent-in: #05171a;
+  --up:        #3fbe8b;
+  --down:      #e0695c;
+  --warn-bg:   #221d0e;
+  --warn-line: #4a3f1c;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);   /* explicit — never inherit the host ground */
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Digits that line up in columns */
+.num, table td, table th { font-variant-numeric: tabular-nums; }
+
+h1, h2, h3 { line-height: 1.25; text-wrap: balance; margin: 0 0 .5rem; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.25rem, 2.6vw, 1.6rem); letter-spacing: -0.01em; }
+p  { margin: 0 0 1rem; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.wrap  { max-width: var(--w-wide);  margin: 0 auto; padding: 0 16px; }
+.prose { max-width: var(--w-prose); margin: 0 auto; padding: 0 16px; }
+
+.eyebrow {
+  font-size: .75rem; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.site-head {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  position: sticky; top: 0; z-index: 20;
+}
+.site-head .wrap {
+  display: flex; align-items: center; gap: 1.25rem;
+  min-height: 58px; flex-wrap: wrap;
+}
+.brand { font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.site-nav { display: flex; gap: 1rem; flex-wrap: wrap; margin-left: auto; align-items: center; }
+.site-nav a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--ink); }
+
+.theme-btn {
+  background: transparent; border: 1px solid var(--line); color: var(--muted);
+  border-radius: var(--r); cursor: pointer; padding: .3rem .6rem; font-size: .85rem;
+}
+
+/* ── Cards, tables, controls ────────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 1rem 1.15rem;
+}
+.grid { display: grid; gap: 1rem; }
+@media (min-width: 720px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 720px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+
+.stat { font-size: 1.9rem; font-weight: 650; letter-spacing: -0.02em; }
+.stat-label { color: var(--muted); font-size: .85rem; }
+
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { padding: .5rem .7rem; text-align: right; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+thead th {
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--muted); font-weight: 600; cursor: pointer; user-select: none;
+}
+tbody tr { border-bottom: 1px solid var(--line); }
+tbody tr:last-child { border-bottom: 0; }
+.up { color: var(--up); } .down { color: var(--down); }
+.na { color: var(--muted); font-style: italic; }
+
+.pill {
+  display: inline-block; padding: .1rem .5rem; border-radius: 999px;
+  font-size: .78rem; border: 1px solid var(--line); color: var(--muted);
+}
+
+.controls { display: grid; gap: .9rem; }
+@media (min-width: 640px) { .controls { grid-template-columns: repeat(3, 1fr); } }
+.ctl label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: .25rem; }
+.ctl input[type="range"] { width: 100%; accent-color: var(--accent); }
+.ctl select, .ctl input[type="number"] {
+  width: 100%; padding: .35rem .5rem; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--paper); color: var(--ink); font: inherit;
+}
+
+.notice {
+  background: var(--warn-bg); border: 1px solid var(--warn-line);
+  border-radius: var(--r); padding: .75rem 1rem; font-size: .9rem;
+}
+
+/* Ad slots: reserved, never adjacent to a control, always labelled. */
+.ad-slot {
+  border: 1px dashed var(--line); border-radius: var(--r);
+  min-height: 90px; display: grid; place-items: center;
+  color: var(--muted); font-size: .78rem; margin: 2rem 0;
+}
+
+.site-foot {
+  border-top: 1px solid var(--line); margin-top: 3rem;
+  padding: 2rem 0; color: var(--muted); font-size: .86rem; background: var(--surface);
+}
+.disclaimer { font-size: .82rem; line-height: 1.55; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

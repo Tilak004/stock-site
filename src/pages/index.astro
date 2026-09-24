@@ -1,0 +1,106 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Explore Stocks Through Data & Rules-Based Analysis";
+const description =
+  "A free technical screener and learning resource for Indian equity markets. " +
+  "Filter NSE stocks by RSI, ADX, moving averages and volume using thresholds " +
+  "you set, and learn what each indicator actually measures.";
+
+const sections = [
+  {
+    href: "/screener/",
+    kicker: "Tool",
+    title: "Technical screener",
+    body: "Filter NSE stocks using standard indicators. You set every threshold; the table recomputes as you move them.",
+  },
+  {
+    href: "/learn/",
+    kicker: "Education",
+    title: "Technical analysis, explained",
+    body: "What RSI, ADX, moving averages and volume actually measure — and, just as importantly, what they do not.",
+  },
+  {
+    href: "/tools/",
+    kicker: "Calculators",
+    title: "Investment calculators",
+    body: "CAGR, XIRR, SIP, step-up SIP, inflation, position sizing and risk-reward. Everything runs in your browser.",
+  },
+  {
+    href: "/methodology/",
+    kicker: "Transparency",
+    title: "How this is calculated",
+    body: "Every formula, threshold and data source used on this site, published in full — including the limitations.",
+  },
+];
+---
+
+<Base title={title} description={description}>
+  <section class="wrap" style="padding:3.5rem 16px 2rem">
+    <p class="eyebrow">Indian equity markets</p>
+    <h1 style="max-width:18ch">Explore stocks through data and rules-based analysis</h1>
+    <p style="max-width:62ch;font-size:1.05rem;color:var(--muted)">
+      This site computes standard technical indicators across a large universe of
+      NSE-listed stocks and lets you filter them using conditions you define. It
+      is a measurement and learning tool — not a tip service, and not a
+      recommendation engine.
+    </p>
+    <p style="margin-top:1.5rem">
+      <a href="/screener/"
+         style="display:inline-block;background:var(--accent);color:var(--accent-in);
+                padding:.7rem 1.4rem;border-radius:8px;text-decoration:none;font-weight:600">
+        Open the screener
+      </a>
+    </p>
+  </section>
+
+  <section class="wrap">
+    <div class="grid grid-2">
+      {sections.map((s) => (
+        <a href={s.href} class="card" style="text-decoration:none;color:inherit;display:block">
+          <p class="eyebrow">{s.kicker}</p>
+          <h2 style="font-size:1.15rem;margin-bottom:.35rem">{s.title}</h2>
+          <p style="color:var(--muted);margin:0">{s.body}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <div class="wrap"><div class="ad-slot" aria-hidden="true">Advertisement</div></div>
+
+  <section class="wrap" style="padding-bottom:1rem">
+    <h2>What this site does not do</h2>
+    <div class="grid grid-3" style="margin-top:1rem">
+      <div class="card">
+        <p style="margin:0"><strong>No buy or sell calls.</strong> You will not find
+        entry prices, stop-losses or targets here. Indicator values describe what
+        price has already done.</p>
+      </div>
+      <div class="card">
+        <p style="margin:0"><strong>No predictions.</strong> No indicator forecasts
+        future prices. Anyone claiming otherwise is selling something.</p>
+      </div>
+      <div class="card">
+        <p style="margin:0"><strong>No personalised advice.</strong> Suitability
+        depends on your goals, horizon and risk tolerance — none of which this
+        site knows.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding:2rem 16px 1rem">
+    <div class="card">
+      <p class="eyebrow">Long-term investing</p>
+      <h2 style="font-size:1.15rem">Looking at mutual funds instead?</h2>
+      <p style="color:var(--muted)">
+        Technical screening is a short-horizon activity. If you are investing for
+        long-term goals, mutual funds are usually the more appropriate vehicle.
+      </p>
+      <p style="margin:0">
+        <a href="/mutual-funds/">Read about long-term investing</a> ·
+        <a href="https://tilak004.github.io/Business_website/" rel="noopener">
+          Visit Shastri Financial Services</a>
+      </p>
+    </div>
+  </section>
+</Base>
