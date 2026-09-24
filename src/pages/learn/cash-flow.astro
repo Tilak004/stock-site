@@ -1,0 +1,144 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Cash Flow vs Profit — Why They Diverge";
+const description =
+  "A company can report rising profit while running out of cash. How accrual " +
+  "accounting creates the gap, what free cash flow measures, and how to spot trouble.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Cash flow vs profit">
+  <h1>Cash flow versus profit</h1>
+  <p class="lede">
+    Profit is an opinion; cash is a fact. That line is a cliché among analysts
+    because it keeps turning out to be true — most accounting blow-ups are visible
+    in the cash flow statement years before they reach the headlines.
+  </p>
+
+  <h2>Where the gap comes from</h2>
+  <p>
+    Accrual accounting records revenue when it is <em>earned</em> and costs when
+    they are <em>incurred</em>, regardless of when money moves. That is the right
+    way to measure a period's economic activity, but it opens a gap between
+    reported profit and the bank balance.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>credit_sales</code><span class="meta">revenue without cash</span></div>
+      <p>Goods shipped on 90-day terms count as revenue today. If the customer
+        pays late, or never, the profit was still booked.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>inventory_build</code><span class="meta">cash without cost</span></div>
+      <p>Cash spent producing unsold goods does not appear in the P&amp;L — it sits
+        on the balance sheet as inventory until sold. Cash leaves, profit does not
+        move.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>depreciation</code><span class="meta">cost without cash</span></div>
+      <p>The opposite case. Depreciation reduces profit but no money leaves in that
+        period; the cash went out when the asset was bought.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>capitalised_costs</code><span class="meta">worth scrutiny</span></div>
+      <p>Expenses recorded as assets instead of costs — some development spending,
+        certain interest. Profit looks higher; cash is unaffected. Aggressive
+        capitalisation is a classic way to flatter earnings.</p>
+    </div>
+  </div>
+
+  <h2>The check that matters</h2>
+  <div class="formula">Cumulative CFO over 5 years  vs  Cumulative PAT over 5 years</div>
+  <p>
+    Over a single year the two can diverge for perfectly ordinary reasons — a big
+    order shipped in March, a one-off inventory build. Over five years, in a
+    healthy business, cash from operations should be in the same neighbourhood as
+    cumulative net profit, and usually somewhat higher because depreciation is
+    added back.
+  </p>
+  <p class="lede">
+    <strong>If five years of profit never turned into five years of cash, ask
+    where it went.</strong> Usually the answer is on the balance sheet: swelling
+    receivables, swelling inventory, or both.
+  </p>
+
+  <h2>Free cash flow</h2>
+  <div class="formula">FCF = Cash from operations − Capital expenditure</div>
+  <p>
+    What is left after keeping the business running and funding its growth. This
+    is the money genuinely available for dividends, buybacks, debt repayment, or
+    accumulation.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>negative_fcf_while_growing</code><span class="meta">not automatically bad</span></div>
+      <p>A company building capacity will consume cash for years. The question is
+        whether the spending eventually produces returns — check
+        <a href="/learn/roe-roce/">ROCE</a> a few years later.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>negative_fcf_while_flat</code><span class="meta">bad</span></div>
+      <p>Heavy capex with no revenue growth to show for it means the spending is
+        maintenance, not expansion — the business needs continuous investment just
+        to stand still.</p>
+    </div>
+  </div>
+
+  <h2>Warning signs in the cash flow statement</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>cfo_below_pat_persistently</code><span class="meta">the main one</span></div>
+      <p>Profit that never becomes cash. The most reliable single indicator of
+        accounting trouble available to an outside investor.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>receivables_outgrowing_revenue</code><span class="meta">deteriorating quality</span></div>
+      <p>Revenue up 20%, receivables up 60%. Sales are being made to customers who
+        are not paying, or on terms that keep loosening.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>financing_funds_operations</code><span class="meta">structural</span></div>
+      <p>Negative CFO covered year after year by fresh borrowing. That can only
+        continue while lenders keep lending.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>asset_sales_propping_up_cash</code><span class="meta">non-repeatable</span></div>
+      <p>Positive investing cash flow in a supposedly growing business. Selling the
+        furniture works once.</p>
+    </div>
+  </div>
+
+  <h2>A worked illustration</h2>
+  <p class="lede">
+    These figures are illustrative — not any real company — but the shape is one
+    that recurs:
+  </p>
+  <div class="formula">Year    Revenue   PAT    CFO    Receivables
+1       1,000     100    95     180
+2       1,300     130    70     310
+3       1,700     170    40     520
+4       2,200     220   −10     820</div>
+  <p>
+    Revenue and profit compound beautifully. Cash from operations goes the other
+    way, and receivables grow far faster than revenue — from 18% of sales to 37%.
+    The company is booking sales it is not collecting. By year four it is funding
+    its own operations from somewhere else, and the P&amp;L gives no hint of it.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Why this matters more in India</h2>
+  <p class="lede">
+    Working-capital cycles in Indian manufacturing and infrastructure are long,
+    and receivable days of 90 to 180 are ordinary in several sectors. That makes
+    the CFO-versus-PAT comparison more informative here than in economies with
+    tighter payment norms — and it means the level matters less than the
+    <em>trend</em>. Slowly lengthening collection is the signal.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/reading-financials/">reading a financial statement</a> ·
+    <a href="/learn/debt-leverage/">debt and leverage</a> ·
+    <a href="/learn/valuation-ratios/">valuation ratios</a>
+  </p>
+</Base>

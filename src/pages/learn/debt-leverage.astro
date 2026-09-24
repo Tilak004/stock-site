@@ -1,0 +1,142 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Debt and Leverage — How Much Is Too Much";
+const description =
+  "Debt-to-equity, interest coverage and net debt to EBITDA: what each ratio " +
+  "measures, why coverage matters more than the debt level, and sector context.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Debt and leverage">
+  <h1>Debt and leverage</h1>
+  <p class="lede">
+    Debt is not inherently bad. It is cheaper than equity, and interest is
+    tax-deductible, so a moderate amount usually raises returns for shareholders.
+    What makes it dangerous is that the obligation is fixed while the profit that
+    services it is not.
+  </p>
+
+  <h2>The three ratios worth knowing</h2>
+  <div class="formula">Debt to equity      = Total borrowings / Shareholders' equity
+Interest coverage   = EBIT / Interest expense
+Net debt to EBITDA  = (Total debt − Cash) / EBITDA</div>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>debt_to_equity</code><span class="meta">how it is funded</span></div>
+      <p>The most quoted, and the least informative on its own. It describes the
+        structure but says nothing about whether the company can afford it. A
+        utility at 2× may be far safer than a cyclical manufacturer at 0.8×.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>interest_coverage</code><span class="meta">can it pay?</span></div>
+      <p><strong>The one that matters most.</strong> How many times over does
+        operating profit cover the interest bill. Below roughly 2× there is very
+        little margin for a bad year; below 1× the company is not earning enough
+        to pay its lenders from operations.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>net_debt_to_ebitda</code><span class="meta">how long to repay</span></div>
+      <p>Roughly how many years of operating earnings it would take to clear the
+        debt, netting off cash. Lenders and rating agencies lean on this one
+        heavily.</p>
+    </div>
+  </div>
+
+  <h2>Why coverage beats the debt level</h2>
+  <p>
+    A debt-to-equity of 1.5 tells you the shape of the balance sheet. Interest
+    coverage tells you whether that shape is survivable. Consider two illustrative
+    companies, both at 1.5× debt-to-equity:
+  </p>
+  <div class="formula">Company A: EBIT ₹500, interest ₹60   → coverage 8.3×
+Company B: EBIT ₹500, interest ₹400  → coverage 1.25×</div>
+  <p class="lede">
+    Identical leverage ratios. Company A can absorb a 40% fall in profit and still
+    pay. Company B cannot absorb a 20% fall. The difference is the interest rate
+    it borrowed at — which itself reflects what lenders already think of its risk.
+  </p>
+
+  <h2>Sector context</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>utilities_infrastructure</code><span class="meta">high debt is normal</span></div>
+      <p>Predictable, often regulated cash flows support leverage that would be
+        reckless elsewhere. Judge against sector norms, not an absolute number.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>cyclicals</code><span class="meta">debt is dangerous</span></div>
+      <p>Metals, real estate, capital goods. Revenue can halve in a downturn while
+        interest does not move. Leverage that looked comfortable at the top of the
+        cycle becomes fatal at the bottom.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>banks_and_nbfcs</code><span class="meta">different framework entirely</span></div>
+      <p>Borrowing is the raw material of lending, so these ratios do not apply.
+        Lenders are assessed on capital adequacy, asset quality and provisioning
+        instead.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>asset_light_services</code><span class="meta">debt-free is common</span></div>
+      <p>IT services and similar businesses often carry net cash. Any meaningful
+        debt in such a company is worth understanding, because the business model
+        does not require it.</p>
+    </div>
+  </div>
+
+  <h2>What the headline number hides</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>short_term_borrowings</code><span class="meta">refinancing risk</span></div>
+      <p>Debt maturing within a year must be repaid or rolled over. A company
+        dependent on continuous refinancing is exposed to credit markets tightening
+        at exactly the wrong moment.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>contingent_liabilities</code><span class="meta">off the balance sheet</span></div>
+      <p>Guarantees given for subsidiaries, disputed tax demands, pending
+        litigation. Not counted as debt, but they can become debt. They are in the
+        notes to accounts.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>related_party_lending</code><span class="meta">read the notes</span></div>
+      <p>Loans and guarantees to group entities can move obligations around so
+        that no single entity looks stretched. Consolidated statements are the ones
+        to read.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>promoter_pledging</code><span class="meta">not company debt, still your risk</span></div>
+      <p>Promoters borrowing against their own shareholding does not appear on the
+        company's balance sheet at all, but a margin call forces selling and
+        collapses the price. See
+        <a href="/learn/promoter-governance/">promoter holding and governance</a>.</p>
+    </div>
+  </div>
+
+  <h2>The link to returns</h2>
+  <p class="lede">
+    Leverage flatters <a href="/learn/roe-roce/">ROE</a> without improving ROCE,
+    because it changes the funding rather than the operation. The test is simple:
+    if ROCE is comfortably above the cost of borrowing, debt is adding value to
+    shareholders. If ROCE is below it, every additional rupee borrowed makes them
+    poorer, and growth accelerates the damage.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>What debt does to a share price</h2>
+  <p class="lede">
+    Leveraged companies move more violently in both directions, because the equity
+    absorbs all of the variation in profit while the interest bill stays fixed.
+    That shows up on a chart as higher volatility — you will see it in the
+    <span class="c">atr_pct</span> column of the
+    <a href="/screener/">screener</a>. The indicator measures the symptom; the
+    balance sheet explains the cause.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/cash-flow/">cash flow vs profit</a> ·
+    <a href="/learn/roe-roce/">ROE and ROCE</a> ·
+    <a href="/learn/evaluating-a-business/">evaluating a business</a>
+  </p>
+</Base>

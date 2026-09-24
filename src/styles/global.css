@@ -1,19 +1,46 @@
 /* ── Fonts ───────────────────────────────────────────────────────────────────
+   Fira Sans for UI text — the face Moneycontrol self-hosts, so the site reads in
+   the same register as the Indian financial press. JetBrains Mono stays for
+   numbers and identifiers: a data grid needs tabular figures that align down the
+   column, which is what separates a financial table from a styled list.
+
    Self-hosted rather than Google Fonts: one request from our own origin, cached
-   forever on Cloudflare's CDN, no third-party DNS lookup or connection in the
-   critical path. Both are variable fonts, so a single file per family covers
-   every weight. Latin subset only — unicode-range keeps non-Latin text falling
-   back cleanly instead of rendering tofu.
+   forever on the CDN, no third-party DNS lookup or connection in the critical
+   path. Fira Sans is static rather than variable, so it ships one file per
+   weight (400/500/600/700, ~24 KB each). Latin subset only — unicode-range keeps
+   non-Latin text falling back cleanly instead of rendering tofu.
    --------------------------------------------------------------------------- */
 @font-face {
-  font-family: "Inter";
+  font-family: "Fira Sans";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url("/fonts/inter.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url("/fonts/fira-sans-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/fira-sans-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/fira-sans-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/fira-sans-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "JetBrains Mono";
@@ -52,7 +79,7 @@
   --key: #7c3aed;
 
   --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --nav: 268px;
 }
 

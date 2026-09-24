@@ -1,0 +1,220 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "How to Read a Financial Statement";
+const description =
+  "The three financial statements — balance sheet, profit and loss, cash flow — " +
+  "what each one tells you, how they connect, and the lines worth checking first.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Reading a financial statement">
+  <h1>How to read a financial statement</h1>
+  <p class="lede">
+    A listed company publishes three statements every quarter. Each answers a
+    different question, and reading any one alone will mislead you. Together they
+    are the closest thing to an honest description of a business that you can get
+    without working there.
+  </p>
+
+  <h2>The three statements, and what each answers</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>balance_sheet</code><span class="meta">a snapshot on one date</span></div>
+      <p>What the company owns and owes at a point in time. Assets on one side,
+        liabilities and equity on the other, and the two always balance because
+        every rupee of asset was funded by either a lender or an owner.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>profit_and_loss</code><span class="meta">a period, usually a quarter or year</span></div>
+      <p>Revenue earned and costs incurred over that period, ending in profit.
+        Sometimes called the income statement.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>cash_flow_statement</code><span class="meta">the same period</span></div>
+      <p>Cash that actually moved, split into operating, investing and financing.
+        This is the one most retail investors skip and the one professionals read
+        first.</p>
+    </div>
+  </div>
+
+  <h2>Why profit and cash are not the same thing</h2>
+  <p>
+    This is the single most useful idea in the whole subject. Accounting recognises
+    revenue when it is <em>earned</em>, not when the money arrives. Sell goods on
+    90-day credit in March and the sale appears in that year's profit even though
+    no cash has been received.
+  </p>
+  <p>
+    A company can therefore report rising profit for years while its bank balance
+    drains — because the "profit" is sitting in receivables that customers have
+    not paid. It is a common pattern in businesses that are growing by extending
+    increasingly generous credit.
+  </p>
+  <p class="lede">
+    <a href="/learn/cash-flow/">Cash flow versus profit</a> covers this in more
+    detail. If you only ever internalise one idea from the fundamentals section,
+    make it this one.
+  </p>
+
+  <h2>The balance sheet</h2>
+  <div class="formula">Assets = Liabilities + Shareholders' Equity</div>
+  <p>
+    Read it as: everything the business controls was paid for either with borrowed
+    money or with owners' money. Indian companies present it under Schedule III of
+    the Companies Act, so the layout is consistent across filings.
+  </p>
+
+  <h3>Lines worth checking first</h3>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>borrowings</code><span class="meta">current and non-current</span></div>
+      <p>Total debt. Compare it with equity and with operating profit — the
+        absolute number means little on its own. See
+        <a href="/learn/debt-leverage/">debt and leverage</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>trade_receivables</code><span class="meta">money owed to the company</span></div>
+      <p>Growing much faster than revenue is a warning. It means sales are being
+        booked but not collected.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>inventories</code><span class="meta">unsold stock</span></div>
+      <p>Rising inventory alongside flat sales suggests goods are not moving.
+        Eventually it gets written down.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>reserves_and_surplus</code><span class="meta">accumulated retained profit</span></div>
+      <p>Profits kept in the business rather than paid out. A long record of
+        growing reserves is a sign of genuine accumulated earnings.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>contingent_liabilities</code><span class="meta">in the notes, not on the face</span></div>
+      <p>Guarantees, disputed tax demands, pending litigation. Not counted as
+        liabilities but they can become real. Large contingents relative to net
+        worth deserve attention.</p>
+    </div>
+  </div>
+
+  <h2>The profit and loss statement</h2>
+  <p>It runs top to bottom from revenue to net profit, and each margin along the way tells you something different:</p>
+  <div class="formula">Revenue from operations
+− Cost of materials / cost of goods sold
+= Gross profit
+− Employee benefits, other expenses
+= EBITDA
+− Depreciation and amortisation
+= EBIT (operating profit)
+− Finance costs
+= Profit before tax
+− Tax
+= Profit after tax</div>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>gross_margin</code><span class="meta">pricing power</span></div>
+      <p>How much of each rupee of sales survives the direct cost of producing it.
+        Stable or rising gross margin suggests the company can pass on input costs.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>operating_margin</code><span class="meta">operational efficiency</span></div>
+      <p>EBIT divided by revenue. This is the business itself, before financing
+        and tax decisions distort the picture.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>other_income</code><span class="meta">read the notes</span></div>
+      <p>Interest, dividends, one-off asset sales. If a large share of profit comes
+        from here rather than from operations, the headline profit is not really
+        describing the business.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>exceptional_items</code><span class="meta">one-offs</span></div>
+      <p>Restructuring charges, impairments, litigation settlements. Strip them out
+        before comparing years, and be suspicious when "one-off" items appear every
+        single year.</p>
+    </div>
+  </div>
+
+  <h2>The cash flow statement</h2>
+  <p>Three sections, and the relationship between them tells a story on its own:</p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>cash_from_operations</code><span class="meta">CFO</span></div>
+      <p>Cash generated by actually running the business. Over several years this
+        should broadly track net profit. Persistent divergence is the single
+        clearest accounting red flag available to an outside investor.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>cash_from_investing</code><span class="meta">CFI</span></div>
+      <p>Usually negative in a growing company, because it is buying plant and
+        equipment. Consistently positive CFI can mean the company is selling assets
+        to stay afloat.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>cash_from_financing</code><span class="meta">CFF</span></div>
+      <p>Borrowing, repayment, equity issues, dividends. A company funding
+        operating losses by repeatedly raising debt shows up here first.</p>
+    </div>
+  </div>
+
+  <h2>A ten-minute first pass</h2>
+  <p class="lede">
+    Before any valuation work, five checks over five years of data will tell you
+    whether a company is worth a closer look:
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>1. cfo_vs_pat</code><span class="meta">cumulative</span></div>
+      <p>Add up five years of cash from operations and five years of net profit.
+        If CFO is far below PAT, the profits are not converting into cash.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>2. receivable_days_trend</code><span class="meta">direction matters more than level</span></div>
+      <p>Receivables ÷ revenue × 365. Rising steadily means collection is getting
+        slower, and revenue quality is deteriorating.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>3. debt_to_equity</code><span class="meta">and its trend</span></div>
+      <p>Rising leverage without rising returns means the extra borrowing is not
+        producing anything.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>4. return_on_capital</code><span class="meta">ROCE</span></div>
+      <p>Consistently above the company's cost of borrowing, or the business is
+        destroying value as it grows. See <a href="/learn/roe-roce/">ROE and ROCE</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>5. promoter_pledging</code><span class="meta">in the shareholding pattern</span></div>
+      <p>Shares pledged against loans. High pledging creates forced-selling risk
+        entirely unrelated to how the business performs. See
+        <a href="/learn/promoter-governance/">promoter holding and governance</a>.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Where to find the filings</h2>
+  <p class="lede">
+    Listed Indian companies file with both exchanges, and the filings are free.
+    Quarterly results and annual reports are on the
+    <a href="https://www.nseindia.com/" rel="noopener nofollow">NSE</a> and
+    <a href="https://www.bseindia.com/" rel="noopener nofollow">BSE</a> websites
+    under the company's page, and on the company's own investor-relations section.
+    Read the annual report rather than a summary: the notes to accounts are where
+    the interesting material lives, and no aggregator reproduces them in full.
+  </p>
+
+  <h2>What this has to do with charts</h2>
+  <p class="lede">
+    Nothing, and that is the point. The <a href="/screener/">screener</a> on this
+    site measures price behaviour — trend, momentum, participation. It cannot tell
+    you whether the underlying business earns a decent return on capital or
+    whether its profits are real. Those are separate questions, answered from
+    separate documents, and neither substitutes for the other.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/cash-flow/">cash flow versus profit</a> ·
+    <a href="/learn/roe-roce/">ROE and ROCE</a> ·
+    <a href="/learn/valuation-ratios/">valuation ratios</a>
+  </p>
+</Base>

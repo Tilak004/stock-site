@@ -1,0 +1,143 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "ROE vs ROCE — What Each Measures and When They Disagree";
+const description =
+  "Return on equity and return on capital employed: the formulas, why a company " +
+  "can show high ROE and poor ROCE, and how leverage inflates one but not the other.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / ROE and ROCE">
+  <h1>ROE and ROCE</h1>
+  <p class="lede">
+    Both measure how efficiently a company turns capital into profit. They differ
+    in <strong>whose</strong> capital they count — and that difference is exactly
+    where the useful information lives.
+  </p>
+
+  <h2>The formulas</h2>
+  <div class="formula">ROE  = Net profit / Shareholders' equity
+ROCE = EBIT / (Total assets − Current liabilities)</div>
+  <p>
+    ROE asks: for every rupee the owners put in, how much profit came back? ROCE
+    asks: for every rupee employed in the business — owners' <em>and</em> lenders'
+    — how much operating profit did it produce?
+  </p>
+  <p class="lede">
+    Note ROCE uses <span class="c">EBIT</span>, before interest. That is
+    deliberate. Since the denominator includes borrowed money, the numerator must
+    include the profit earned on it, before any is paid away as interest.
+  </p>
+
+  <h2>Why leverage inflates ROE but not ROCE</h2>
+  <p>
+    This is the whole reason to look at both. Take an illustrative business
+    earning ₹20 of operating profit on ₹100 of capital employed — a 20% ROCE.
+  </p>
+  <div class="formula">Funded entirely by equity:
+  equity ₹100, debt ₹0
+  EBIT ₹20, interest ₹0, tax @25% → net profit ₹15
+  ROE  = 15/100 = 15%      ROCE = 20/100 = 20%
+
+Funded half by debt at 10%:
+  equity ₹50, debt ₹50
+  EBIT ₹20, interest ₹5, tax @25% → net profit ₹11.25
+  ROE  = 11.25/50 = 22.5%  ROCE = 20/100 = 20%</div>
+  <p class="lede">
+    ROE jumped from 15% to 22.5% while the business did not become one bit better
+    at its actual job. ROCE stayed at 20% because it measures the operation, not
+    the financing decision. <strong>High ROE alongside mediocre ROCE usually means
+    leverage, not quality.</strong>
+  </p>
+  <p>
+    That is fine while things go well. It also means a downturn hits the equity
+    holder far harder, because the interest bill does not shrink when profit does.
+    See <a href="/learn/debt-leverage/">debt and leverage</a>.
+  </p>
+
+  <h2>Reading the numbers</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>compare_roce_with_borrowing_cost</code><span class="meta">the key test</span></div>
+      <p>If ROCE is below what the company pays to borrow, every additional rupee
+        raised destroys value. Growth in that situation makes shareholders poorer,
+        not richer. The comparison matters far more than any absolute threshold.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>consistency_over_level</code><span class="meta">what to look for</span></div>
+      <p>A steady 18% across five years says more than one spectacular year at 40%
+        followed by four at 8%. Look at the series, not the latest figure.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>sector_context</code><span class="meta">comparisons only work within a sector</span></div>
+      <p>Asset-light businesses — software, consumer brands — structurally earn
+        higher returns on capital than steel or infrastructure. Comparing across
+        sectors tells you about the industry, not the management.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>banks_are_different</code><span class="meta">use ROA and ROE</span></div>
+      <p>For lenders, debt <em>is</em> the raw material, so "capital employed" does
+        not mean the same thing. Banks and NBFCs are judged on return on assets
+        alongside ROE, with capital adequacy considered separately.</p>
+    </div>
+  </div>
+
+  <h2>Breaking ROE apart</h2>
+  <p>
+    The DuPont decomposition splits ROE into three drivers, which tells you
+    <em>why</em> it is what it is:
+  </p>
+  <div class="formula">ROE = (Net profit / Revenue)      ← net margin
+    × (Revenue / Total assets)   ← asset turnover
+    × (Total assets / Equity)    ← leverage</div>
+  <p class="lede">
+    Two companies can post identical ROE for completely different reasons. A
+    premium brand gets there on margin; a distributor gets there on turnover; a
+    leveraged infrastructure company gets there on the third term alone. Only the
+    third is fragile.
+  </p>
+
+  <h2>Where these can mislead</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>buybacks_shrink_equity</code><span class="meta">mechanical effect</span></div>
+      <p>Buying back shares reduces the denominator, so ROE rises without any
+        improvement in operations.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>old_written_down_assets</code><span class="meta">flattering</span></div>
+      <p>A decades-old plant carried at near-zero book value makes capital employed
+        look tiny and ROCE look superb. Replacing it at today's cost would tell a
+        very different story.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>one_off_profits</code><span class="meta">check the P&L</span></div>
+      <p>A large asset sale inflates net profit and therefore ROE for one year.
+        Strip exceptional items out before drawing conclusions.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>year_end_vs_average</code><span class="meta">method matters</span></div>
+      <p>Some sources use closing equity, others the average of opening and
+        closing. For a fast-growing company the two differ materially — make sure
+        you are comparing like with like.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Where to find them</h2>
+  <p class="lede">
+    Neither is reported directly. Both are computed from the balance sheet and
+    the profit and loss statement, which is why
+    <a href="/learn/reading-financials/">reading the statements</a> comes first.
+    Screening sites publish them, but the definitions vary — particularly whether
+    equity is averaged, and whether ROCE uses EBIT or profit before tax. If a
+    number looks surprising, recompute it yourself.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/debt-leverage/">debt and leverage</a> ·
+    <a href="/learn/cash-flow/">cash flow vs profit</a> ·
+    <a href="/learn/evaluating-a-business/">evaluating a business</a>
+  </p>
+</Base>

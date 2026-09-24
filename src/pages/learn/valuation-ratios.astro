@@ -1,0 +1,158 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "P/E, P/B and EV/EBITDA — Valuation Ratios Explained";
+const description =
+  "What each valuation multiple measures, when each is the right one, why a low " +
+  "P/E is often a warning rather than a bargain, and how to compare them properly.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Valuation ratios">
+  <h1>Valuation ratios</h1>
+  <p class="lede">
+    A multiple compares price to something fundamental. On its own a multiple
+    means nothing — it only becomes informative against the same company's
+    history, against comparable companies, or against the growth and returns that
+    justify it.
+  </p>
+
+  <h2>Price to earnings</h2>
+  <div class="formula">P/E = Share price / Earnings per share
+    = Market capitalisation / Net profit</div>
+  <p>
+    The most quoted and most misused multiple. Read literally it is the number of
+    years of current earnings you are paying for the whole company.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>trailing_vs_forward</code><span class="meta">know which you are quoting</span></div>
+      <p>Trailing uses the last twelve months of actual earnings. Forward uses an
+        analyst estimate — which may be wrong, and is systematically optimistic on
+        average. Most screeners show trailing.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>low_pe_is_often_a_warning</code><span class="meta">the value trap</span></div>
+      <p>Markets price in what they expect. A P/E of 6 usually means earnings are
+        expected to fall, not that the stock is cheap. Ask what the market knows
+        before concluding it is wrong.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>breaks_on_low_or_negative_profit</code><span class="meta">limitation</span></div>
+      <p>Near-zero earnings produce an enormous P/E; losses make it meaningless.
+        Cyclicals at the bottom of a cycle look expensive on P/E and at the top
+        look cheap — exactly backwards.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>ignores_the_balance_sheet</code><span class="meta">important</span></div>
+      <p>Two companies on the same P/E, one debt-free and one heavily borrowed,
+        are not similarly priced. P/E says nothing about debt.</p>
+    </div>
+  </div>
+
+  <h2>Price to book</h2>
+  <div class="formula">P/B = Market capitalisation / Shareholders' equity</div>
+  <p>
+    Price against the accounting value of net assets. Most useful where the
+    balance sheet genuinely reflects the business — banks, insurers, asset-heavy
+    manufacturers.
+  </p>
+  <p class="lede">
+    It is close to useless for asset-light businesses. A software or consumer
+    company's value sits in brand, people and code, none of which appear as
+    assets, so P/B looks extreme and tells you nothing. Pair it with
+    <a href="/learn/roe-roce/">ROE</a>: a high P/B is justified by a high and
+    sustained ROE, and unjustified without one.
+  </p>
+
+  <h2>Enterprise value to EBITDA</h2>
+  <div class="formula">EV        = Market cap + Total debt − Cash
+EV/EBITDA = EV / (Operating profit + Depreciation + Amortisation)</div>
+  <p>
+    The multiple professionals reach for when comparing companies with different
+    capital structures, because it values the <em>whole business</em> — what both
+    shareholders and lenders own — against the profit available to all of them.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>capital_structure_neutral</code><span class="meta">the main advantage</span></div>
+      <p>A debt-laden company and a debt-free one become comparable, which P/E
+        never allows.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>ebitda_is_not_cash_flow</code><span class="meta">common error</span></div>
+      <p>EBITDA ignores capital expenditure, working capital and tax. For a
+        capital-intensive business that maintenance capex is unavoidable, so
+        EBITDA overstates what the business really generates. See
+        <a href="/learn/cash-flow/">cash flow vs profit</a>.</p>
+    </div>
+  </div>
+
+  <h2>Which to use when</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>banks_and_nbfcs</code><span class="meta">P/B with ROE</span></div>
+      <p>Debt is raw material for a lender, so EV is not meaningful. P/B judged
+        against ROE and asset quality is the standard approach.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>capital_intensive</code><span class="meta">EV/EBITDA</span></div>
+      <p>Cement, steel, telecom, infrastructure. Different leverage and different
+        depreciation policies make P/E comparisons meaningless.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>steady_consumer_businesses</code><span class="meta">P/E works reasonably</span></div>
+      <p>Stable margins, modest capex and low debt are the conditions under which
+        P/E behaves itself.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>loss_making</code><span class="meta">use revenue multiples, carefully</span></div>
+      <p>EV/Sales when there are no earnings to divide by. It says nothing about
+        whether profit will ever arrive, which is the entire question.</p>
+    </div>
+  </div>
+
+  <h2>Comparing multiples properly</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>against_its_own_history</code><span class="meta">most reliable</span></div>
+      <p>A company's own five or ten-year median multiple, and where it sits now.
+        This controls for sector and business model automatically.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>against_close_peers</code><span class="meta">same sector only</span></div>
+      <p>Cross-sector comparison measures the industry, not the company. An IT
+        services firm on 25× and a cement maker on 12× tells you nothing.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>against_growth_and_returns</code><span class="meta">what justifies a multiple</span></div>
+      <p>A higher multiple is defensible when growth is faster, returns on capital
+        are higher, or earnings are more predictable. If none of those hold, it is
+        just a higher price.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>What multiples cannot tell you</h2>
+  <p class="lede">
+    Every ratio on this page is a single number standing in for a business.
+    None of them capture whether the accounts are honest, whether a competitive
+    advantage is durable, how capable management is, or whether the last three
+    years of earnings were a cyclical peak. Those come from
+    <a href="/learn/reading-financials/">the statements</a>,
+    <a href="/learn/evaluating-a-business/">the business itself</a>, and
+    <a href="/learn/promoter-governance/">who runs it</a>.
+  </p>
+  <p class="lede">
+    And none of them say anything about <em>when</em>. A cheap stock can stay
+    cheap for years. That is a different question, and the
+    <a href="/screener/">screener</a> addresses a different piece of it — price
+    behaviour, not value.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/evaluating-a-business/">evaluating a business</a> ·
+    <a href="/learn/roe-roce/">ROE and ROCE</a> ·
+    <a href="/learn/debt-leverage/">debt and leverage</a>
+  </p>
+</Base>
