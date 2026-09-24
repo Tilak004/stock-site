@@ -127,7 +127,7 @@ const hasRail = Astro.slots.has("rail");
     {/* Fonts are same-origin, so preloading removes a round trip on first paint. */}
     <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
 
-    {/* Applied before first paint so the theme never flashes. */}
+    {/* Applied before first paint so a stored dark choice never flashes white. */}
     <script is:inline>
       (function () {
         try {
@@ -176,7 +176,20 @@ const hasRail = Astro.slots.has("rail");
         <div class="aside-bot">
           <span>Data: NSE daily</span>
           <button class="tbtn" id="theme-toggle" type="button"
-                  aria-label="Switch between light and dark theme">Theme</button>
+                  aria-label="Switch between light and dark theme"
+                  title="Switch theme">
+            <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+          </button>
         </div>
       </aside>
 
@@ -212,9 +225,8 @@ const hasRail = Astro.slots.has("rail");
     <script is:inline>
       document.getElementById("theme-toggle")?.addEventListener("click", function () {
         var el = document.documentElement;
-        var cur = el.getAttribute("data-theme");
-        if (!cur) cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        var next = cur === "dark" ? "light" : "dark";
+        // Light is the default, so anything that is not explicitly "dark" is light.
+        var next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
         el.setAttribute("data-theme", next);
         try { localStorage.setItem("theme", next); } catch (e) { /* ignore */ }
       });
