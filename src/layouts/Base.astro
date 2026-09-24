@@ -13,6 +13,11 @@ export interface Props {
 const { title, description, crumb, index = true } = Astro.props;
 
 const SITE_NAME = "Rulebook";
+
+// Google Search Console verification. Paste the content value from the
+// "HTML tag" method here — just the token, not the whole <meta> element.
+// Leave empty and no tag is emitted.
+const GSC_VERIFICATION = "";
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const fullTitle = Astro.url.pathname === "/" ? title : `${title} — ${SITE_NAME}`;
 const path = Astro.url.pathname;
@@ -129,6 +134,7 @@ const next = here >= 0 && here < flat.length - 1 ? flat[here + 1] : null;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
     {!index && <meta name="robots" content="noindex, follow" />}
 
     <meta property="og:type" content="website" />
