@@ -4,24 +4,84 @@ import "../styles/global.css";
 export interface Props {
   title: string;
   description: string;
+  /** Breadcrumb shown above the H1, e.g. "Screener / All stocks". */
+  crumb?: string;
   /** Set false on pages that should not be indexed. */
   index?: boolean;
 }
 
-const { title, description, index = true } = Astro.props;
+const { title, description, crumb, index = true } = Astro.props;
 
-const SITE_NAME = "Rulebook Analytics";
+const SITE_NAME = "Rulebook";
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const fullTitle = Astro.url.pathname === "/" ? title : `${title} — ${SITE_NAME}`;
-
-const nav = [
-  { href: "/screener/",     label: "Screener" },
-  { href: "/learn/",        label: "Learn" },
-  { href: "/tools/",        label: "Tools" },
-  { href: "/methodology/",  label: "Methodology" },
-  { href: "/mutual-funds/", label: "Mutual Funds" },
-];
 const path = Astro.url.pathname;
+
+// tag: LIVE = computed data, DOC = article, CALC = calculator. Same job as the
+// POST/GET badges in an API reference — it tells you what a page is before you
+// click it.
+const groups = [
+  {
+    label: "Screener",
+    open: true,
+    items: [
+      { href: "/screener/", label: "All stocks", tag: "LIVE", cls: "data" },
+      { href: "/screener/conditions/", label: "Condition reference", tag: "DOC", cls: "doc" },
+    ],
+  },
+  {
+    label: "Technical analysis",
+    open: true,
+    items: [
+      { href: "/learn/moving-averages/", label: "Moving averages", tag: "DOC", cls: "doc" },
+      { href: "/learn/rsi/", label: "RSI", tag: "DOC", cls: "doc" },
+      { href: "/learn/adx/", label: "ADX", tag: "DOC", cls: "doc" },
+      { href: "/learn/volume/", label: "Volume & relative volume", tag: "DOC", cls: "doc" },
+      { href: "/learn/support-resistance/", label: "Support and resistance", tag: "DOC", cls: "doc" },
+    ],
+  },
+  {
+    label: "Trading",
+    open: false,
+    items: [
+      { href: "/learn/swing-trading/", label: "Swing trading", tag: "DOC", cls: "doc" },
+      { href: "/learn/backtesting/", label: "Backtesting", tag: "DOC", cls: "doc" },
+      { href: "/learn/overfitting/", label: "Overfitting", tag: "DOC", cls: "doc" },
+      { href: "/learn/risk-management/", label: "Risk management", tag: "DOC", cls: "doc" },
+    ],
+  },
+  {
+    label: "Investing",
+    open: false,
+    items: [
+      { href: "/learn/cagr/", label: "CAGR", tag: "DOC", cls: "doc" },
+      { href: "/learn/xirr/", label: "XIRR", tag: "DOC", cls: "doc" },
+      { href: "/learn/asset-allocation/", label: "Asset allocation", tag: "DOC", cls: "doc" },
+    ],
+  },
+  {
+    label: "Tools",
+    open: true,
+    items: [
+      { href: "/tools/cagr-calculator/", label: "CAGR", tag: "CALC", cls: "calc" },
+      { href: "/tools/xirr-calculator/", label: "XIRR", tag: "CALC", cls: "calc" },
+      { href: "/tools/sip-calculator/", label: "SIP & step-up SIP", tag: "CALC", cls: "calc" },
+      { href: "/tools/position-sizing/", label: "Position sizing", tag: "CALC", cls: "calc" },
+      { href: "/tools/risk-reward/", label: "Risk / reward", tag: "CALC", cls: "calc" },
+    ],
+  },
+  {
+    label: "Reference",
+    open: false,
+    items: [
+      { href: "/methodology/", label: "Methodology", tag: "DOC", cls: "doc" },
+      { href: "/mutual-funds/", label: "Mutual funds", tag: "DOC", cls: "doc" },
+      { href: "/about/", label: "About", tag: "DOC", cls: "doc" },
+    ],
+  },
+];
+
+const hasRail = Astro.slots.has("rail");
 ---
 <!doctype html>
 <html lang="en-IN">
@@ -42,6 +102,8 @@ const path = Astro.url.pathname;
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {/* Fonts are same-origin, so preloading removes a round trip on first paint. */}
+    <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
 
     {/* Applied before first paint so the theme never flashes. */}
     <script is:inline>
@@ -56,58 +118,100 @@ const path = Astro.url.pathname;
   </head>
 
   <body>
-    <header class="site-head">
-      <div class="wrap">
-        <a class="brand" href="/">{SITE_NAME}</a>
-        <nav class="site-nav" aria-label="Main">
-          {nav.map((n) => (
-            <a href={n.href} aria-current={path.startsWith(n.href) ? "page" : undefined}>
-              {n.label}
-            </a>
-          ))}
-          <button class="theme-btn" id="theme-toggle" type="button"
+    <div class="shell">
+      <aside class="aside" id="aside">
+        <div class="aside-top">
+          <a class="logo" href="/">Rulebook <em>/ NSE technicals</em></a>
+          <label class="search">
+            <span>Search</span>
+            <input type="text" aria-label="Search the site" id="nav-search" />
+            <span class="kbd">/</span>
+          </label>
+        </div>
+
+        <div class="navscroll">
+          {groups.map((g) => {
+            const active = g.items.some((i) => path.startsWith(i.href));
+            return (
+              <>
+                <button class="grp" type="button" aria-expanded={String(g.open || active)}>
+                  <span>{g.label}</span><span class="ch">▶</span>
+                </button>
+                <ul class="sub" style={g.open || active ? "" : "display:none"}>
+                  {g.items.map((i) => (
+                    <li>
+                      <a href={i.href} aria-current={path === i.href ? "page" : undefined}>
+                        {i.label}<span class={`tag ${i.cls}`}>{i.tag}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            );
+          })}
+        </div>
+
+        <div class="aside-bot">
+          <span>Data: NSE daily</span>
+          <button class="tbtn" id="theme-toggle" type="button"
                   aria-label="Switch between light and dark theme">Theme</button>
-        </nav>
-      </div>
-    </header>
+        </div>
+      </aside>
 
-    <main id="main">
-      <slot />
-    </main>
+      <main>
+        <div class={hasRail ? "cols has-rail" : "cols"}>
+          <div class="doc">
+            {crumb && <div class="crumb">{crumb}</div>}
+            <slot />
 
-    <footer class="site-foot">
-      <div class="wrap">
-        <p class="disclaimer">
-          <strong>Disclaimer.</strong> This website is for educational and
-          informational purposes only. It publishes values of standard technical
-          indicators computed from publicly available market data, and lets you
-          filter stocks using conditions you choose. It does not provide
-          personalised investment advice, and nothing here is a recommendation to
-          buy, sell or hold any security. Indicator values describe past and
-          present price behaviour; they do not predict future prices. Historical
-          or backtested results do not guarantee future performance. Please do
-          your own research and consider your own circumstances, or consult a
-          SEBI-registered investment adviser.
-        </p>
-        <p style="margin-top:1rem">
-          <a href="/methodology/">Methodology</a> ·
-          <a href="/about/">About</a> ·
-          <a href="/privacy/">Privacy</a> ·
-          <a href="/disclaimer/">Full disclaimer</a>
-        </p>
-      </div>
-    </footer>
+            <div class="foot">
+              <b>Disclaimer.</b> Educational and informational purposes only. This
+              site publishes values of standard technical indicators computed from
+              publicly available market data, and lets you filter stocks using
+              conditions you choose. It does not provide personalised investment
+              advice, and nothing here is a recommendation to buy, sell or hold any
+              security. Indicator values describe past price behaviour; they do not
+              predict future prices. Historical or backtested results do not
+              guarantee future performance. Please do your own research and consider
+              your own circumstances, or consult a SEBI-registered investment adviser.
+              <p style="margin-top:.8rem">
+                <a href="/methodology/">Methodology</a> ·
+                <a href="/about/">About</a> ·
+                <a href="/privacy/">Privacy</a>
+              </p>
+            </div>
+          </div>
+
+          {hasRail && <div class="rail"><slot name="rail" /></div>}
+        </div>
+      </main>
+    </div>
 
     <script is:inline>
       document.getElementById("theme-toggle")?.addEventListener("click", function () {
         var el = document.documentElement;
         var cur = el.getAttribute("data-theme");
-        if (!cur) {
-          cur = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        }
+        if (!cur) cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         var next = cur === "dark" ? "light" : "dark";
         el.setAttribute("data-theme", next);
         try { localStorage.setItem("theme", next); } catch (e) { /* ignore */ }
+      });
+
+      document.querySelectorAll(".grp").forEach(function (g) {
+        g.addEventListener("click", function () {
+          var open = g.getAttribute("aria-expanded") === "true";
+          g.setAttribute("aria-expanded", String(!open));
+          var ul = g.nextElementSibling;
+          if (ul && ul.classList.contains("sub")) ul.style.display = open ? "none" : "";
+        });
+      });
+
+      // "/" focuses search, the way a docs site behaves.
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "/" && document.activeElement?.tagName !== "INPUT") {
+          e.preventDefault();
+          document.getElementById("nav-search")?.focus();
+        }
       });
     </script>
   </body>

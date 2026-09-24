@@ -3,104 +3,79 @@ import Base from "../layouts/Base.astro";
 
 const title = "Explore Stocks Through Data & Rules-Based Analysis";
 const description =
-  "A free technical screener and learning resource for Indian equity markets. " +
-  "Filter NSE stocks by RSI, ADX, moving averages and volume using thresholds " +
-  "you set, and learn what each indicator actually measures.";
-
-const sections = [
-  {
-    href: "/screener/",
-    kicker: "Tool",
-    title: "Technical screener",
-    body: "Filter NSE stocks using standard indicators. You set every threshold; the table recomputes as you move them.",
-  },
-  {
-    href: "/learn/",
-    kicker: "Education",
-    title: "Technical analysis, explained",
-    body: "What RSI, ADX, moving averages and volume actually measure — and, just as importantly, what they do not.",
-  },
-  {
-    href: "/tools/",
-    kicker: "Calculators",
-    title: "Investment calculators",
-    body: "CAGR, XIRR, SIP, step-up SIP, inflation, position sizing and risk-reward. Everything runs in your browser.",
-  },
-  {
-    href: "/methodology/",
-    kicker: "Transparency",
-    title: "How this is calculated",
-    body: "Every formula, threshold and data source used on this site, published in full — including the limitations.",
-  },
-];
+  "A free technical screener and reference for Indian equity markets. Filter NSE " +
+  "stocks by RSI, ADX, moving averages and volume using thresholds you set, and " +
+  "learn what each indicator actually measures.";
 ---
 
-<Base title={title} description={description}>
-  <section class="wrap" style="padding:3.5rem 16px 2rem">
-    <p class="eyebrow">Indian equity markets</p>
-    <h1 style="max-width:18ch">Explore stocks through data and rules-based analysis</h1>
-    <p style="max-width:62ch;font-size:1.05rem;color:var(--muted)">
-      This site computes standard technical indicators across a large universe of
-      NSE-listed stocks and lets you filter them using conditions you define. It
-      is a measurement and learning tool — not a tip service, and not a
-      recommendation engine.
-    </p>
-    <p style="margin-top:1.5rem">
-      <a href="/screener/"
-         style="display:inline-block;background:var(--accent);color:var(--accent-in);
-                padding:.7rem 1.4rem;border-radius:8px;text-decoration:none;font-weight:600">
-        Open the screener
-      </a>
-    </p>
-  </section>
+<Base title={title} description={description} crumb="Introduction">
+  <h1>Explore stocks through data, not opinions</h1>
+  <p class="lede">
+    This site computes standard technical indicators across the NSE universe each
+    trading day and lets you filter them using conditions you define. It is a
+    measurement and reference tool — not a tip service, and not a recommendation
+    engine.
+  </p>
 
-  <section class="wrap">
-    <div class="grid grid-2">
-      {sections.map((s) => (
-        <a href={s.href} class="card" style="text-decoration:none;color:inherit;display:block">
-          <p class="eyebrow">{s.kicker}</p>
-          <h2 style="font-size:1.15rem;margin-bottom:.35rem">{s.title}</h2>
-          <p style="color:var(--muted);margin:0">{s.body}</p>
-        </a>
-      ))}
-    </div>
-  </section>
+  <p>
+    <a href="/screener/">Open the screener →</a>
+  </p>
 
-  <div class="wrap"><div class="ad-slot" aria-hidden="true">Advertisement</div></div>
-
-  <section class="wrap" style="padding-bottom:1rem">
-    <h2>What this site does not do</h2>
-    <div class="grid grid-3" style="margin-top:1rem">
-      <div class="card">
-        <p style="margin:0"><strong>No buy or sell calls.</strong> You will not find
-        entry prices, stop-losses or targets here. Indicator values describe what
-        price has already done.</p>
-      </div>
-      <div class="card">
-        <p style="margin:0"><strong>No predictions.</strong> No indicator forecasts
-        future prices. Anyone claiming otherwise is selling something.</p>
-      </div>
-      <div class="card">
-        <p style="margin:0"><strong>No personalised advice.</strong> Suitability
-        depends on your goals, horizon and risk tolerance — none of which this
-        site knows.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap" style="padding:2rem 16px 1rem">
+  <h2>What is here</h2>
+  <div class="cards">
     <div class="card">
-      <p class="eyebrow">Long-term investing</p>
-      <h2 style="font-size:1.15rem">Looking at mutual funds instead?</h2>
-      <p style="color:var(--muted)">
-        Technical screening is a short-horizon activity. If you are investing for
-        long-term goals, mutual funds are usually the more appropriate vehicle.
-      </p>
-      <p style="margin:0">
-        <a href="/mutual-funds/">Read about long-term investing</a> ·
-        <a href="https://tilak004.github.io/Business_website/" rel="noopener">
-          Visit Shastri Financial Services</a>
-      </p>
+      <h3><a href="/screener/">Screener</a></h3>
+      <p>Filter NSE stocks by indicator values. You set every threshold; the
+        table recomputes as you move them.</p>
     </div>
-  </section>
+    <div class="card">
+      <h3><a href="/learn/rsi/">Technical analysis</a></h3>
+      <p>What RSI, ADX, moving averages and volume measure — and, just as
+        importantly, what they do not.</p>
+    </div>
+    <div class="card">
+      <h3><a href="/tools/cagr-calculator/">Calculators</a></h3>
+      <p>CAGR, XIRR, SIP, position sizing and risk-reward. Everything runs in
+        your browser; nothing is stored.</p>
+    </div>
+  </div>
+
+  <h2>What is not here</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>no_buy_sell_calls</code><span class="meta">by design</span></div>
+      <p>No entry prices, stop-losses or targets. Indicator values describe what
+        price has already done.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>no_predictions</code><span class="meta">by design</span></div>
+      <p>No indicator forecasts future prices. Anyone claiming otherwise is
+        selling something.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>no_personalised_advice</code><span class="meta">by design</span></div>
+      <p>Suitability depends on your goals, horizon and risk tolerance — none of
+        which this site knows.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Data and method</h2>
+  <p class="lede">
+    Daily OHLCV from public sources, indicators computed with standard formulas,
+    refreshed once per trading day. Where a value cannot be computed it is shown
+    as unavailable rather than estimated, and every row carries the date of the
+    price bar it was derived from.
+    <a href="/methodology/">Read the full methodology</a>.
+  </p>
+
+  <h2>Investing for the long term</h2>
+  <p class="lede">
+    Technical screening is a short-horizon activity. If you are investing toward
+    long-term goals, mutual funds are usually the more appropriate vehicle.
+    <a href="/mutual-funds/">Read more</a>, or
+    <a href="https://tilak004.github.io/Business_website/" rel="noopener">visit
+    Shastri Financial Services</a>.
+  </p>
 </Base>
