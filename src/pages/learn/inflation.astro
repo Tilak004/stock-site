@@ -1,0 +1,68 @@
+---
+import Base from "../../layouts/Base.astro";
+const title = "Inflation — Why Nominal Returns Mislead";
+const description =
+  "How inflation erodes purchasing power, the real rate formula, and why a fixed " +
+  "deposit can grow your balance while shrinking what it buys.";
+---
+<Base title={title} description={description} crumb="Investing / Inflation">
+  <h1>Inflation</h1>
+  <p class="lede">
+    Inflation is the rate at which money buys less. It is the reason a return
+    figure means nothing on its own, and the reason "safe" instruments are not
+    always safe in the way people assume.
+  </p>
+
+  <h2>The real rate</h2>
+  <div class="formula">Real rate = (1 + nominal) / (1 + inflation) &minus; 1</div>
+  <p class="lede">
+    Subtracting inflation from the nominal rate is a decent approximation at low
+    rates and drifts noticeably at high ones. The formula above is exact.
+  </p>
+
+  <h2>The fixed deposit case</h2>
+  <p>Worked through, because this catches a great many people:</p>
+  <div class="formula">FD rate                 7.0%
+Tax at 30% slab        &minus;2.1%
+Post-tax return         4.9%
+Inflation               6.0%
+Real return            &minus;1.0%</div>
+  <p class="lede">
+    <strong>The balance grows every year while the purchasing power shrinks.</strong>
+    The statement shows a larger number and buys less. At lower tax slabs the
+    picture improves, which is why the same instrument is genuinely different for
+    different people. The <a href="/tools/fd-calculator/">FD calculator</a>
+    computes this directly.
+  </p>
+
+  <h2>What it does over time</h2>
+  <div class="formula">At 6% inflation, &#8377;1,00,000 today buys:
+  in 10 years  &#8377;55,839 worth
+  in 20 years  &#8377;31,180 worth
+  in 30 years  &#8377;17,411 worth</div>
+  <p class="lede">
+    Prices roughly double every twelve years at 6%. A retirement figure that
+    sounds ample in today's money is a different proposition thirty years out.
+  </p>
+
+  <h2>Things worth knowing</h2>
+  <div class="defs">
+    <div class="def"><div class="h"><code>your_inflation_is_not_cpi</code><span class="meta">important</span></div>
+      <p>Headline CPI is a basket average. Education and healthcare have
+        historically risen faster. Planning a child's education at the headline
+        rate may understate it considerably.</p></div>
+    <div class="def"><div class="h"><code>equity_is_not_a_hedge_short_term</code><span class="meta">common belief, overstated</span></div>
+      <p>Over long periods equity has generally outpaced inflation. Over any
+        particular five-year stretch it may not, and high inflation is often
+        accompanied by poor equity returns.</p></div>
+    <div class="def"><div class="h"><code>debt_is_hurt_most</code><span class="meta">structural</span></div>
+      <p>Fixed-rate instruments pay a fixed nominal amount. If inflation rises
+        after you invest, the real value of every future payment falls and there
+        is nothing to adjust.</p></div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+  <p class="lede">Next: <a href="/tools/inflation-calculator/">inflation calculator</a> &middot;
+    <a href="/learn/compounding/">compounding</a> &middot;
+    <a href="/learn/equity-vs-debt/">equity vs debt</a></p>
+</Base>

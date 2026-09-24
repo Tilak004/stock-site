@@ -1,0 +1,80 @@
+---
+import Base from "../../layouts/Base.astro";
+const title = "CAGR and XIRR — Which Return Number to Use";
+const description =
+  "CAGR assumes one lump sum in and one value out. XIRR handles irregular cash " +
+  "flows. Using the wrong one misstates your return, often badly.";
+---
+<Base title={title} description={description} crumb="Investing / CAGR and XIRR">
+  <h1>CAGR and XIRR</h1>
+  <p class="lede">
+    Both express a return as an annual rate. They differ in what they assume about
+    when money went in &mdash; and using the wrong one produces a number that can be
+    badly wrong rather than slightly wrong.
+  </p>
+
+  <h2>CAGR</h2>
+  <div class="formula">CAGR = (End value / Start value)^(1 / years) &minus; 1</div>
+  <p class="lede">
+    The constant annual rate that would take a starting value to an ending value.
+    It uses only the first and last figures, so an investment that fell 60% and
+    recovered has the same CAGR as one that rose steadily to the same point. The
+    experience of holding them was not remotely the same.
+  </p>
+  <p>Use it when: one amount in at the start, one value at the end. Nothing else.</p>
+
+  <h2>XIRR</h2>
+  <p>
+    When money goes in and out on irregular dates &mdash; an SIP, top-ups, partial
+    withdrawals &mdash; CAGR has no valid input. XIRR is the rate at which every cash
+    flow, discounted back to the first date, sums to zero.
+  </p>
+  <div class="formula">&Sigma;  CF&#8342; / (1 + r)^(d&#8342; / 365)  =  0        solved for r</div>
+  <p class="lede">
+    There is no closed form; it is solved numerically. The
+    <a href="/tools/xirr-calculator/">XIRR calculator</a> does it the same way a
+    spreadsheet does.
+  </p>
+
+  <h2>The error this prevents</h2>
+  <p>
+    Suppose you invest &#8377;10,000 a month for five years &mdash; &#8377;6 lakh total &mdash; and
+    it is worth &#8377;8 lakh at the end.
+  </p>
+  <div class="formula">Wrong:  treat 6 lakh as invested for 5 years
+        (8/6)^(1/5) &minus; 1 = 5.9%
+
+Right:  XIRR over the actual monthly dates
+        roughly 11-12%</div>
+  <p class="lede">
+    The wrong method understates the return by roughly half, because the average
+    rupee was invested for about two and a half years, not five. The last
+    instalment was invested for one month.
+  </p>
+
+  <h2>Which to use</h2>
+  <div class="defs">
+    <div class="def"><div class="h"><code>lumpsum_investment</code><span class="meta">CAGR</span></div>
+      <p>One purchase, one current value.</p></div>
+    <div class="def"><div class="h"><code>sip_or_any_recurring</code><span class="meta">XIRR</span></div>
+      <p>Money going in at different times. This is most people, most of the time.</p></div>
+    <div class="def"><div class="h"><code>comparing_funds</code><span class="meta">CAGR, carefully</span></div>
+      <p>Published fund returns are point-to-point CAGR. That is the fund's
+        performance, not yours &mdash; yours depends on when you actually invested.</p></div>
+    <div class="def"><div class="h"><code>your_own_portfolio</code><span class="meta">XIRR</span></div>
+      <p>Almost always, because almost nobody invests once and never again.</p></div>
+  </div>
+
+  <h2>What neither tells you</h2>
+  <p class="lede">
+    Both compress an entire history into one number, and say nothing about the
+    path. Two portfolios with identical XIRR can have had completely different
+    drawdowns, and the one that fell 45% along the way was a different thing to
+    own. Return without risk is half a description.
+  </p>
+
+  <div class="ad">Advertisement</div>
+  <p class="lede">Next: <a href="/learn/compounding/">compounding</a> &middot;
+    <a href="/tools/xirr-calculator/">XIRR calculator</a> &middot;
+    <a href="/learn/inflation/">inflation</a></p>
+</Base>

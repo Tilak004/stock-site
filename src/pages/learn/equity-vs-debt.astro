@@ -1,0 +1,107 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Equity vs Debt — What Each Is Actually For";
+const description =
+  "The structural difference between owning and lending, what each asset class " +
+  "does well, and why horizon rather than temperament should decide the split.";
+---
+
+<Base title={title} description={description} crumb="Investing / Equity vs debt">
+  <h1>Equity versus debt</h1>
+  <p class="lede">
+    Equity means owning part of a business. Debt means lending money for a fixed
+    return. Almost every practical difference between them follows from that one
+    structural fact.
+  </p>
+
+  <h2>What follows from ownership</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>unlimited_upside</code><span class="meta">equity</span></div>
+      <p>An owner keeps whatever is left after everyone else is paid. If the
+        business does well, there is no ceiling on that.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>last_in_line</code><span class="meta">equity</span></div>
+      <p>And no floor. Lenders, employees and suppliers are paid first. In
+        liquidation, equity holders receive what remains, which is frequently
+        nothing.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>fixed_return_capped</code><span class="meta">debt</span></div>
+      <p>A lender receives the agreed rate regardless of how well the borrower
+        does. Spectacular success pays the lender exactly the same.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>paid_first</code><span class="meta">debt</span></div>
+      <p>Interest is a contractual obligation, not a discretionary payment. That
+        is the whole of why debt is safer.</p>
+    </div>
+  </div>
+
+  <h2>Horizon decides the split, not temperament</h2>
+  <p class="lede">
+    The common framing is "risk appetite". A more useful framing is
+    <strong>when you need the money</strong>. Equity's variability only becomes a
+    problem if you are forced to sell during a fall — and what forces you to sell
+    is needing the money, not disliking volatility.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>under_3_years</code><span class="meta">debt, essentially always</span></div>
+      <p>Equity can be down 30% over any three-year window. Money with a near-term
+        purpose should not be exposed to that, whatever your appetite.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>3_to_7_years</code><span class="meta">mixed</span></div>
+      <p>Long enough to recover from an ordinary fall, not long enough to be
+        confident of it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>over_10_years</code><span class="meta">equity-weighted</span></div>
+      <p>Long enough that the main risk shifts from volatility to inflation — and
+        against inflation, debt is the riskier choice. See
+        <a href="/learn/inflation/">inflation</a>.</p>
+    </div>
+  </div>
+
+  <h2>The risk that changes places</h2>
+  <p class="lede">
+    Over one year, equity is far riskier. Over thirty, the position reverses: a
+    portfolio of fixed deposits earning a post-tax 5% against 6% inflation loses
+    purchasing power with complete reliability. Equity <em>might</em>; debt at
+    those rates <em>will</em>. <strong>Which asset is "safe" depends entirely on
+    the horizon.</strong>
+  </p>
+
+  <h2>Practical notes for India</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>taxation_differs</code><span class="meta">verify current rules</span></div>
+      <p>Equity and debt instruments are taxed differently, and the rules have
+        changed more than once in recent years. Check the current position rather
+        than relying on anything remembered — it materially affects any post-tax
+        comparison.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>debt_is_not_risk_free</code><span class="meta">two real risks</span></div>
+      <p>Credit risk: the borrower may not repay. Interest-rate risk: existing
+        bonds fall in value when rates rise. Debt mutual funds carry both, which
+        surprises people who bought them as the safe option.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>epf_and_ppf_are_debt</code><span class="meta">often forgotten</span></div>
+      <p>Most salaried Indians already hold a substantial debt allocation through
+        provident fund contributions. Count it before concluding you need more.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Next: <a href="/learn/asset-allocation/">asset allocation</a> ·
+    <a href="/learn/inflation/">inflation</a> ·
+    <a href="/mutual-funds/">mutual funds</a>
+  </p>
+</Base>

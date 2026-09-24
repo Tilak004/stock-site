@@ -1,0 +1,138 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Long-Term Investing & Mutual Funds";
+const description =
+  "What mutual funds are, the types, how costs and the direct-versus-regular " +
+  "distinction work, and why they suit long-term goals better than stock picking.";
+
+const BUSINESS = "https://tilak004.github.io/Business_website/";
+---
+
+<Base title={title} description={description} crumb="Reference / Mutual funds">
+  <h1>Long-term investing and mutual funds</h1>
+  <p class="lede">
+    The rest of this site is about short-horizon price behaviour. This page is
+    about the opposite problem — money you will not need for a decade, where the
+    relevant questions are completely different.
+  </p>
+
+  <h2>What a mutual fund is</h2>
+  <p class="lede">
+    A pooled vehicle. Many investors contribute, a professional manager invests
+    the pool according to a stated mandate, and you own units representing your
+    share. You get diversification and professional management that would be
+    impractical to assemble with a small amount of money on your own.
+  </p>
+
+  <h2>The main types</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>equity_funds</code><span class="meta">long horizon</span></div>
+      <p>Invest primarily in shares. Highest expected return, highest variability.
+        Sub-categorised by company size — large, mid and small cap — and by theme
+        or sector.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>debt_funds</code><span class="meta">shorter horizon</span></div>
+      <p>Invest in bonds and money-market instruments. Lower variability, and not
+        risk-free: they carry credit risk and interest-rate risk. See
+        <a href="/learn/equity-vs-debt/">equity vs debt</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>hybrid_funds</code><span class="meta">mixed</span></div>
+      <p>Hold both in some proportion, rebalancing internally.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>index_funds_and_etfs</code><span class="meta">passive</span></div>
+      <p>Track an index rather than attempting to beat it. Materially lower
+        expense ratios, which over decades compounds into a large difference —
+        see <a href="/learn/compounding/">compounding</a>.</p>
+    </div>
+  </div>
+
+  <h2>Costs, and why they matter more than they look</h2>
+  <p class="lede">
+    The expense ratio is deducted from the fund daily, so quoted returns are
+    already net of it. It still compounds against you: over 30 years, one extra
+    percentage point of annual cost can consume a substantial share of the final
+    corpus. The <a href="/tools/sip-calculator/">SIP calculator</a> makes the
+    magnitude visible if you run it at two different rates.
+  </p>
+
+  <h2>Direct and regular plans</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>direct</code><span class="meta">no distributor commission</span></div>
+      <p>Bought straight from the fund house. Lower expense ratio, and you make
+        every decision yourself.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>regular</code><span class="meta">includes distributor commission</span></div>
+      <p>Bought through a distributor, who is paid a trail commission out of the
+        expense ratio. The higher cost pays for the distributor's service.</p>
+    </div>
+  </div>
+  <p class="lede">
+    Which is appropriate depends on whether you want to handle selection,
+    rebalancing, paperwork and behaviour on your own. Both are legitimate.
+    <strong>Disclosure:</strong> the operator of this site is an AMFI-registered
+    mutual fund distributor and would receive trail commission on regular plans
+    bought through him. That is precisely why this page states the trade-off
+    rather than recommending one.
+  </p>
+
+  <h2>Why funds usually suit long-term goals better than stock picking</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>diversification_by_default</code><span class="meta">structural</span></div>
+      <p>A single fund holds dozens of companies. Assembling that yourself with a
+        small sum means large positions in few names.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>removes_the_timing_decision</code><span class="meta">behavioural</span></div>
+      <p>An automated monthly investment does not consult your opinion about the
+        market, which is a feature. See
+        <a href="/learn/trading-psychology/">trading psychology</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>no_ongoing_analysis</code><span class="meta">practical</span></div>
+      <p>Evaluating businesses properly is a continuous job. Most people do not
+        want it, and doing it badly is worse than not doing it.</p>
+    </div>
+  </div>
+
+  <h2>What they do not do</h2>
+  <p class="lede">
+    They do not eliminate risk. An equity fund falls when markets fall, and a
+    diversified fund falling 30% in a bad year is ordinary rather than
+    exceptional. They do not guarantee returns, past performance does not predict
+    future performance, and a fund that topped the tables for three years is often
+    one that took more risk in a period that rewarded it.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Shastri Financial Services</h2>
+  <p class="lede">
+    Mutual fund distribution is a separate activity from this site, conducted
+    under <span class="c">ARN-346031</span>. This site is not a sales channel for
+    it and nothing here is conditional on becoming a client.
+  </p>
+  <p class="lede">
+    <a href={BUSINESS} rel="noopener">Visit Shastri Financial Services →</a>
+  </p>
+
+  <div class="note">
+    <b>Note.</b> Mutual fund investments are subject to market risks. Read all
+    scheme related documents carefully. Nothing on this page is a recommendation
+    of any particular scheme, and suitability depends on circumstances this site
+    knows nothing about.
+  </div>
+
+  <p class="lede">
+    Next: <a href="/learn/asset-allocation/">asset allocation</a> ·
+    <a href="/learn/equity-vs-debt/">equity vs debt</a> ·
+    <a href="/tools/sip-calculator/">SIP calculator</a>
+  </p>
+</Base>

@@ -1,0 +1,99 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Compounding — Why Time Matters More Than Rate";
+const description =
+  "How compounding works, why the last years contribute most, and why a small " +
+  "difference in fees or an early withdrawal costs far more than it appears to.";
+---
+
+<Base title={title} description={description} crumb="Investing / Compounding">
+  <h1>Compounding</h1>
+  <p class="lede">
+    Compounding is earning returns on returns. Everyone knows the definition. The
+    part worth internalising is how unevenly it arrives — almost all of the growth
+    happens at the end, which is why interruptions are so expensive.
+  </p>
+
+  <h2>The arithmetic</h2>
+  <div class="formula">Final value = P × (1 + r)^years</div>
+  <p>
+    ₹1,00,000 at 12% a year:
+  </p>
+  <div class="formula">10 years  →  ₹3,10,585     (gain ₹2.1 lakh)
+20 years  →  ₹9,64,629     (gain ₹8.6 lakh)
+30 years  →  ₹29,95,992    (gain ₹28.9 lakh)</div>
+  <p class="lede">
+    Doubling the period from 10 to 20 years does not double the gain — it
+    quadruples it. From 20 to 30 years the value triples again. <strong>The final
+    decade contributes more than the first two combined.</strong>
+  </p>
+
+  <h2>Why this makes early years so valuable</h2>
+  <p class="lede">
+    Money invested at 25 gets forty years of compounding; the same rupee invested
+    at 40 gets twenty-five. At 12%, that difference is roughly five times the
+    final value from an identical amount. Starting earlier beats investing more,
+    within a wide range — which is an unusual situation in finance and worth
+    acting on.
+  </p>
+
+  <h2>Where it quietly leaks</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>fees_compound_too</code><span class="meta">the big one</span></div>
+      <p>A 1% higher expense ratio does not cost 1%. Over 30 years at 12% versus
+        11%, an initial ₹1,00,000 ends at about ₹29.96 lakh versus ₹22.89 lakh —
+        a gap of over ₹7 lakh, from one percentage point. The fee compounds
+        against you exactly as the return compounds for you.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>interrupting_it</code><span class="meta">costliest mistake</span></div>
+      <p>Withdrawing in year 20 of a 30-year plan does not cost you a third of the
+        outcome. It costs the largest third, because the final decade is where
+        most of the growth was going to happen.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>tax_on_the_way</code><span class="meta">drag</span></div>
+      <p>Gains taxed annually compound on a smaller base each year than gains
+        taxed once at the end. The same nominal return produces a different
+        outcome depending on when tax is paid.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>inflation</code><span class="meta">the silent half</span></div>
+      <p>Compounding works on the other side too. At 6%, prices roughly double
+        every twelve years. A nominal return that looks impressive can be a real
+        loss — see <a href="/tools/inflation-calculator/">the inflation
+        calculator</a>.</p>
+    </div>
+  </div>
+
+  <h2>The rule of 72</h2>
+  <div class="formula">Years to double ≈ 72 / annual return %</div>
+  <p class="lede">
+    At 12%, six years. At 8%, nine years. At 6%, twelve years. A useful mental
+    check, accurate enough for rates in the single to low double digits.
+  </p>
+
+  <h2>The honest caveat</h2>
+  <p class="lede">
+    Every illustration above assumes a constant rate, and nothing delivers that.
+    Real equity returns arrive in bursts separated by long flat or negative
+    stretches, and the sequence matters — a large fall early in a withdrawal phase
+    does far more damage than the same fall later.
+  </p>
+  <p class="lede">
+    Compounding is real. Smooth compounding is a diagram. The
+    <a href="/tools/sip-calculator/">SIP</a> and
+    <a href="/tools/lumpsum-calculator/">lumpsum</a> calculators use the same
+    simplification, and it is a simplification.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Next: <a href="/learn/cagr/">CAGR and XIRR</a> ·
+    <a href="/learn/inflation/">inflation</a> ·
+    <a href="/learn/asset-allocation/">asset allocation</a>
+  </p>
+</Base>
