@@ -1,0 +1,138 @@
+---
+import Base from "../../layouts/Base.astro";
+import ThresholdCurve from "../../components/ThresholdCurve.astro";
+
+const title = "Overfitting — Why Searching Harder Makes It Worse";
+const description =
+  "Why the best result from a parameter search is mostly luck, how to compute " +
+  "the noise floor, and a worked example of +21% in-sample becoming +2% out.";
+---
+
+<Base title={title} description={description} crumb="Trading / Overfitting">
+  <h1>Overfitting</h1>
+  <p class="lede">
+    Overfitting is finding a rule that describes the past precisely and the
+    future not at all. It is not a beginner's mistake — the more sophisticated
+    the search, the easier it is to do, because a bigger search finds better
+    coincidences.
+  </p>
+
+  <h2>The core problem, stated once</h2>
+  <p>
+    Test one strategy against random data and it probably looks mediocre. Test
+    two thousand and the best one looks excellent — <em>by construction</em>,
+    because you selected the maximum of two thousand draws from a distribution
+    centred on nothing.
+  </p>
+  <p class="lede">
+    The expected best result rises roughly with <span class="c">√(2 ln N)</span>
+    as the number of trials N grows. <strong>Searching harder does not find
+    better strategies. It raises the bar a real strategy has to clear, and makes
+    a fake one easier to believe.</strong>
+  </p>
+
+  <h2>You can compute the bar</h2>
+  <p>
+    Given how many parameter combinations you tried and how much their results
+    varied, you can calculate the best Sharpe you would expect from pure noise:
+  </p>
+  <div class="formula">expected best (no edge) ≈ σ × [ (1−γ)·z(1 − 1/N) + γ·z(1 − 1/(N·e)) ]
+
+N = number of trials,  σ = spread of results,  γ = 0.5772</div>
+  <p class="lede">
+    A worked instance: 27 combinations with a Sharpe spread of 0.17 gives a noise
+    floor of about <strong>0.34</strong>. A best result of 1.19 clears that
+    comfortably. Had the same search run over 2,187 combinations, the floor would
+    have risen to roughly <strong>0.59</strong> — the identical result becomes
+    markedly less convincing purely because more things were tried.
+  </p>
+
+  <h2>Seeing it in one picture</h2>
+  <p class="lede">
+    This is the same phenomenon in its simplest form. As a single threshold
+    tightens, the number of surviving stocks collapses. Anywhere on this curve you
+    can pick a value that "selects the best stocks" — and the selection is mostly
+    an artefact of where you drew the line.
+  </p>
+
+  <ThresholdCurve
+    field="adx" min={0} max={50} direction="gte" highlight={18}
+    title="How many stocks survive as one threshold tightens"
+    caption="Real NSE data, recomputed nightly. A rule with three thresholds instead of one has this problem three times over, multiplicatively — which is how a screen ends up with six survivors that share nothing but the fact that they fitted." />
+
+  <h2>The signatures</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>in_sample_gain_that_does_not_transfer</code><span class="meta">the clearest</span></div>
+      <p>A real example: re-optimising a strategy's parameters improved Sharpe by
+        <strong>+21% in-sample</strong> and <strong>+2% out-of-sample</strong>.
+        Almost the entire improvement was selection, not edge.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>a_narrow_peak</code><span class="meta">fragility</span></div>
+      <p>If a threshold of 18 scores well while 15 and 21 score badly, that is a
+        spike, not an effect. Prefer the centre of a broad plateau even when its
+        peak is lower — real relationships degrade smoothly.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>unstable_winners_across_folds</code><span class="meta">easy to check</span></div>
+      <p>Refit on rolling windows. If six periods choose six different "optimal"
+        parameter sets, the optimiser is fitting noise regardless of how good the
+        average looks.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>too_many_conditions</code><span class="meta">rule of thumb</span></div>
+      <p>Every extra rule is another chance to fit the past. A strategy with nine
+        conditions on a few hundred trades has more parameters than the data can
+        support.</p>
+    </div>
+  </div>
+
+  <h2>What actually helps</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>fewer_trials</code><span class="meta">counterintuitive but true</span></div>
+      <p>Two or three parameters on coarse steps. Twenty-seven combinations is
+        defensible; two thousand is not, because the noise floor rises with every
+        one you add.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>an_economic_reason_first</code><span class="meta">the real defence</span></div>
+      <p>Decide <em>why</em> an edge should exist before searching — who is on the
+        other side and why they keep losing. A pattern with no explanation is
+        usually a coincidence that has not revealed itself yet.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rolling_walk_forward</code><span class="meta">not one split</span></div>
+      <p>Fit on everything before a year, trade that year untouched, roll forward.
+        Several independent out-of-sample windows rather than one.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>report_the_trial_count</code><span class="meta">honesty test</span></div>
+      <p>A backtest quoted without saying how many variants were tried is
+        uninterpretable. If nobody mentions it, assume the number is large.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>The uncomfortable part</h2>
+  <p class="lede">
+    You cannot fully escape this. Every time you look at a result and adjust
+    something, you spend a little of your out-of-sample data. By the tenth
+    iteration, the "held out" period has quietly informed your choices and stopped
+    being a test at all.
+  </p>
+  <p class="lede">
+    The only real protection is genuinely forward data — a strategy tested on
+    prices that did not exist when it was designed. That takes months, and it is
+    the reason forward paper trading is worth more than any amount of additional
+    backtesting.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/backtesting/">backtesting</a> ·
+    <a href="/learn/risk-management/">risk management</a> ·
+    <a href="/screener/">try it on the screener</a>
+  </p>
+</Base>

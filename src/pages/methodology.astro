@@ -1,0 +1,163 @@
+---
+import Base from "../layouts/Base.astro";
+import snapshot from "../../public/data/snapshot.json";
+
+const meta = snapshot as any;
+const barDate = meta.stocks?.[0]?.bar_date ?? "unknown";
+
+const title = "Methodology";
+const description =
+  "Exactly how the data on this site is produced: sources, formulas, thresholds, " +
+  "update frequency, what is excluded and where the numbers can be wrong.";
+---
+
+<Base title={title} description={description} crumb="Reference / Methodology">
+  <h1>Methodology</h1>
+  <p class="lede">
+    Everything published here is computed from public daily price data using
+    standard formulas. This page states exactly how, including the parts that
+    make the numbers less impressive than they could be made to look.
+  </p>
+
+  <h2>Data source and universe</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>source</code><span class="meta">public end-of-day data</span></div>
+      <p>Daily open, high, low, close and volume for NSE-listed equities,
+        adjusted for splits and bonuses. No intraday data, no order book, no
+        derivatives.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>universe_scanned</code><span class="meta">{meta.universe_scanned} tickers</span></div>
+      <p>The full watchlist the pipeline attempts each run.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rows_computed</code><span class="meta">{meta.rows_computed}</span></div>
+      <p>Tickers with enough history (250+ sessions) to compute a 200-day average.
+        The rest are skipped rather than approximated.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rows_published</code><span class="meta">{meta.rows_published}</span></div>
+      <p>Selected by {meta.selection}. Thinly traded stocks are excluded
+        deliberately — their indicator values come from prices that barely
+        represent transactions, and a handful of trades can set the close.</p>
+    </div>
+  </div>
+
+  <h2>Indicators and their parameters</h2>
+  <p class="lede">
+    All standard, all verifiable against any other source. Exponential moving
+    averages are used rather than simple ones, so figures will differ slightly
+    from commentary quoting the "200 DMA", which usually means a simple average.
+  </p>
+  <div class="formula">RSI            Wilder's, 14 periods, on closing prices
+ADX / DI+ / DI-  Wilder's, 14 periods
+ATR            Wilder's, 14 periods
+EMA            21, 50 and 200 periods
+Volume average simple, 20 sessions
+52-week high   highest high over the trailing 252 sessions</div>
+
+  <h2>Published conditions</h2>
+  <p class="lede">
+    Six conditions are evaluated per stock. The thresholds below are the
+    <em>defaults</em> — the screener lets you change every one of them, and the
+    conditions are recomputed in your browser from the raw values.
+  </p>
+  <div class="formula">above_200dma      close &gt; EMA200
+ema21_above_50    EMA21 &gt; EMA50
+rsi_in_band       35 &le; RSI(14) &le; 70
+adx_trending      ADX(14) &ge; 18
+volume_above_avg  volume &ge; 20-day average
+near_52w_high     within 25% of the 52-week high</div>
+  <p class="lede">
+    These are round textbook values, chosen so a reader can verify them anywhere.
+    They are deliberately <strong>not</strong> the output of an optimisation, and
+    they are not tuned to make any result look good.
+  </p>
+
+  <h2>Update frequency</h2>
+  <p class="lede">
+    Recomputed once per trading day after the close by an automated job, which
+    then republishes the site. The current snapshot was generated
+    {" "}{new Date(meta.generated_at).toLocaleString("en-IN")} from the
+    {" "}<strong>{barDate}</strong> session. Every stock page and every table row
+    carries the date of the bar it was computed from, so a stale value is visible
+    rather than passed off as current.
+  </p>
+
+  <h2>Handling of missing and bad data</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>nulls_are_shown</code><span class="meta">never filled in</span></div>
+      <p>A value that cannot be computed is published as null and rendered as
+        "n/a" or a dash. Nothing is interpolated, estimated or carried forward.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>unknown_counts_as_not_met</code><span class="meta">conservative</span></div>
+      <p>A condition whose inputs are missing counts as <em>not</em> satisfied,
+        rather than being guessed either way.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>insufficient_history</code><span class="meta">excluded</span></div>
+      <p>Under 250 sessions and the ticker is dropped entirely. A 200-day average
+        computed from 120 days would be misleading.</p>
+    </div>
+  </div>
+
+  <h2>Known limitations</h2>
+  <p class="lede">
+    These are real and worth stating rather than burying.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>end_of_day_only</code><span class="meta">not live</span></div>
+      <p>Everything is computed after the close from daily bars. Nothing on this
+        site is real-time, and it is not suitable for intraday use.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>survivorship_bias</code><span class="meta">unquantified</span></div>
+      <p>The watchlist is built from currently listed companies. Firms that were
+        delisted, merged away or went bankrupt are absent. Any historical
+        statistic drawn from this universe is biased upward as a result, and this
+        site cannot say by how much.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>corporate_actions</code><span class="meta">source-dependent</span></div>
+      <p>Prices are split and bonus adjusted by the data source. Where an
+        adjustment is missing or late, indicator values for that ticker will be
+        wrong until it works through. If a figure looks impossible, it probably
+        is — please <a href="/contact/">report it</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>indicators_describe_the_past</code><span class="meta">by construction</span></div>
+      <p>Every value here is a function of prices that have already occurred.
+        None of them forecast anything, and no combination of them does either.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>no_costs_modelled</code><span class="meta">relevant to any backtest</span></div>
+      <p>Nothing on the public site simulates trading. Where returns are ever
+        discussed, brokerage, STT, stamp duty and slippage materially reduce them
+        — and on illiquid names slippage alone can exceed any edge. See
+        <a href="/learn/backtesting/">backtesting</a>.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>What this site does not do</h2>
+  <p class="lede">
+    It does not publish buy or sell signals, entry prices, stop-losses or
+    targets. It does not rank stocks by quality or assign a proprietary score.
+    The count of conditions met is a tally at published thresholds, not a rating.
+    It does not provide personalised investment advice — see the
+    <a href="/disclaimer/">disclaimer</a>.
+  </p>
+
+  <h2>Corrections</h2>
+  <p class="lede">
+    If a value looks wrong, include the ticker and the bar date shown on the
+    page. Every row carries that date, which makes it straightforward to check
+    against another source. Corrections are welcome and will be made.
+    <a href="/contact/">Get in touch</a>.
+  </p>
+</Base>

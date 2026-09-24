@@ -1,0 +1,156 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Backtesting — And the Ways It Lies to You";
+const description =
+  "What a backtest is, the specific errors that inflate results, and a worked " +
+  "example of a backtest that reported Sharpe 3.2 when the real figure was 1.1.";
+---
+
+<Base title={title} description={description} crumb="Trading / Backtesting">
+  <h1>Backtesting</h1>
+  <p class="lede">
+    A backtest applies a set of rules to historical prices and reports what would
+    have happened. Done carefully it is the only way to check whether an idea has
+    ever worked. Done carelessly — which is the norm — it produces a number that
+    is mostly an artefact of how it was measured.
+  </p>
+  <p class="lede">
+    This page is written from a specific example: a real backtest that reported a
+    Sharpe ratio above 3, where the honest figure turned out to be near 1.1. The
+    difference was not the strategy. It was the measurement.
+  </p>
+
+  <h2>The errors that inflate results</h2>
+
+  <h3>1. No capital constraint</h3>
+  <p>
+    The most damaging and the least discussed. A backtest that runs each stock
+    independently and then pools the results is implicitly assuming a separate
+    account per stock.
+  </p>
+  <p class="lede">
+    In the example, pooling per-stock results implied about <strong>115
+    simultaneous open positions</strong> and roughly <strong>2,200% of capital
+    deployed</strong>, on 99% of trading days. There is no such account. Replaying
+    the identical trades against a single realistic account — one pot of money,
+    fifteen positions, no leverage — is what took the Sharpe from 3.2 to 1.1.
+  </p>
+  <p>
+    It also surfaced something the original could not express: only about
+    <strong>one signal in eight could actually be funded</strong>. That turns the
+    question from "which signals are good" into "which fifteen do I take today",
+    which is a completely different problem.
+  </p>
+
+  <h3>2. Annualising trade returns as if they were sequential</h3>
+  <p>
+    A common formula annualises by the square root of trades per year. That is
+    valid for trades taken one after another. It is wrong when positions overlap,
+    because correlated simultaneous trades are not independent observations —
+    and it overstates the result by roughly the square root of the number of
+    concurrent positions.
+  </p>
+
+  <h3>3. Survivorship bias</h3>
+  <p class="lede">
+    Building a universe from currently listed companies quietly excludes every
+    firm that failed. The backtest is then run on a population pre-filtered for
+    survival, which is exactly the filter you do not have in advance.
+  </p>
+
+  <h3>4. Lookahead, including the subtle kind</h3>
+  <p>
+    The obvious form is using tomorrow's price today. The subtle forms are worse
+    because they look reasonable:
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>ranking_by_an_in_sample_model</code><span class="meta">real example</span></div>
+      <p>Using a model trained on the same trades to decide which trades to take.
+        The model is picking winners it was already shown the answers to. In the
+        example this produced a <strong>6,473% return</strong> — entirely
+        fictional. The fix is to score each trade only with a model trained on
+        data that closed before it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>pretrained_weights</code><span class="meta">modern version</span></div>
+      <p>Any model trained on market history overlapping your test window has
+        seen the answers. The leak is in the parameters, not the inputs, so
+        careful feature construction does not catch it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>survivorship_in_the_universe_file</code><span class="meta">easy to miss</span></div>
+      <p>Today's index constituents applied to a ten-year backtest embeds a
+        decade of hindsight about which companies would still be there.</p>
+    </div>
+  </div>
+
+  <h3>5. Costs that are optimistic</h3>
+  <p class="lede">
+    In the example the strategy returned roughly 15% a year at 0.20% round-trip
+    costs, and <strong>less than the index</strong> at 1.0% — which is realistic
+    for illiquid smallcaps. The break-even was near 0.9%. An edge that only exists
+    at institutional fill quality is not an edge you have.
+  </p>
+
+  <h2>The check that catches most of it</h2>
+  <p class="lede">
+    Split your history in two. Choose every parameter using only the first half.
+    Then run the second half once, without changing anything. If the result
+    collapses, you fitted the past.
+  </p>
+  <p>
+    In the example, re-optimising the parameters produced <strong>+21%
+    in-sample</strong> and <strong>+2% out-of-sample</strong>. That gap is the
+    overfitting, measured. See <a href="/learn/overfitting/">overfitting</a> for
+    why searching harder makes this worse rather than better.
+  </p>
+
+  <h2>What a believable backtest looks like</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>one_account</code><span class="meta">non-negotiable</span></div>
+      <p>A single pot of money, a cap on concurrent positions, and a rule for
+        which signals get funded when more fire than you can afford.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>daily_equity_curve</code><span class="meta">not trade returns</span></div>
+      <p>Marked to market daily, so drawdown reflects the pain of holding rather
+        than only realised losses.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>costs_and_a_liquidity_floor</code><span class="meta">both</span></div>
+      <p>Realistic slippage, and a minimum turnover so you are not backtesting
+        fills you could never get.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>modest_numbers</code><span class="meta">the tell</span></div>
+      <p>A single honest equity signal is Sharpe 0.3 to 0.8. Anything above 2
+        from one rule on daily bars is a measurement error until proven
+        otherwise. Implausibly good results are evidence of a bug, not of skill.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Why this page exists</h2>
+  <p class="lede">
+    Almost everyone publishes the version of their backtest that looks best.
+    The numbers above are what the same strategy looked like before and after the
+    measurement errors were fixed — 3.2 became 1.1, and the strategy did not
+    change at all. The 1.1 was always the true figure; what was removed was an
+    artefact sitting on top of it.
+  </p>
+  <p class="lede">
+    A Sharpe of 1.1 that survives honest accounting is worth far more than a 3.2
+    that does not. If your backtest looks extraordinary, the most likely
+    explanation is that it is measuring something other than what you think.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/overfitting/">overfitting</a> ·
+    <a href="/learn/risk-management/">risk management</a> ·
+    <a href="/methodology/">how this site computes its data</a>
+  </p>
+</Base>
