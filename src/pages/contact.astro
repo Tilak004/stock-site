@@ -6,9 +6,8 @@ const description =
   "Get in touch about the site, report an error in the data, or reach Shastri " +
   "Financial Services about mutual fund distribution.";
 
-// TODO: LinkedIn URL pending from Tilak — placeholder intentionally omitted
-// rather than guessed, so no dead or wrong link ships.
 const EMAIL = "shastritilak880@gmail.com";
+const LINKEDIN = "https://www.linkedin.com/in/tilak-shastri/";
 const PHONE = "+91 94817 40319";
 ---
 
@@ -24,6 +23,10 @@ const PHONE = "+91 94817 40319";
     <div class="def">
       <div class="h"><code>email</code><span class="meta">preferred</span></div>
       <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+    </div>
+    <div class="def">
+      <div class="h"><code>linkedin</code><span class="meta">also fine</span></div>
+      <p><a href={LINKEDIN} rel="noopener">linkedin.com/in/tilak-shastri</a></p>
     </div>
     <div class="def">
       <div class="h"><code>found_an_error</code><span class="meta">please do tell me</span></div>

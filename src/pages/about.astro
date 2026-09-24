@@ -2,6 +2,24 @@
 import Base from "../layouts/Base.astro";
 
 const title = "About";
+const LINKEDIN = "https://www.linkedin.com/in/tilak-shastri/";
+const BUSINESS = "https://tilak004.github.io/Business_website/";
+
+// schema.org Person with sameAs: this is how Google ties the author identity on
+// this site to the same person elsewhere. On YMYL finance content that identity
+// signal carries real weight, and a verifiable ARN plus a real LinkedIn is more
+// than most finance sites can show.
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Tilak Chandra Shastri",
+  jobTitle: "Mutual Fund Distributor",
+  identifier: "ARN-346031",
+  affiliation: { "@type": "Organization", name: "Shastri Financial Services", url: BUSINESS },
+  knowsAbout: ["Technical analysis", "Mutual funds", "Equity markets", "Backtesting"],
+  sameAs: [LINKEDIN, BUSINESS],
+};
+
 const description =
   "Who runs this site, what it is for, how it is funded, and the limits of what " +
   "it does. Built and maintained by Tilak Chandra Shastri, AMFI-registered " +
@@ -23,6 +41,11 @@ const description =
     <span class="c">ARN-346031</span> — operating as
     <strong>Shastri Financial Services</strong>, with around five years of
     hands-on experience in the stock market.
+  </p>
+  <p class="lede">
+    <a href={LINKEDIN} rel="noopener">LinkedIn</a> ·
+    <a href={BUSINESS} rel="noopener">Shastri Financial Services</a> ·
+    <a href="/contact/">Contact</a>
   </p>
   <p>
     I built the analytics behind this site myself: the data pipeline, the
@@ -88,4 +111,6 @@ const description =
     Corrections, questions and disagreements are all welcome — particularly
     corrections. See the <a href="/contact/">contact page</a>.
   </p>
+
+  <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
 </Base>
