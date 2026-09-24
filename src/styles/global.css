@@ -58,32 +58,12 @@
    shadows, no gradients. Colour is functional only — green/red for market
    direction, amber for attention, blue for values and links.
 
-   Light is the default for EVERYONE — deliberately not following
-   prefers-color-scheme, so a visitor on a dark-mode OS still lands on the white
-   theme. Dark is opt-in through the toggle and remembered in localStorage.
+   Dark is the default for EVERYONE — deliberately not following
+   prefers-color-scheme, so a visitor on a light-mode OS still lands on the dark
+   theme. Light is opt-in through the toggle and remembered in localStorage.
    Components only ever read tokens, so both states resolve as a set.
    --------------------------------------------------------------------------- */
 :root {
-  --bg: #ffffff;
-  --panel: #fafafa;
-  --chip: #f1f1ef;
-  --code: #fafafa;
-  --ink: #1a1a1a;
-  --dim: #6b6b6b;
-  --faint: #949494;
-  --line: #e5e5e3;
-  --link: #2563eb;
-  --up: #15803d;
-  --down: #b91c1c;
-  --warn: #b45309;
-  --key: #7c3aed;
-
-  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-  --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --nav: 268px;
-}
-
-:root[data-theme="dark"] {
   --bg: #0d0d0d;
   --panel: #111111;
   --chip: #1c1c1c;
@@ -97,6 +77,27 @@
   --down: #f87171;
   --warn: #fbbf24;
   --key: #c084fc;
+
+
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --nav: 268px;
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --panel: #fafafa;
+  --chip: #f1f1ef;
+  --code: #fafafa;
+  --ink: #1a1a1a;
+  --dim: #6b6b6b;
+  --faint: #949494;
+  --line: #e5e5e3;
+  --link: #2563eb;
+  --up: #15803d;
+  --down: #b91c1c;
+  --warn: #b45309;
+  --key: #7c3aed;
 }
 
 * { box-sizing: border-box; }
@@ -320,11 +321,11 @@ td.n { font-family: var(--mono); }
 .pager .pos { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
 .pager select { width: auto; padding: .2rem .35rem; font-size: .76rem; }
 
-/* Theme toggle icon: moon while light (click to go dark), sun while dark.
+/* Theme toggle icon: sun while dark (click to go light), moon while light.
    Inline SVG rather than an emoji — emoji render differently on every platform
    and sit badly against this typography. These inherit currentColor. */
 .tbtn { display: inline-flex; align-items: center; gap: .3rem; line-height: 1; padding: .28rem .45rem; }
 .tbtn svg { width: 14px; height: 14px; display: block; }
-.tbtn .i-sun { display: none; }
-:root[data-theme="dark"] .tbtn .i-sun { display: block; }
-:root[data-theme="dark"] .tbtn .i-moon { display: none; }
+.tbtn .i-moon { display: none; }
+:root[data-theme="light"] .tbtn .i-moon { display: block; }
+:root[data-theme="light"] .tbtn .i-sun { display: none; }
