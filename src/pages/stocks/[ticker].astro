@@ -1,0 +1,177 @@
+---
+import Base from "../../layouts/Base.astro";
+import snapshot from "../../../public/data/snapshot.json";
+
+// One template, one page per stock in the snapshot. Adding stocks to the
+// exporter's --top adds pages here with no further work.
+export function getStaticPaths() {
+  const rows = (snapshot as any).stocks ?? [];
+  return rows.map((s: any) => ({ params: { ticker: s.ticker.toLowerCase() }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const meta = snapshot as any;
+
+const n = (v: any, d = 2) => (typeof v === "number" ? v.toFixed(d) : null);
+const inr = (v: any) =>
+  typeof v === "number" ? "₹" + v.toLocaleString("en-IN", { maximumFractionDigits: 2 }) : null;
+
+// Plain-English reading of each condition FOR THIS STOCK, built from its own
+// numbers. This is what stops the page being a bare table of figures.
+const facts: { label: string; state: boolean | null; text: string; link?: string }[] = [
+  {
+    label: "Above the 200-day average",
+    state: s.conditions.above_200dma,
+    link: "/learn/moving-averages/",
+    text: s.ema200 == null || s.close == null
+      ? "The 200-day average could not be computed."
+      : s.close > s.ema200
+        ? `Last close ${inr(s.close)} is above the 200-day EMA of ${inr(s.ema200)}, a difference of ${n(((s.close / s.ema200) - 1) * 100, 1)}%.`
+        : `Last close ${inr(s.close)} is below the 200-day EMA of ${inr(s.ema200)}, by ${n((1 - s.close / s.ema200) * 100, 1)}%.`,
+  },
+  {
+    label: "21-day EMA above the 50-day",
+    state: s.conditions.ema21_above_50,
+    link: "/learn/moving-averages/",
+    text: s.ema21 == null || s.ema50 == null
+      ? "One of the shorter averages could not be computed."
+      : s.ema21 > s.ema50
+        ? `The 21-day EMA (${inr(s.ema21)}) sits above the 50-day (${inr(s.ema50)}).`
+        : `The 21-day EMA (${inr(s.ema21)}) sits below the 50-day (${inr(s.ema50)}).`,
+  },
+  {
+    label: "RSI between 35 and 70",
+    state: s.conditions.rsi_in_band,
+    link: "/learn/rsi/",
+    text: s.rsi == null
+      ? "RSI could not be computed."
+      : s.rsi < 35
+        ? `RSI(14) is ${n(s.rsi, 1)}, below the 35 mark — conventionally described as oversold.`
+        : s.rsi > 70
+          ? `RSI(14) is ${n(s.rsi, 1)}, above 70 — conventionally described as overbought.`
+          : `RSI(14) is ${n(s.rsi, 1)}, inside the 35–70 band, so neither extreme applies.`,
+  },
+  {
+    label: "ADX at or above 18",
+    state: s.conditions.adx_trending,
+    link: "/learn/adx/",
+    text: s.adx == null
+      ? "ADX could not be computed."
+      : s.adx >= 18
+        ? `ADX(14) is ${n(s.adx, 1)}, indicating a directional move rather than a range. ADX does not say which direction.`
+        : `ADX(14) is ${n(s.adx, 1)}, below 18 — describing a sideways market rather than a trending one.`,
+  },
+  {
+    label: "Volume at or above its 20-day average",
+    state: s.conditions.volume_above_avg,
+    link: "/learn/volume/",
+    text: s.vol_ratio == null
+      ? "Relative volume could not be computed."
+      : `The last session traded at ${n(s.vol_ratio)}× its own 20-day average volume.`,
+  },
+  {
+    label: "Within 25% of the 52-week high",
+    state: s.conditions.near_52w_high,
+    link: "/learn/support-resistance/",
+    text: s.pct_from_52wh == null
+      ? "Distance from the 52-week high could not be computed."
+      : `Trading ${n(Math.abs(s.pct_from_52wh), 1)}% below its 52-week high.`,
+  },
+];
+
+const title = `${s.ticker} Technical Indicators — RSI, ADX and Moving Averages`;
+const description =
+  `Current technical indicator values for ${s.ticker}: RSI ${n(s.rsi, 1) ?? "n/a"}, ` +
+  `ADX ${n(s.adx, 1) ?? "n/a"}, close ${inr(s.close) ?? "n/a"}, and where it sits ` +
+  `against its 21, 50 and 200-day moving averages. Updated ${s.bar_date}.`;
+---
+
+<Base title={title} description={description} crumb={`Stocks / ${s.ticker}`}>
+  <h1>{s.ticker} — technical indicators</h1>
+  <p class="lede">
+    Standard indicator values computed from daily price data, as of the
+    <strong>{s.bar_date}</strong> session. {s.sector && <>Sector: {s.sector}.</>}
+    These are measurements of past price behaviour — not a view on the company,
+    and not a recommendation.
+  </p>
+
+  <div class="scroll" style="margin:1.2rem 0">
+    <table>
+      <thead>
+        <tr><th>Measure</th><th>Value</th><th>Measure</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Close</td><td class="n">{inr(s.close) ?? <span class="na">n/a</span>}</td>
+          <td>Day change</td>
+          <td class={"n " + (s.chg_pct == null ? "" : s.chg_pct >= 0 ? "up" : "down")}>
+            {n(s.chg_pct) ?? <span class="na">n/a</span>}%
+          </td>
+        </tr>
+        <tr>
+          <td>RSI(14)</td><td class="n">{n(s.rsi, 1) ?? <span class="na">n/a</span>}</td>
+          <td>ADX(14)</td><td class="n">{n(s.adx, 1) ?? <span class="na">n/a</span>}</td>
+        </tr>
+        <tr>
+          <td>EMA 21</td><td class="n">{inr(s.ema21) ?? <span class="na">n/a</span>}</td>
+          <td>EMA 50</td><td class="n">{inr(s.ema50) ?? <span class="na">n/a</span>}</td>
+        </tr>
+        <tr>
+          <td>EMA 200</td><td class="n">{inr(s.ema200) ?? <span class="na">n/a</span>}</td>
+          <td>Volume vs 20d avg</td><td class="n">{n(s.vol_ratio) ?? <span class="na">n/a</span>}×</td>
+        </tr>
+        <tr>
+          <td>ATR as % of price</td><td class="n">{n(s.atr_pct) ?? <span class="na">n/a</span>}%</td>
+          <td>From 52-week high</td><td class="n">{n(s.pct_from_52wh, 1) ?? <span class="na">n/a</span>}%</td>
+        </tr>
+        <tr>
+          <td>Median turnover</td><td class="n">₹{n(s.turnover_cr, 0) ?? "—"} cr/day</td>
+          <td>Conditions met</td><td class="n">{s.met} / 6</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>What these values say</h2>
+  <div class="defs">
+    {facts.map((f) => (
+      <div class="def">
+        <div class="h">
+          <code>{f.label}</code>
+          <span class="meta" style={f.state === true ? "color:var(--up)" : f.state === false ? "color:var(--down)" : ""}>
+            {f.state === null ? "unknown" : f.state ? "yes" : "no"}
+          </span>
+        </div>
+        <p>{f.text}{f.link && <> <a href={f.link}>What this measures →</a></>}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="note">
+    <b>How to read the count.</b> {s.met} of 6 is a tally of conditions satisfied
+    at the thresholds this site publishes — it is not a rating, a score, or a
+    judgement of quality. A stock meeting six conditions is not thereby a better
+    investment than one meeting three. Change the thresholds yourself on the
+    <a href="/screener/">screener</a> and the count changes.
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>What this page does not cover</h2>
+  <p class="lede">
+    Every figure above is a function of past prices. None of it describes whether
+    {" "}{s.ticker} earns a decent return on capital, whether its profits convert
+    into cash, how much it owes, or what it is worth. Those are separate
+    questions answered from the financial statements —
+    see <a href="/learn/reading-financials/">reading a financial statement</a> and
+    <a href="/learn/valuation-ratios/"> valuation ratios</a>.
+  </p>
+
+  <p class="lede" style="font-size:.78rem">
+    Data computed {new Date(meta.generated_at).toLocaleString("en-IN")} from the
+    {" "}{s.bar_date} session. Published for {meta.rows_published} of
+    {" "}{meta.universe_scanned} scanned stocks, selected by
+    {" "}{meta.selection}. Values are not live and not intended for trading
+    decisions.
+  </p>
+</Base>

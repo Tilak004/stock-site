@@ -1,0 +1,80 @@
+---
+import Base from "../../layouts/Base.astro";
+import snapshot from "../../../public/data/snapshot.json";
+
+const meta = snapshot as any;
+const rows = [...(meta.stocks ?? [])].sort((a: any, b: any) =>
+  a.ticker.localeCompare(b.ticker));
+
+// Grouped by first letter so the index is navigable rather than one long list.
+const groups: Record<string, any[]> = {};
+for (const s of rows) {
+  const k = s.ticker[0].toUpperCase();
+  (groups[k] ||= []).push(s);
+}
+const letters = Object.keys(groups).sort();
+
+const title = "NSE Stocks — Technical Indicator Pages";
+const description =
+  `Technical indicator values for ${rows.length} liquid NSE-listed stocks: RSI, ` +
+  `ADX, moving averages, relative volume and distance from the 52-week high.`;
+---
+
+<Base title={title} description={description} crumb="Stocks">
+  <h1>Stock pages</h1>
+  <p class="lede">
+    Current indicator values for the <strong>{rows.length}</strong> most liquid
+    stocks in the universe, ranked by 60-day median turnover. Each page shows
+    what the standard indicators read for that stock, and what each reading
+    describes.
+  </p>
+  <p class="lede">
+    To filter across all of them at once with your own thresholds, use the
+    <a href="/screener/">screener</a>.
+  </p>
+
+  <nav aria-label="Jump to letter" style="margin:1rem 0 1.4rem;font-family:var(--mono);font-size:.82rem">
+    {letters.map((l) => <a href={`#${l}`} style="margin-right:.55rem">{l}</a>)}
+  </nav>
+
+  {letters.map((l) => (
+    <section>
+      <h2 id={l} style="font-family:var(--mono);font-size:.95rem">{l}</h2>
+      <div class="tickers">
+        {groups[l].map((s: any) => (
+          <a href={`/stocks/${s.ticker.toLowerCase()}/`}>
+            <span class="t">{s.ticker}</span>
+            <span class="m">{s.met}/6</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede" style="font-size:.78rem">
+    {meta.rows_published} of {meta.universe_scanned} scanned stocks are published,
+    selected by {meta.selection}. Thinly traded stocks are excluded deliberately:
+    their indicator values are computed from prices that barely represent
+    transactions. Data as of the {rows[0]?.bar_date} session.
+  </p>
+</Base>
+
+<style>
+  .tickers {
+    display: grid; gap: .4rem; margin-bottom: 1.4rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .tickers a {
+    display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+    border: 1px solid var(--line); border-radius: 6px; padding: .35rem .55rem;
+    text-decoration: none; background: var(--panel); font-size: .82rem;
+  }
+  .tickers a:hover { border-color: var(--link); text-decoration: none; }
+  .tickers .t { color: var(--ink); font-weight: 500; }
+  .tickers .m {
+    font-family: var(--mono); font-size: .72rem; color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+</style>
