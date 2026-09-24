@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
 
 const title = "Lumpsum Calculator — One-Time Investment Growth";
 const description =
@@ -40,6 +41,8 @@ const description =
     <div class="calc-out">
       <div class="out-hero" id="fv">—</div>
       <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">estimated value at the end</div>
+      <Donut id="dLump" aLabel="Invested" bLabel="Gain" />
+
       <div class="out-row"><span class="lbl">Gain</span><span class="val" id="g">—</span></div>
       <div class="out-row"><span class="lbl">Times multiplied</span><span class="val" id="m">—</span></div>
       <div class="out-row"><span class="lbl">Same total, invested monthly instead</span><span class="val" id="sip">—</span></div>
@@ -104,6 +107,7 @@ m = compounding periods per year</div>
       const n = Math.round(Y * 12), i = R / 100 / 12, per = P / n;
       const sipFv = i === 0 ? per * n : per * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
       $("sip").textContent = inr(sipFv);
+      window.donut && donut("dLump", P, fv - P, inr(P), inr(fv - P));
     }
     ["p", "y", "r", "c"].forEach((i) => $(i).addEventListener("input", run));
     run();

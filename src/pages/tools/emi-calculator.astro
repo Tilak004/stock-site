@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
 
 const title = "EMI Calculator — Home, Car and Personal Loan";
 const description =
@@ -33,6 +34,8 @@ const description =
     <div class="calc-out">
       <div class="out-hero" id="emi">—</div>
       <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">per month</div>
+      <Donut id="dEmi" aLabel="Principal" bLabel="Interest" />
+
       <div class="out-row"><span class="lbl">Total interest paid</span><span class="val" id="int">—</span></div>
       <div class="out-row"><span class="lbl">Total amount repaid</span><span class="val" id="tot">—</span></div>
       <div class="out-row"><span class="lbl">Interest as % of loan</span><span class="val" id="pct">—</span></div>
@@ -110,6 +113,7 @@ P = principal,  i = annual rate / 12 / 100,  n = tenure in months</div>
       $("tot").textContent = inr(total);
       $("pct").textContent = (((total - P) / P) * 100).toFixed(1) + "%";
       $("n").textContent = n;
+      window.donut && donut("dEmi", P, total - P, inr(P), inr(total - P));
     }
     ["p", "r", "y"].forEach((i) => $(i).addEventListener("input", run));
     run();

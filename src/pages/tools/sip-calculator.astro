@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
 
 const title = "SIP Calculator — Monthly Investment Returns";
 const description =
@@ -41,6 +42,8 @@ const description =
     <div class="calc-out">
       <div class="out-hero" id="fv">—</div>
       <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">estimated value at the end</div>
+      <Donut id="dSip" aLabel="Invested" bLabel="Returns" />
+
       <div class="out-row"><span class="lbl">Total invested</span><span class="val" id="inv">—</span></div>
       <div class="out-row"><span class="lbl">Estimated gain</span><span class="val" id="gain">—</span></div>
       <div class="out-row"><span class="lbl">Instalments</span><span class="val" id="n">—</span></div>
@@ -117,6 +120,7 @@ const description =
       $("inv").textContent = inr(invested);
       $("gain").textContent = inr(fv - invested);
       $("n").textContent = n;
+      window.donut && donut("dSip", invested, fv - invested, inr(invested), inr(fv - invested));
     }
 
     ["amt", "yrs", "rate", "when"].forEach((id) =>

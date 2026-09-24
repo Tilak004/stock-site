@@ -1,0 +1,144 @@
+---
+import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
+
+const title = "FD Calculator — Fixed Deposit Maturity Value";
+const description =
+  "Calculate fixed deposit maturity value and interest earned, with quarterly " +
+  "compounding, plus the real return after tax and inflation.";
+---
+
+<Base title={title} description={description} crumb="Tools / FD calculator">
+  <h1>FD calculator</h1>
+  <p class="lede">
+    Maturity value of a fixed deposit. Indian banks compound FD interest
+    <strong>quarterly</strong> by convention, which is why the effective yield is
+    slightly higher than the quoted rate.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="p">Deposit amount (₹)</label>
+        <input type="number" id="p" value="500000" min="100" step="10000" />
+      </div>
+      <div class="fld">
+        <label for="r">Interest rate (% per year)</label>
+        <input type="number" id="r" value="7" min="0" max="20" step="0.05" />
+      </div>
+      <div class="fld">
+        <label for="y">Tenure (years)</label>
+        <input type="number" id="y" value="5" min="0.25" max="20" step="0.25" />
+      </div>
+      <div class="fld">
+        <label for="c">Compounding</label>
+        <select id="c">
+          <option value="4" selected>Quarterly (bank standard)</option>
+          <option value="1">Annual</option>
+          <option value="12">Monthly</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label for="t">Your income tax slab (%)</label>
+        <input type="number" id="t" value="30" min="0" max="45" step="5" />
+        <div class="hint">FD interest is taxed at your slab rate.</div>
+      </div>
+      <div class="fld">
+        <label for="inf">Assumed inflation (%)</label>
+        <input type="number" id="inf" value="6" min="0" max="20" step="0.5" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="mv">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">maturity value before tax</div>
+      <Donut id="dFd" aLabel="Deposit" bLabel="Interest" />
+
+      <div class="out-row"><span class="lbl">Interest earned</span><span class="val" id="int">—</span></div>
+      <div class="out-row"><span class="lbl">Effective annual yield</span><span class="val" id="eff">—</span></div>
+      <div class="out-row"><span class="lbl">Interest after tax</span><span class="val" id="post">—</span></div>
+      <div class="out-row"><span class="lbl">Post-tax return rate</span><span class="val" id="ptr">—</span></div>
+      <div class="out-row"><span class="lbl">Real return after inflation</span><span class="val" id="real">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">Maturity = P × (1 + r/n)^(n × years)     n = compounding periods per year
+
+Real return = (1 + post-tax rate) / (1 + inflation) − 1</div>
+
+  <h2>The row that matters</h2>
+  <p class="lede">
+    Look at <strong>real return after inflation</strong>. At a 7% FD, a 30% tax
+    slab and 6% inflation, the post-tax rate is about 4.9% and the real return is
+    <em>negative</em> — the balance grows while the purchasing power shrinks. An
+    FD is a capital-preservation instrument, and at higher tax slabs it does not
+    always preserve capital in real terms.
+  </p>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>tds</code><span class="meta">how the tax arrives</span></div>
+      <p>Banks deduct tax at source once interest crosses a threshold in a
+        financial year. That is a collection mechanism, not the final liability —
+        the interest is taxed at your slab regardless of whether TDS was cut.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>taxed_yearly_not_at_maturity</code><span class="meta">commonly missed</span></div>
+      <p>Interest is generally taxable on an accrual basis each year, even on a
+        cumulative FD where you receive nothing until maturity.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>premature_withdrawal</code><span class="meta">excluded</span></div>
+      <p>Breaking an FD early usually attracts a rate penalty, often around 0.5–1%.
+        Not modelled here.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>senior_citizen_rates</code><span class="meta">usually higher</span></div>
+      <p>Banks typically offer an additional 0.25–0.5%. Enter the actual rate
+        you have been quoted.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/rd-calculator/">RD</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a> ·
+    <a href="/tools/lumpsum-calculator/">lumpsum</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const P = +$("p").value, R = +$("r").value, Y = +$("y").value,
+            n = +$("c").value, slab = +$("t").value / 100, inf = +$("inf").value / 100;
+      $("err").textContent = "";
+      const ids = ["mv", "int", "eff", "post", "ptr", "real"];
+      if (!(P > 0) || !(R >= 0) || !(Y > 0)) {
+        ids.forEach((i) => ($(i).textContent = "—"));
+        $("err").textContent = "Enter a positive deposit, a non-negative rate and a tenure above zero.";
+        return;
+      }
+      const mv = P * Math.pow(1 + R / 100 / n, n * Y);
+      const interest = mv - P;
+      const eff = (Math.pow(1 + R / 100 / n, n) - 1) * 100;      // effective annual yield
+      const postTaxInterest = interest * (1 - slab);
+      const postTaxRate = (Math.pow((P + postTaxInterest) / P, 1 / Y) - 1) * 100;
+      const real = ((1 + postTaxRate / 100) / (1 + inf) - 1) * 100;
+
+      $("mv").textContent = inr(mv);
+      $("int").textContent = inr(interest);
+      $("eff").textContent = eff.toFixed(2) + "%";
+      $("post").textContent = inr(postTaxInterest);
+      $("ptr").textContent = postTaxRate.toFixed(2) + "%";
+      $("real").textContent = real.toFixed(2) + "%";
+      $("real").style.color = real >= 0 ? "var(--up)" : "var(--down)";
+      window.donut && donut("dFd", P, interest, inr(P), inr(interest));
+    }
+    ["p", "r", "y", "c", "t", "inf"].forEach((i) => $(i).addEventListener("input", run));
+    run();
+  </script>
+</Base>

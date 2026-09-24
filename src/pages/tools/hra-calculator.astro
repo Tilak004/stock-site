@@ -1,0 +1,148 @@
+---
+import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
+
+const title = "HRA Exemption Calculator — House Rent Allowance";
+const description =
+  "Calculate your HRA exemption as the least of three statutory amounts, and see " +
+  "which one is binding and why.";
+---
+
+<Base title={title} description={description} crumb="Tools / HRA calculator">
+  <h1>HRA exemption calculator</h1>
+  <p class="lede">
+    House Rent Allowance is partly exempt from income tax if you actually pay
+    rent. The exempt amount is the <strong>least of three</strong> figures — and
+    knowing which one binds tells you whether anything can be improved.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="sal">Basic salary + DA (₹ per year)</label>
+        <input type="number" id="sal" value="900000" min="0" step="10000" />
+        <div class="hint">Not total CTC — basic plus dearness allowance.</div>
+      </div>
+      <div class="fld">
+        <label for="hra">HRA received (₹ per year)</label>
+        <input type="number" id="hra" value="360000" min="0" step="10000" />
+      </div>
+      <div class="fld">
+        <label for="rent">Rent paid (₹ per year)</label>
+        <input type="number" id="rent" value="300000" min="0" step="10000" />
+      </div>
+      <div class="fld">
+        <label for="city">City</label>
+        <select id="city">
+          <option value="50">Metro — Delhi, Mumbai, Kolkata, Chennai</option>
+          <option value="40">Non-metro</option>
+        </select>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="ex">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">exempt from tax</div>
+      <Donut id="dHra" aLabel="Taxable" bLabel="Exempt" />
+
+      <div class="out-row"><span class="lbl">1 · Actual HRA received</span><span class="val" id="a">—</span></div>
+      <div class="out-row"><span class="lbl">2 · Rent paid − 10% of salary</span><span class="val" id="b">—</span></div>
+      <div class="out-row"><span class="lbl">3 · 50% / 40% of salary</span><span class="val" id="c">—</span></div>
+      <div class="out-row"><span class="lbl">Binding limit</span><span class="val" id="bind">—</span></div>
+      <div class="out-row"><span class="lbl">Taxable portion of HRA</span><span class="val" id="tax">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">Exemption = least of:
+  1. actual HRA received
+  2. rent paid − 10% of (basic + DA)
+  3. 50% of (basic + DA) in a metro, 40% elsewhere</div>
+
+  <h2>Reading which limit binds</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>limit_2_binds</code><span class="meta">most common</span></div>
+      <p>Your rent is low relative to salary. Only rent above 10% of salary counts
+        at all, so a modest rent yields a modest exemption regardless of how much
+        HRA you receive.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>limit_1_binds</code><span class="meta">HRA component is small</span></div>
+      <p>You cannot exempt more HRA than you are actually paid. If your salary
+        structure allocates little to HRA, that caps everything.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>limit_3_binds</code><span class="meta">high rent, high HRA</span></div>
+      <p>The statutory ceiling has taken over. Paying still more rent will not
+        increase the exemption.</p>
+    </div>
+  </div>
+
+  <h2>Things worth knowing</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>old_regime_only</code><span class="meta">important</span></div>
+      <p>HRA exemption is available under the old tax regime. The new regime
+        generally does not allow it, so this calculation only matters if you have
+        opted for the old one. Verify which regime applies to you.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>landlord_pan</code><span class="meta">documentation</span></div>
+      <p>Where annual rent exceeds a specified threshold, the landlord's PAN must
+        be reported to your employer. Rent receipts should be retained.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rent_to_family</code><span class="meta">permitted, with care</span></div>
+      <p>Paying rent to a parent who owns the property is allowed, but the rent
+        must be genuine, actually paid, and declared as income by them.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/gratuity-calculator/">gratuity</a> ·
+    <a href="/tools/emi-calculator/">EMI</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const sal = +$("sal").value, hra = +$("hra").value,
+            rent = +$("rent").value, pc = +$("city").value / 100;
+      $("err").textContent = "";
+      const ids = ["ex", "a", "b", "c", "bind", "tax"];
+      if (!(sal >= 0) || !(hra >= 0) || !(rent >= 0)) {
+        ids.forEach((i) => ($(i).textContent = "—"));
+        $("err").textContent = "Enter non-negative values.";
+        return;
+      }
+      const l1 = hra;
+      const l2 = Math.max(0, rent - 0.10 * sal);   // cannot go below zero
+      const l3 = pc * sal;
+      const exempt = Math.min(l1, l2, l3);
+      const names = ["actual HRA received", "rent − 10% of salary",
+                     (pc === 0.5 ? "50%" : "40%") + " of salary"];
+      const bindIdx = [l1, l2, l3].indexOf(exempt);
+
+      $("ex").textContent = inr(exempt);
+      $("a").textContent = inr(l1);
+      $("b").textContent = inr(l2);
+      $("c").textContent = inr(l3);
+      $("bind").textContent = names[bindIdx];
+      $("tax").textContent = inr(Math.max(0, hra - exempt));
+
+      if (l2 === 0 && rent > 0) {
+        $("err").textContent =
+          "Rent is below 10% of salary, so limit 2 is zero and no HRA exemption is available.";
+      }
+      window.donut && donut("dHra", Math.max(0, hra - exempt), exempt, inr(Math.max(0, hra - exempt)), inr(exempt));
+    }
+    ["sal", "hra", "rent", "city"].forEach((i) => $(i).addEventListener("input", run));
+    run();
+  </script>
+</Base>

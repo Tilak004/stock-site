@@ -1,0 +1,123 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Gratuity Calculator — Payment of Gratuity Act Formula";
+const description =
+  "Calculate gratuity using the statutory formula: 15 days of last drawn salary " +
+  "for each completed year of service, divided by 26.";
+---
+
+<Base title={title} description={description} crumb="Tools / Gratuity calculator">
+  <h1>Gratuity calculator</h1>
+  <p class="lede">
+    Gratuity is a lump sum an employer pays on exit, once you have completed five
+    years of continuous service. For establishments covered by the Payment of
+    Gratuity Act, the formula is statutory rather than negotiable.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="s">Last drawn monthly salary (₹)</label>
+        <input type="number" id="s" value="80000" min="1000" step="1000" />
+        <div class="hint">Basic salary + dearness allowance only, not the full CTC.</div>
+      </div>
+      <div class="fld">
+        <label for="y">Years of service</label>
+        <input type="number" id="y" value="10" min="0" max="50" step="0.5" />
+        <div class="hint">Over 6 months in the final year rounds up to a full year.</div>
+      </div>
+      <div class="fld">
+        <label for="cap">Statutory cap (₹)</label>
+        <input type="number" id="cap" value="2000000" min="0" step="100000" />
+        <div class="hint">Verify the cap in force for your exit year.</div>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="g">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">gratuity payable</div>
+      <div class="out-row"><span class="lbl">Years counted</span><span class="val" id="yc">—</span></div>
+      <div class="out-row"><span class="lbl">Before the cap</span><span class="val" id="raw">—</span></div>
+      <div class="out-row"><span class="lbl">Cap applied?</span><span class="val" id="capped">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">Gratuity = (15 × last drawn salary × completed years) / 26</div>
+  <p class="lede">
+    The 26 is the number of working days in a month the Act assumes, and 15 is
+    half a month. So each completed year earns roughly half a month of salary.
+  </p>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>five_year_minimum</code><span class="meta">eligibility</span></div>
+      <p>Generally payable only after five years of continuous service. The
+        requirement is waived where service ends due to death or disablement.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rounding_of_the_final_year</code><span class="meta">how years are counted</span></div>
+      <p>More than six months in the final year counts as a full year; six months
+        or less is dropped. So 10 years and 7 months counts as 11.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>basic_plus_da_only</code><span class="meta">most common error</span></div>
+      <p>The salary in the formula is basic plus dearness allowance. Using total
+        CTC overstates the result substantially, since allowances and employer
+        contributions do not count.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>uncovered_establishments</code><span class="meta">different divisor</span></div>
+      <p>Employers outside the Act sometimes use a formula based on 30 days rather
+        than 26, which produces a lower figure. Check which applies to you.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>tax_treatment</code><span class="meta">verify separately</span></div>
+      <p>Gratuity is exempt from income tax up to a statutory limit, with
+        different treatment for government and non-government employees. Confirm
+        the current limit rather than assuming it — this page does not model tax.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/hra-calculator/">HRA exemption</a> ·
+    <a href="/tools/lumpsum-calculator/">lumpsum</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const s = +$("s").value, y = +$("y").value, cap = +$("cap").value;
+      $("err").textContent = "";
+      const ids = ["g", "yc", "raw", "capped"];
+      if (!(s > 0) || !(y >= 0)) {
+        ids.forEach((i) => ($(i).textContent = "—"));
+        $("err").textContent = "Enter a positive salary and a non-negative period.";
+        return;
+      }
+      // More than six months in the final year rounds up; six or fewer is dropped.
+      const whole = Math.floor(y);
+      const years = (y - whole) > 0.5 ? whole + 1 : whole;
+      const raw = (15 * s * years) / 26;
+      const payable = cap > 0 ? Math.min(raw, cap) : raw;
+
+      $("g").textContent = inr(payable);
+      $("yc").textContent = years + (years === 1 ? " year" : " years");
+      $("raw").textContent = inr(raw);
+      $("capped").textContent = cap > 0 && raw > cap ? "yes" : "no";
+
+      if (y > 0 && y < 5) {
+        $("err").textContent =
+          "Under five years of service — gratuity is generally not payable, except on death or disablement.";
+      }
+    }
+    ["s", "y", "cap"].forEach((i) => $(i).addEventListener("input", run));
+    run();
+  </script>
+</Base>

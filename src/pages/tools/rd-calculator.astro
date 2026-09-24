@@ -1,0 +1,128 @@
+---
+import Base from "../../layouts/Base.astro";
+import Donut from "../../components/Donut.astro";
+
+const title = "RD Calculator — Recurring Deposit Maturity Value";
+const description =
+  "Calculate recurring deposit maturity value and interest earned, with the " +
+  "quarterly compounding Indian banks use, plus the post-tax and real return.";
+---
+
+<Base title={title} description={description} crumb="Tools / RD calculator">
+  <h1>RD calculator</h1>
+  <p class="lede">
+    A recurring deposit is a fixed monthly amount paid into a bank deposit for a
+    set term. Each instalment earns interest only for the months it is actually
+    invested, so the earlier ones do most of the work.
+  </p>
+
+  <div class="calc">
+    <div class="calc-in">
+      <div class="fld">
+        <label for="m">Monthly deposit (₹)</label>
+        <input type="number" id="m" value="10000" min="100" step="500" />
+      </div>
+      <div class="fld">
+        <label for="r">Interest rate (% per year)</label>
+        <input type="number" id="r" value="6.75" min="0" max="20" step="0.05" />
+      </div>
+      <div class="fld">
+        <label for="y">Tenure (years)</label>
+        <input type="number" id="y" value="5" min="0.5" max="10" step="0.5" />
+      </div>
+      <div class="fld">
+        <label for="t">Your income tax slab (%)</label>
+        <input type="number" id="t" value="30" min="0" max="45" step="5" />
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="out-hero" id="mv">—</div>
+      <div class="lede" style="font-size:.78rem;margin:.2rem 0 .8rem">maturity value before tax</div>
+      <Donut id="dRd" aLabel="Deposited" bLabel="Interest" />
+
+      <div class="out-row"><span class="lbl">Total deposited</span><span class="val" id="dep">—</span></div>
+      <div class="out-row"><span class="lbl">Interest earned</span><span class="val" id="int">—</span></div>
+      <div class="out-row"><span class="lbl">Interest after tax</span><span class="val" id="post">—</span></div>
+      <div class="out-row"><span class="lbl">Instalments</span><span class="val" id="n">—</span></div>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <h2>How it is calculated</h2>
+  <p class="lede">
+    Indian banks compound RD interest quarterly, so this is computed instalment by
+    instalment: each deposit compounds for the number of quarters remaining until
+    maturity, and the results are summed. That is more accurate than applying a
+    single annuity formula, which assumes annual compounding.
+  </p>
+  <div class="formula">Maturity = Σ  Pₖ × (1 + r/4)^(remaining quarters for instalment k)</div>
+
+  <h2>Why the return feels lower than the rate</h2>
+  <p class="lede">
+    A 5-year RD at 6.75% does <strong>not</strong> earn 6.75% on the full amount
+    for five years, because the money goes in gradually. Your last instalment
+    earns interest for one month. The quoted rate is correct; the average holding
+    period is roughly half the term, which is what makes the total interest look
+    modest against the amount deposited.
+  </p>
+
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>rd_vs_sip</code><span class="meta">the real comparison</span></div>
+      <p>An RD is the same monthly-contribution structure as a
+        <a href="/tools/sip-calculator/">SIP</a>, with a guaranteed low rate
+        instead of a variable market return. The choice is certainty against
+        expected return, over the horizon you actually have.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>taxed_at_slab</code><span class="meta">like FD</span></div>
+      <p>RD interest is taxed at your income slab, not at any concessional rate.
+        At 30% that removes a substantial share of it.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>missed_instalments</code><span class="meta">not modelled</span></div>
+      <p>Banks usually levy a small penalty for a missed monthly payment.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <p class="lede">
+    Related: <a href="/tools/fd-calculator/">FD</a> ·
+    <a href="/tools/sip-calculator/">SIP</a> ·
+    <a href="/tools/inflation-calculator/">inflation</a>
+  </p>
+
+  <script is:inline>
+    const $ = (i) => document.getElementById(i);
+    const inr = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+
+    function run() {
+      const P = +$("m").value, R = +$("r").value, Y = +$("y").value, slab = +$("t").value / 100;
+      $("err").textContent = "";
+      const ids = ["mv", "dep", "int", "post", "n"];
+      if (!(P > 0) || !(R >= 0) || !(Y > 0)) {
+        ids.forEach((i) => ($(i).textContent = "—"));
+        $("err").textContent = "Enter a positive deposit and a tenure above zero.";
+        return;
+      }
+      const n = Math.round(Y * 12);
+      const q = R / 100 / 4;          // quarterly rate, the Indian bank convention
+      let mv = 0;
+      for (let k = 0; k < n; k++) {
+        const monthsLeft = n - k;
+        mv += P * Math.pow(1 + q, monthsLeft / 3);   // months converted to quarters
+      }
+      const deposited = P * n;
+      const interest = mv - deposited;
+      $("mv").textContent = inr(mv);
+      $("dep").textContent = inr(deposited);
+      $("int").textContent = inr(interest);
+      $("post").textContent = inr(interest * (1 - slab));
+      $("n").textContent = n;
+      window.donut && donut("dRd", deposited, interest, inr(deposited), inr(interest));
+    }
+    ["m", "r", "y", "t"].forEach((i) => $(i).addEventListener("input", run));
+    run();
+  </script>
+</Base>

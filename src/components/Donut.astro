@@ -1,0 +1,87 @@
+---
+/**
+ * Donut.astro — a two-part donut that a calculator updates live.
+ *
+ * Drawn with stroke-dasharray on a circle rather than arc path maths: fewer
+ * moving parts, and updating it is a single attribute write on each input event.
+ *
+ * Usage in markup:
+ *   <Donut id="sipDonut" aLabel="Invested" bLabel="Returns" />
+ *
+ * Usage from the calculator script:
+ *   donut("sipDonut", invested, gain, inr(invested), inr(gain));
+ *
+ * The helper is defined once on window, so several donuts on a page share it.
+ */
+export interface Props {
+  id: string;
+  aLabel: string;   // the first slice, drawn in the muted tone
+  bLabel: string;   // the second slice, drawn in the accent tone
+}
+const { id, aLabel, bLabel } = Astro.props;
+---
+
+<div class="donut-wrap" id={id}>
+  <svg viewBox="0 0 132 132" role="img" aria-label={`${aLabel} versus ${bLabel}`}>
+    <circle class="ring-a" cx="66" cy="66" r="52" fill="none" stroke-width="20" />
+    <circle class="ring-b" cx="66" cy="66" r="52" fill="none" stroke-width="20"
+            stroke-dasharray="0 999" transform="rotate(-90 66 66)" />
+    <text class="mid" x="66" y="63" text-anchor="middle">—</text>
+    <text class="sub" x="66" y="78" text-anchor="middle"></text>
+  </svg>
+  <ul class="legend">
+    <li><i class="sw-a"></i><span class="k">{aLabel}</span><span class="v" data-a>—</span></li>
+    <li><i class="sw-b"></i><span class="k">{bLabel}</span><span class="v" data-b>—</span></li>
+  </ul>
+</div>
+
+<style>
+  .donut-wrap {
+    display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap;
+    padding: .2rem 0 .1rem;
+  }
+  .donut-wrap svg { width: 116px; height: 116px; flex: 0 0 auto; }
+  .ring-a { stroke: var(--line); }
+  .ring-b { stroke: var(--link); transition: stroke-dasharray .18s ease; }
+  .mid {
+    font-family: var(--mono); font-size: 17px; font-weight: 600;
+    fill: var(--ink); letter-spacing: -.03em;
+  }
+  .sub { font-family: var(--mono); font-size: 8.5px; fill: var(--faint); }
+
+  .legend { list-style: none; margin: 0; padding: 0; min-width: 160px; flex: 1 1 160px; }
+  .legend li {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .28rem 0; font-size: .82rem; border-bottom: 1px solid var(--line);
+  }
+  .legend li:last-child { border-bottom: 0; }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto; }
+  .sw-a { background: var(--line); border: 1px solid var(--dim); }
+  .sw-b { background: var(--link); }
+  .legend .k { color: var(--dim); }
+  .legend .v {
+    margin-left: auto; font-family: var(--mono); font-variant-numeric: tabular-nums;
+    color: var(--ink); font-weight: 500;
+  }
+  @media (prefers-reduced-motion: reduce) { .ring-b { transition: none; } }
+</style>
+
+<script is:inline>
+  // Defined once; later instances on the same page reuse it.
+  if (!window.donut) {
+    window.donut = function (id, a, b, aText, bText) {
+      var w = document.getElementById(id);
+      if (!w) return;
+      var C = 2 * Math.PI * 52;          // circumference of r=52
+      var total = a + b;
+      var frac = total > 0 ? b / total : 0;
+      w.querySelector(".ring-b").setAttribute(
+        "stroke-dasharray", (frac * C).toFixed(1) + " " + C.toFixed(1));
+      w.querySelector(".mid").textContent = total > 0
+        ? Math.round(frac * 100) + "%" : "—";
+      w.querySelector(".sub").textContent = total > 0 ? "of total" : "";
+      w.querySelector("[data-a]").textContent = aText;
+      w.querySelector("[data-b]").textContent = bText;
+    };
+  }
+</script>
