@@ -1,0 +1,147 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Promoter Holding, Pledging and Corporate Governance";
+const description =
+  "How to read the shareholding pattern of an Indian listed company: promoter " +
+  "stake, pledged shares, related-party transactions and auditor changes.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Promoter holding & governance">
+  <h1>Promoter holding and governance</h1>
+  <p class="lede">
+    Most Indian listed companies have a controlling family or group — the
+    "promoters". That concentrates both the incentive to build the business and
+    the ability to extract from it, which makes the shareholding pattern one of
+    the more informative filings available, and one of the least read.
+  </p>
+
+  <h2>Where to find it</h2>
+  <p class="lede">
+    Every listed company files a shareholding pattern each quarter with both
+    exchanges, under a SEBI-mandated format. It is free on the
+    <a href="https://www.nseindia.com/" rel="noopener nofollow">NSE</a> and
+    <a href="https://www.bseindia.com/" rel="noopener nofollow">BSE</a> company
+    pages. It shows the promoter stake, how much of it is pledged, and the split
+    across institutions and retail.
+  </p>
+
+  <h2>Promoter stake</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>high_and_stable</code><span class="meta">generally reassuring</span></div>
+      <p>A large stake held steady for years means the controlling family's wealth
+        rises and falls with yours. Alignment is not a guarantee of competence,
+        but misalignment is a reliable source of trouble.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>steadily_declining</code><span class="meta">ask why</span></div>
+      <p>Promoters selling down over several quarters deserve an explanation.
+        Sometimes it is genuine diversification or an estate matter. Sometimes it
+        is the people who know most, selling.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>very_low</code><span class="meta">different risk</span></div>
+      <p>A small promoter holding means weaker alignment but also a company less
+        likely to be run for one family's benefit. Professionally managed firms
+        with dispersed ownership are judged on board quality instead.</p>
+    </div>
+  </div>
+
+  <h2>Pledged shares — the one to check first</h2>
+  <p>
+    Promoters can borrow against their own shareholding. The pledged percentage
+    appears in the same filing, and it matters for a reason many investors only
+    discover during a fall.
+  </p>
+  <div class="formula">Share price falls
+  → collateral value drops below the lender's threshold
+  → margin call: pledge more shares, or repay
+  → if neither is possible, the lender sells into the market
+  → price falls further, triggering further calls</div>
+  <p class="lede">
+    <strong>This is a forced-selling mechanism entirely unrelated to how the
+    business is performing.</strong> A company can be trading perfectly well while
+    its share price collapses because a lender is liquidating collateral. High
+    pledging turns an ordinary correction into a disorderly one.
+  </p>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>near_zero</code><span class="meta">no mechanism</span></div>
+      <p>Nothing to unwind. The overwhelming majority of well-run companies sit
+        here.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>rising_quarter_on_quarter</code><span class="meta">the signal</span></div>
+      <p>The trend matters more than the level. Promoters pledging progressively
+        more are usually under increasing financial pressure somewhere, and it is
+        rarely disclosed anywhere else.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>high_and_persistent</code><span class="meta">structural fragility</span></div>
+      <p>A large pledged fraction means the stock carries a source of downside
+        that has nothing to do with its earnings.</p>
+    </div>
+  </div>
+
+  <h2>Governance signals in the annual report</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>auditor_resignation</code><span class="meta">the loudest signal available</span></div>
+      <p>Auditors rarely walk away from fee income. A resignation mid-term,
+        particularly with a vague reason, is among the most serious warnings an
+        outside investor can see. SEBI requires disclosure of the reasons — read
+        them.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>qualified_opinion</code><span class="meta">read it in full</span></div>
+      <p>A qualification or an emphasis of matter means the auditor could not
+        satisfy themselves about something specific. The wording identifies
+        exactly what.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>related_party_transactions</code><span class="meta">in the notes</span></div>
+      <p>Sales, purchases, loans or guarantees between the listed company and
+        promoter-controlled entities. Often routine. Sometimes value leaving the
+        listed entity at prices nobody negotiated at arm's length. Compare the
+        scale against revenue.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>frequent_cfo_turnover</code><span class="meta">pattern worth noting</span></div>
+      <p>Several finance heads in a few years, especially alongside auditor
+        changes, suggests disagreement about the numbers.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>contingent_liabilities_vs_net_worth</code><span class="meta">scale matters</span></div>
+      <p>Guarantees given to group companies. Not debt today, potentially debt
+        tomorrow. Large relative to net worth is worth understanding fully.</p>
+    </div>
+  </div>
+
+  <h2>Institutional holding</h2>
+  <p class="lede">
+    Domestic and foreign institutional stakes appear in the same filing. Rising
+    institutional ownership indicates that investors with research budgets and
+    management access have formed a positive view — which is information, not
+    proof. Institutions are wrong regularly, and they were holders of most of the
+    companies that subsequently failed. Treat it as one input among several.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>A practical five-minute check</h2>
+  <p class="lede">
+    Open the latest shareholding pattern and the last annual report, and answer
+    four things: Is promoter holding stable over eight quarters? Is any of it
+    pledged, and is that rising? Has the auditor changed or qualified anything?
+    Are related-party transactions small relative to revenue? Four answers, five
+    minutes, and it filters out a meaningful share of the situations that end
+    badly for reasons that were visible in advance.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/evaluating-a-business/">evaluating a business</a> ·
+    <a href="/learn/reading-financials/">reading a financial statement</a> ·
+    <a href="/learn/debt-leverage/">debt and leverage</a>
+  </p>
+</Base>

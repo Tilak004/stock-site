@@ -1,0 +1,167 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "How to Evaluate a Business";
+const description =
+  "A framework for judging a company beyond its ratios: what it sells, whether " +
+  "its advantage lasts, how it earns returns, and where the analysis usually fails.";
+---
+
+<Base title={title} description={description} crumb="Fundamentals / Evaluating a business">
+  <h1>How to evaluate a business</h1>
+  <p class="lede">
+    Ratios describe what a business <em>has done</em>. Evaluating it means forming
+    a view on whether that continues — and that requires understanding what the
+    company actually sells, to whom, and why they keep buying.
+  </p>
+
+  <h2>Start with the sentence test</h2>
+  <p>
+    Before any spreadsheet: can you explain, in one plain sentence, how the
+    company makes money? Not the sector — the mechanism. Who pays, for what, how
+    often, and what happens if they stop.
+  </p>
+  <p class="lede">
+    If you cannot write that sentence, no amount of ratio analysis will rescue
+    the decision. Most poor outcomes trace back to owning something the buyer
+    never really understood.
+  </p>
+
+  <h2>The five questions</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>1. what_is_sold</code><span class="meta">the revenue engine</span></div>
+      <p>Product or service, one-off or recurring, discretionary or essential.
+        Recurring revenue from something customers cannot easily stop buying is
+        structurally more valuable than a lumpy order book, and the two deserve
+        different multiples.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>2. who_pays</code><span class="meta">customer concentration</span></div>
+      <p>Thousands of small customers, or three large ones? Concentration is in
+        the annual report. A supplier deriving 40% of revenue from one buyer does
+        not control its own pricing, whatever its margins currently say.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>3. why_here_and_not_a_competitor</code><span class="meta">the moat</span></div>
+      <p>Brand, switching costs, network effects, regulatory licence, distribution
+        reach, genuine cost advantage. If the honest answer is "no particular
+        reason", margins will be competed away eventually.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>4. what_does_growth_cost</code><span class="meta">capital intensity</span></div>
+      <p>How much must be invested to add a rupee of revenue? A business that
+        grows without much new capital compounds far faster than one that must
+        build a plant first. This is visible as
+        <a href="/learn/roe-roce/">ROCE</a> alongside capex in the cash flow
+        statement.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>5. what_would_break_it</code><span class="meta">the pre-mortem</span></div>
+      <p>Write down what would have to happen for this to be a bad decision — a
+        raw material spike, a regulatory change, a technology shift, the loss of
+        one customer. If you cannot name anything, you have not looked hard
+        enough.</p>
+    </div>
+  </div>
+
+  <h2>Durable advantages, and the ones that only look durable</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>switching_costs</code><span class="meta">usually durable</span></div>
+      <p>Software embedded in a customer's operations, a bank holding the salary
+        account. Leaving is expensive or disruptive, so customers stay even when a
+        cheaper option exists.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>brand_with_pricing_power</code><span class="meta">durable if real</span></div>
+      <p>The test is whether prices can rise with inflation without volumes
+        falling. A recognised name that still discounts to move stock does not
+        have pricing power — it has advertising.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>regulatory_licence</code><span class="meta">durable until policy changes</span></div>
+      <p>Limited licences create genuine protection, and also genuine dependence
+        on a decision you do not control.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>scale_alone</code><span class="meta">often mistaken for a moat</span></div>
+      <p>Being the largest only helps if size produces a cost advantage
+        competitors cannot replicate. In commodity businesses it frequently does
+        not.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>first_mover</code><span class="meta">rarely durable</span></div>
+      <p>Arriving first is an advantage only if something is built with the head
+        start. On its own it is a timing accident.</p>
+    </div>
+  </div>
+
+  <h2>Reading management</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>compare_old_letters_to_outcomes</code><span class="meta">the best single test</span></div>
+      <p>Read the chairman's letter from four years ago, then check what actually
+        happened. Managements that state targets plainly and then discuss misses
+        honestly are behaving differently from those that only ever narrate
+        success.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>capital_allocation_record</code><span class="meta">what they did with the money</span></div>
+      <p>Where did retained profit go — into the core business, acquisitions,
+        unrelated diversification, dividends? Acquisitions outside the core are
+        where a great deal of shareholder value has historically disappeared.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>related_party_transactions</code><span class="meta">in the notes</span></div>
+      <p>Money moving between the listed company and promoter-owned entities
+        deserves explanation. Sometimes ordinary, sometimes value leaving through
+        the side door. See
+        <a href="/learn/promoter-governance/">promoter holding and governance</a>.</p>
+    </div>
+  </div>
+
+  <h2>Where this analysis usually fails</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>extrapolating_the_recent_past</code><span class="meta">the commonest error</span></div>
+      <p>Three good years get projected forward for ten. Cyclical businesses look
+        best at exactly the wrong moment, which is why their
+        <a href="/learn/valuation-ratios/">P/E is lowest at the peak</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>confusing_a_good_business_with_a_good_investment</code><span class="meta">price matters</span></div>
+      <p>An excellent company bought at an excessive price is a poor investment.
+        Quality and price are separate judgements and both have to be made.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>narrative_before_numbers</code><span class="meta">order of operations</span></div>
+      <p>It is easy to fall for a story and then hunt for figures that support it.
+        Read the cash flow statement before the investor presentation.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>ignoring_what_you_cannot_assess</code><span class="meta">circle of competence</span></div>
+      <p>If you cannot judge whether a technology or a regulatory regime will
+        hold, that is a legitimate reason to pass. Declining to have a view is a
+        decision, and usually a cheap one.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>How this relates to the screener</h2>
+  <p class="lede">
+    It does not, and the separation is worth stating plainly. The
+    <a href="/screener/">screener</a> measures price behaviour — trend, momentum,
+    participation. It has no opinion on whether a business has a moat or whether
+    its accounts are honest. A stock can satisfy every technical condition on this
+    site while the underlying company deteriorates, and the reverse happens
+    constantly. They are separate questions answered from separate documents.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/promoter-governance/">promoter holding and governance</a> ·
+    <a href="/learn/valuation-ratios/">valuation ratios</a> ·
+    <a href="/learn/reading-financials/">reading a financial statement</a>
+  </p>
+</Base>

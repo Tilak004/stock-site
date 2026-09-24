@@ -1,0 +1,132 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Moving Averages Explained — SMA, EMA and the 200 DMA";
+const description =
+  "How simple and exponential moving averages differ, what the 20/50/100/200-day " +
+  "averages are used for, crossovers, and why they lag by construction.";
+---
+
+<Base title={title} description={description} crumb="Technical analysis / Moving averages">
+  <h1>Moving averages</h1>
+  <p class="lede">
+    A moving average is the average closing price over the last <em>n</em> days,
+    recalculated each day. It is the simplest way to strip daily noise out of a
+    price series and see the underlying direction — and the oldest, which is part
+    of why it still matters.
+  </p>
+
+  <h2>Simple versus exponential</h2>
+  <div class="formula">SMA = (P₁ + P₂ + ... + Pₙ) / n          every day weighted equally
+
+EMA today = (Price × k) + (EMA yesterday × (1 − k))
+where k = 2 / (n + 1)                   recent days weighted more</div>
+  <p>
+    An SMA treats a price from 200 days ago exactly like yesterday's. An EMA
+    weights recent data more heavily, so it turns sooner. Neither is correct —
+    they answer slightly different questions, and EMA's faster response comes with
+    more false turns.
+  </p>
+  <p class="lede">
+    This site uses <strong>EMAs</strong> (21, 50 and 200) on the
+    <a href="/screener/">screener</a>. The "200 DMA" that gets quoted in market
+    commentary is usually a simple 200-day average, so the two will not agree
+    exactly. Neither is wrong; they are different calculations and worth not
+    confusing.
+  </p>
+
+  <h2>What each period is used for</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>20_21_day</code><span class="meta">about a trading month</span></div>
+      <p>Short-term direction. Price oscillating around it means no short-term
+        trend. Often used as a reference for pullbacks within an existing uptrend.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>50_day</code><span class="meta">about a quarter</span></div>
+      <p>Medium-term trend. The most watched intermediate average, which is part
+        of why it appears to "work" — a great many participants are looking at the
+        same line.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>200_day</code><span class="meta">about a year of trading</span></div>
+      <p>The conventional dividing line between a long-term uptrend and
+        downtrend. Its influence is substantially self-fulfilling: it matters
+        because everyone watches it.</p>
+    </div>
+  </div>
+
+  <h2>Crossovers</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>golden_cross</code><span class="meta">50 crosses above 200</span></div>
+      <p>Read as a shift to a longer-term uptrend. It is also a <em>lagging</em>
+        event by definition — the 50-day only crosses the 200-day well after price
+        has already moved.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>death_cross</code><span class="meta">50 crosses below 200</span></div>
+      <p>The mirror image. Both get heavy media coverage, and both describe
+        something that has already happened rather than predicting what comes next.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>faster_crossovers</code><span class="meta">21 over 50</span></div>
+      <p>Trigger much sooner and far more often — including many times in a
+        sideways market where price keeps crossing back and forth. The screener's
+        <span class="c">ema21_above_50</span> condition is this comparison.</p>
+    </div>
+  </div>
+
+  <h2>The lag is unavoidable</h2>
+  <p>
+    Every moving average is built from past prices, so it must trail the current
+    price. A 200-day average includes data from ten months ago. There is a direct
+    trade-off and no way around it:
+  </p>
+  <div class="formula">shorter average → responds faster → more false signals
+longer average  → responds slower → fewer signals, later</div>
+  <p class="lede">
+    Anyone claiming to have found the period that gets both has usually found the
+    period that fit the past best, which is a different thing. See
+    <a href="/learn/overfitting/">overfitting</a>.
+  </p>
+
+  <h2>Where they fail</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>sideways_markets</code><span class="meta">the main weakness</span></div>
+      <p>In a range, price crosses the average constantly and every crossover is a
+        false signal. Checking <a href="/learn/adx/">ADX</a> first tells you
+        whether a trend exists at all.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>gaps</code><span class="meta">structural</span></div>
+      <p>A stock that gaps down 15% on news is far below its average before any
+        average can respond. Moving averages offer no protection against events.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>corporate_actions</code><span class="meta">data issue</span></div>
+      <p>Splits and bonuses break an unadjusted price series and make the average
+        meaningless until it works through. Data on this site is adjusted, but it
+        is worth knowing the failure mode exists.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>On the screener</h2>
+  <p class="lede">
+    Two of the six conditions use moving averages:
+    <span class="c">above_200dma</span> compares the close with EMA200, and
+    <span class="c">ema21_above_50</span> compares the two shorter averages. The
+    <span class="c">ema21</span>, <span class="c">ema50</span> and
+    <span class="c">ema200</span> values are in the data, so you can see the
+    distances rather than just a yes or no.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/adx/">ADX</a> ·
+    <a href="/learn/rsi/">RSI</a> ·
+    <a href="/learn/support-resistance/">support and resistance</a>
+  </p>
+</Base>

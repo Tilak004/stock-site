@@ -1,0 +1,123 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "ADX Explained — Average Directional Index";
+const description =
+  "ADX measures trend strength regardless of direction. How it is built from " +
+  "DI+ and DI−, what the conventional levels mean, and why it lags by design.";
+---
+
+<Base title={title} description={description} crumb="Technical analysis / ADX">
+  <h1>ADX — Average Directional Index</h1>
+  <p class="lede">
+    ADX answers one question: <strong>is this market trending, or going
+    sideways?</strong> It says nothing about which way. A stock collapsing and a
+    stock surging can both post an ADX of 40 — a high reading means the move is
+    orderly and sustained, not that it is upward.
+  </p>
+  <p class="lede">
+    That single property is what makes it useful alongside a directional
+    indicator, and useless on its own.
+  </p>
+
+  <h2>How it is built</h2>
+  <p>
+    Wilder's construction has three steps. First, measure directional movement on
+    each bar:
+  </p>
+  <div class="formula">+DM = today's high − yesterday's high   (if positive and larger than −DM)
+−DM = yesterday's low − today's low    (if positive and larger than +DM)</div>
+  <p>Then smooth each over 14 periods, divide by the smoothed true range, and express as percentages:</p>
+  <div class="formula">DI+ = 100 × smoothed(+DM) / ATR
+DI− = 100 × smoothed(−DM) / ATR</div>
+  <p>Finally, ADX is the smoothed average of how far apart those two lines are:</p>
+  <div class="formula">DX  = 100 × |DI+ − DI−| / (DI+ + DI−)
+ADX = smoothed average of DX over 14 periods</div>
+  <p class="lede">
+    Note the absolute value in <span class="c">DX</span>. That is exactly where
+    direction gets discarded — only the <em>gap</em> between the two lines
+    survives, never its sign.
+  </p>
+
+  <h2>Reading the level</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>below_20</code><span class="meta">no trend</span></div>
+      <p>DI+ and DI− are close together. Price is moving without getting anywhere
+        — a range. Trend-following approaches tend to be repeatedly stopped out in
+        this condition.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>20_to_25</code><span class="meta">borderline</span></div>
+      <p>A trend may be forming. The <a href="/screener/">screener</a>'s default
+        threshold of 18 sits just below this, which is a deliberately permissive
+        starting point rather than a recommendation.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>25_to_50</code><span class="meta">trending</span></div>
+      <p>A clear directional move. Check DI+ against DI− to find out which way.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>above_50</code><span class="meta">very strong, and often late</span></div>
+      <p>Powerful trends produce these readings — and because ADX is doubly
+        smoothed, by the time it is this high the move is usually well advanced.</p>
+    </div>
+  </div>
+
+  <h2>Direction comes from DI+ and DI−</h2>
+  <div class="formula">DI+ above DI−  →  upward pressure dominates
+DI− above DI+  →  downward pressure dominates
+ADX            →  how decisively, either way</div>
+  <p class="lede">
+    The conventional reading is ADX above 25 <em>with</em> DI+ above DI− for a
+    genuine uptrend. ADX alone is only half the information, which is why quoting
+    "ADX is 35" without the DI relationship says nothing about whether the stock
+    is rising.
+  </p>
+
+  <h2>The lag is structural, not a flaw</h2>
+  <p class="lede">
+    ADX is smoothed twice — once building DI+ and DI−, again turning DX into ADX.
+    That is what makes it stable enough to be useful, and it is also why it
+    confirms trends rather than anticipating them. ADX will not tell you a trend
+    is starting; it tells you one has been running for a while. Expecting
+    otherwise is expecting the wrong thing from the tool.
+  </p>
+
+  <h2>On the screener</h2>
+  <p class="lede">
+    The <span class="c">adx</span> column is ADX(14) on daily bars. The default
+    condition is ADX ≥ 18, which is looser than the textbook 25 — deliberately, so
+    the starting view is not already filtered down to almost nothing. Raise the
+    slider to 25 or 30 and watch the count fall; that is the trade-off between
+    selectivity and sample size made visible.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>Common misreadings</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>high_adx_means_buy</code><span class="meta">no</span></div>
+      <p>High ADX during a sustained decline is a strong <em>downtrend</em>. The
+        indicator is direction-blind by construction.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>falling_adx_means_reversal</code><span class="meta">not necessarily</span></div>
+      <p>A falling ADX means the trend is losing strength — which often precedes a
+        sideways range rather than a reversal.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>comparing_across_stocks</code><span class="meta">reasonable, with care</span></div>
+      <p>ADX is normalised by true range, so cross-stock comparison is more
+        defensible than with raw price indicators. Volatility regimes still
+        differ.</p>
+    </div>
+  </div>
+
+  <p class="lede">
+    Next: <a href="/learn/rsi/">RSI</a> ·
+    <a href="/learn/moving-averages/">moving averages</a> ·
+    <a href="/learn/volume/">volume and relative volume</a>
+  </p>
+</Base>

@@ -1,0 +1,125 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "RSI Explained — Relative Strength Index";
+const description =
+  "How RSI(14) is calculated, what overbought and oversold actually mean, why " +
+  "RSI stays extreme in a strong trend, and how to read it on the screener.";
+---
+
+<Base title={title} description={description} crumb="Technical analysis / RSI">
+  <h1>RSI — Relative Strength Index</h1>
+  <p class="lede">
+    RSI compares the size of recent gains with the size of recent losses and
+    expresses the result on a 0–100 scale. It measures the <em>balance</em> of
+    buying and selling pressure over a lookback window — nothing more.
+  </p>
+
+  <h2>How it is calculated</h2>
+  <div class="formula">RS  = Average gain over n periods / Average loss over n periods
+RSI = 100 − 100 / (1 + RS)</div>
+  <p>
+    The default <span class="c">n</span> is 14. Averages are smoothed (Wilder's
+    method) rather than simple, so each new bar has a modest effect and the line
+    does not jump about.
+  </p>
+  <p class="lede">
+    The formula has one consequence worth internalising: RSI can only reach 100 if
+    there have been <em>no</em> down periods in the window, and 0 if there have
+    been no up periods. Both extremes are effectively unreachable in real markets,
+    which is why 70 and 30 became the conventional thresholds rather than 90 and 10.
+  </p>
+
+  <h2>What "overbought" does not mean</h2>
+  <p>
+    RSI above 70 is conventionally called overbought and below 30 oversold. These
+    are descriptions of recent price behaviour, not instructions, and the most
+    common mistake in all of technical analysis is treating them as signals to
+    sell and buy.
+  </p>
+  <p class="lede">
+    <strong>In a strong trend, RSI stays extreme for a long time.</strong> A stock
+    in a powerful advance can hold above 70 for weeks while continuing to rise.
+    Selling because "RSI is overbought" means selling precisely the strongest
+    thing you own, and buying at 30 in a genuine downtrend means buying repeatedly
+    into a decline that keeps going.
+  </p>
+  <p>
+    That is why the <a href="/screener/">screener</a>'s default condition looks for
+    RSI <em>between</em> 35 and 70 rather than below 30 — it excludes both
+    extremes rather than chasing either.
+  </p>
+
+  <h2>Period length changes everything</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>shorter_period</code><span class="meta">RSI(7) or less</span></div>
+      <p>More reactive, hits extremes constantly, far more false readings. Each
+        new bar carries more weight.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>standard</code><span class="meta">RSI(14)</span></div>
+      <p>Wilder's original. Its dominance is convention rather than any proof of
+        optimality — it is what most software defaults to, so it is what most
+        people are reacting to.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>longer_period</code><span class="meta">RSI(21) or more</span></div>
+      <p>Smoother, reaches extremes rarely, later. Fewer false readings and fewer
+        readings overall.</p>
+    </div>
+  </div>
+
+  <h2>Divergence, and the honest caveat</h2>
+  <p>
+    Divergence is when price makes a higher high but RSI makes a lower high, or
+    the reverse at a low. The interpretation is that momentum is weakening even as
+    price extends.
+  </p>
+  <p class="lede">
+    It is widely taught and worth knowing about. It is also <strong>far easier to
+    identify after the fact than in advance</strong>: divergences appear
+    repeatedly during trends that simply continue, and only the ones that preceded
+    a reversal get shown in the examples. Treat it as an observation, not a signal.
+  </p>
+
+  <h2>On the screener</h2>
+  <p class="lede">
+    The <span class="c">rsi</span> column is RSI(14) on daily closes, computed
+    after the session. The default band of 35–70 is a starting point you can
+    change with the slider — and changing it is instructive. Narrow it to 50–60
+    and watch how few stocks survive. That collapse is the point: a screen looks
+    selective mostly because of where the thresholds were drawn, not because it
+    found something.
+  </p>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>What RSI cannot tell you</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>direction_of_the_trend</code><span class="meta">use a moving average</span></div>
+      <p>RSI is a momentum oscillator, not a trend indicator. An RSI of 55 says
+        nothing about whether price is above or below its 200-day average. See
+        <a href="/learn/moving-averages/">moving averages</a>.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>whether_a_trend_exists</code><span class="meta">use ADX</span></div>
+      <p>RSI behaves very differently in a trending market than a sideways one,
+        and it will not tell you which you are in.
+        <a href="/learn/adx/">ADX</a> is the tool for that.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>anything_about_the_business</code><span class="meta">separate question</span></div>
+      <p>RSI is a function of past prices. It has no knowledge of earnings, debt
+        or management. See <a href="/learn/reading-financials/">reading a
+        financial statement</a>.</p>
+    </div>
+  </div>
+
+  <p class="lede">
+    Next: <a href="/learn/adx/">ADX</a> ·
+    <a href="/learn/moving-averages/">moving averages</a> ·
+    <a href="/learn/volume/">volume and relative volume</a>
+  </p>
+</Base>

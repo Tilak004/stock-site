@@ -1,0 +1,117 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Volume and Relative Volume Explained";
+const description =
+  "What trading volume measures, why relative volume is more useful than the raw " +
+  "number, and how liquidity determines whether a price on screen is real.";
+---
+
+<Base title={title} description={description} crumb="Technical analysis / Volume">
+  <h1>Volume and relative volume</h1>
+  <p class="lede">
+    Volume is the number of shares traded in a session. On its own that number is
+    almost meaningless &mdash; a large company trades millions of shares daily and a
+    small one trades thousands. What carries information is volume compared with
+    <em>its own</em> recent average.
+  </p>
+
+  <h2>Relative volume</h2>
+  <div class="formula">Relative volume = Today's volume / 20-day average volume</div>
+  <p>
+    A reading of 1.0 means an ordinary session. 2.5 means two and a half times the
+    usual participation. That comparison works across a ₹2 lakh crore company and a
+    ₹500 crore one, which the raw figure never does.
+  </p>
+  <p class="lede">
+    This is the <span class="c">vol_ratio</span> column on the
+    <a href="/screener/">screener</a>.
+  </p>
+
+  <h2>What it actually tells you</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>unusual_participation</code><span class="meta">what it measures</span></div>
+      <p>High relative volume means more people than usual decided to transact.
+        Something drew attention &mdash; results, news, an index change, a large
+        institutional order.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>not_direction</code><span class="meta">common confusion</span></div>
+      <p>Every trade has a buyer and a seller. Volume is never "buying volume" or
+        "selling volume" &mdash; those phrases describe an interpretation, not the
+        data. Direction comes from price, not volume.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>conviction_behind_a_move</code><span class="meta">the usual reading</span></div>
+      <p>A price move on heavy volume involved many participants; the same move on
+        thin volume involved few. The conventional interpretation is that the
+        former is more meaningful. It is a reasonable prior, not a rule.</p>
+    </div>
+  </div>
+
+  <h2>Liquidity: why this matters more than it looks</h2>
+  <p>
+    Volume determines whether a displayed price is a price you could actually
+    transact at. In a stock trading &#8377;20 lakh a day, a modest order moves the
+    price against you, and the fill you get is not the price on screen.
+  </p>
+  <p class="lede">
+    <strong>That is why this site publishes only the 200 most liquid stocks by
+    60-day median turnover.</strong> Indicator values on a thinly traded stock are
+    computed from prices that barely represent transactions &mdash; a handful of
+    trades can set the close. The <span class="c">turnover_cr</span> column shows
+    the figure so you can judge it directly.
+  </p>
+
+  <h2>Turnover versus share count</h2>
+  <div class="formula">Turnover (&#8377;) = Volume (shares) &times; Price</div>
+  <p class="lede">
+    Turnover is the better liquidity measure. A stock at &#8377;15 trading 10 lakh
+    shares is far less liquid than one at &#8377;4,000 trading 50,000 shares, even
+    though the share count looks twenty times larger. Rupees moved is what
+    determines whether you can get in and out.
+  </p>
+
+  <h2>Where volume analysis goes wrong</h2>
+  <div class="defs">
+    <div class="def">
+      <div class="h"><code>expiry_and_index_events</code><span class="meta">mechanical spikes</span></div>
+      <p>Derivative expiry, index rebalancing and block deals produce enormous
+        volume that reflects mechanics rather than any view on the company.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>the_20_day_base_moves</code><span class="meta">subtle</span></div>
+      <p>After a period of elevated activity, the 20-day average itself rises, so
+        the same absolute volume now reads as a lower ratio. The denominator is not
+        fixed.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>thin_stocks_produce_wild_ratios</code><span class="meta">noise</span></div>
+      <p>A stock averaging 5,000 shares shows a relative volume of 10&times; on a
+        single 50,000-share trade. Technically true, practically meaningless.</p>
+    </div>
+    <div class="def">
+      <div class="h"><code>low_volume_is_not_bearish</code><span class="meta">misreading</span></div>
+      <p>Quiet participation usually means nothing is happening. Steady drift on
+        light volume is the normal condition of most stocks most of the time.</p>
+    </div>
+  </div>
+
+  <div class="ad">Advertisement</div>
+
+  <h2>On the screener</h2>
+  <p class="lede">
+    The default condition asks for <span class="c">vol_ratio</span> at or above
+    1.0 &mdash; simply an ordinary-or-better session. Raise the slider to 2 and the
+    list shrinks to stocks doing something unusual today, which is a genuinely
+    different question from "which stocks are in an uptrend". Both are on the same
+    table; which one you are asking depends on where you set the threshold.
+  </p>
+
+  <p class="lede">
+    Next: <a href="/learn/moving-averages/">moving averages</a> &middot;
+    <a href="/learn/adx/">ADX</a> &middot;
+    <a href="/learn/support-resistance/">support and resistance</a>
+  </p>
+</Base>
