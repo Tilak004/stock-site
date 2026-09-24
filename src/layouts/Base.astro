@@ -17,20 +17,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const fullTitle = Astro.url.pathname === "/" ? title : `${title} — ${SITE_NAME}`;
 const path = Astro.url.pathname;
 
+// Every group ships collapsed; `open` stays as a per-group override if one ever
+// needs to be expanded by default. The group containing the current page is
+// still auto-expanded below, so landing on a page never hides where you are.
 // tag: LIVE = computed data, DOC = article, CALC = calculator. Same job as the
 // POST/GET badges in an API reference — it tells you what a page is before you
 // click it.
 const groups = [
   {
     label: "Screener",
-    open: true,
+    open: false,
     items: [
       { href: "/screener/", label: "All stocks", tag: "LIVE", cls: "data" },
     ],
   },
   {
     label: "Technical analysis",
-    open: true,
+    open: false,
     items: [
       { href: "/learn/moving-averages/", label: "Moving averages", tag: "DOC", cls: "doc" },
       { href: "/learn/rsi/", label: "RSI", tag: "DOC", cls: "doc" },
@@ -41,7 +44,7 @@ const groups = [
   },
   {
     label: "Fundamentals",
-    open: true,
+    open: false,
     items: [
       { href: "/learn/reading-financials/", label: "Reading a financial statement", tag: "DOC", cls: "doc" },
       { href: "/learn/roe-roce/", label: "ROE and ROCE", tag: "DOC", cls: "doc" },
@@ -76,7 +79,7 @@ const groups = [
   },
   {
     label: "Tools",
-    open: true,
+    open: false,
     items: [
       { href: "/tools/", label: "All calculators", tag: "CALC", cls: "calc" },
       { href: "/tools/sip-calculator/", label: "SIP", tag: "CALC", cls: "calc" },

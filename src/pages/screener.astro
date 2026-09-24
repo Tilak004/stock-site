@@ -134,6 +134,11 @@ const description =
   </Fragment>
 
   <script is:inline>
+    // Astro renders the default slot (.doc, where this script sits) BEFORE the
+    // named "rail" slot, so the filter controls do not exist yet at parse time.
+    // Without this wrapper getElementById returns null, binding the listeners
+    // throws, and the whole script dies silently — dead filters, empty table.
+    document.addEventListener("DOMContentLoaded", function () {
     const $ = (i) => document.getElementById(i);
     const f = (v, d = 2) =>
       v === null || v === undefined ? '<span class="na">—</span>' : Number(v).toFixed(d);
@@ -234,6 +239,7 @@ const description =
       $("a").value = 35; $("b").value = 70; $("c").value = 18;
       $("d").value = 10; $("e").value = 25; $("f").value = 0; $("g").value = "";
       draw();
+    });
     });
   </script>
 </Base>
